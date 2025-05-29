@@ -2,8 +2,8 @@
 
 // 检测运行环境：浏览器环境且支持Cache API
 // 严格检测浏览器环境且支持Cache API（避免SSR等伪浏览器环境）
-  const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
-  const isCacheSupported = isBrowser && typeof caches !== 'undefined' && typeof caches.open === 'function';
+const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
+const isCacheSupported = isBrowser && typeof caches !== 'undefined' && typeof caches.open === 'function';
 
 // 降级存储：内存缓存（适用于非浏览器环境）
 const memoryCache = new Map();
@@ -25,17 +25,33 @@ export default class CacheStore {
   async get(key) {
     if (!this.isCacheSupported) {
       // 使用内存缓存
-      return this.memoryCache.get(key) || null;
+      const item = this.memoryCache.get(key);
+      return item ? item.value : null;
     }
     
     try {
+      // 确保caches对象存在
+      if (typeof caches === 'undefined') {
+        throw new Error('Cache API not available');
+      }
+      
       const cache = await caches.open(this.cacheName);
       const response = await cache.match(key);
-      return response ? await response.json() : null;
+      if (!response) return null;
+      
+      const data = await response.json();
+      // 检查是否过期
+      if (data.ttl && Date.now() - data.timestamp > data.ttl) {
+        await cache.delete(key);
+        return null;
+      }
+      
+      return data.value;
     } catch (error) {
       console.error('Cache get failed:', error);
       // 异常时回退到内存缓存
-      return this.memoryCache.get(key) || null;
+      const item = this.memoryCache.get(key);
+      return item ? item.value : null;
     }
   }
 
@@ -46,31 +62,36 @@ export default class CacheStore {
    * @param {number} ttl 过期时间（毫秒，可选）
    */
   async set(key, value, ttl) {
+    // 准备缓存数据
+    const cacheData = {
+      value,
+      expires: ttl ? Date.now() + ttl : Infinity
+    };
+    
+    // 更新内存缓存（无论环境如何，都确保内存缓存更新）
+    this.memoryCache.set(key, cacheData);
+    
+    // 如果不支持Cache API，仅使用内存缓存
     if (!this.isCacheSupported) {
-      // 使用内存缓存
-      this.memoryCache.set(key, {
-        value,
-        expires: ttl ? Date.now() + ttl : Infinity
-      });
       return;
     }
     
     try {
+      // 确保caches对象存在
+      if (typeof caches === 'undefined') {
+        throw new Error('Cache API not available');
+      }
+      
       const cache = await caches.open(this.cacheName);
-      const response = new Response(JSON.stringify({ value, timestamp: Date.now(), ttl }));
+      const response = new Response(JSON.stringify({ 
+        value, 
+        timestamp: Date.now(), 
+        ttl 
+      }));
       await cache.put(key, response);
-      // 同步更新内存缓存
-      this.memoryCache.set(key, {
-        value,
-        expires: ttl ? Date.now() + ttl : Infinity
-      });
     } catch (error) {
       console.error('Cache set failed:', error);
-      // 异常时使用内存缓存
-      this.memoryCache.set(key, {
-        value,
-        expires: ttl ? Date.now() + ttl : Infinity
-      });
+      // 错误已记录，内存缓存已更新，无需额外操作
     }
   }
 
@@ -79,13 +100,23 @@ export default class CacheStore {
    * @param {string} key 缓存键
    */
   async remove(key) {
+    // 无论环境如何，都清除内存缓存
+    this.memoryCache.delete(key);
+    
+    // 如果支持Cache API，也清除浏览器缓存
     if (this.isCacheSupported) {
-      // 使用浏览器Cache API
-      const cache = await caches.open(this.cacheName);
-      await cache.delete(key);
-    } else {
-      // 使用内存缓存
-      this.memoryCache.delete(key);
+      try {
+        // 确保caches对象存在
+        if (typeof caches === 'undefined') {
+          throw new Error('Cache API not available');
+        }
+        
+        const cache = await caches.open(this.cacheName);
+        await cache.delete(key);
+      } catch (error) {
+        console.error('Cache remove failed:', error);
+        // 错误已记录，内存缓存已清除，无需额外操作
+      }
     }
   }
 
@@ -93,25 +124,43 @@ export default class CacheStore {
    * 清理过期缓存（自动处理不同存储方案）
    */
   async cleanup() {
-    if (this.isCacheSupported) {
-      // 清理浏览器Cache API
-      const cache = await caches.open(this.cacheName);
-      const keys = await cache.keys();
-      for (const key of keys) {
-        const response = await cache.match(key);
-        const { timestamp, ttl } = await response.json();
-        if (ttl && Date.now() - timestamp > ttl) {
-          await cache.delete(key);
-        }
+    // 清理内存缓存（无论环境如何）
+    const now = Date.now();
+    this.memoryCache.forEach((value, key) => {
+      if (value.expires < now) {
+        this.memoryCache.delete(key);
       }
-    } else {
-      // 清理内存缓存
-      const now = Date.now();
-      this.memoryCache.forEach((value, key) => {
-        if (value.expires < now) {
-          this.memoryCache.delete(key);
+    });
+    
+    // 如果支持Cache API，也清理浏览器缓存
+    if (this.isCacheSupported) {
+      try {
+        // 确保caches对象存在
+        if (typeof caches === 'undefined') {
+          throw new Error('Cache API not available');
         }
-      });
+        
+        const cache = await caches.open(this.cacheName);
+        const keys = await cache.keys();
+        for (const key of keys) {
+          try {
+            const response = await cache.match(key);
+            if (!response) continue;
+            
+            const data = await response.json();
+            if (data.ttl && Date.now() - data.timestamp > data.ttl) {
+              await cache.delete(key);
+            }
+          } catch (err) {
+            console.error(`Error processing cache key ${key}:`, err);
+            // 出错时删除可能损坏的缓存项
+            await cache.delete(key);
+          }
+        }
+      } catch (error) {
+        console.error('Cache cleanup failed:', error);
+        // 错误已记录，内存缓存已清理，无需额外操作
+      }
     }
   }
 }
