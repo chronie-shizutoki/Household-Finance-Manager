@@ -1,0 +1,80 @@
+{
+  "app.title": "家庭記帳管理系統",
+  "app": {
+    "title": "家庭記帳管理系統",
+    "addRecord": "新增紀錄",
+    "statistics": "消費統計分析",
+    "export": "匯出資料",         
+    "recordList": "消費紀錄清單",
+    "consumptionTrend": "消費趨勢分析",
+    "notFound": "找不到頁面",
+    "pageNotFound": "您訪問的頁面不存在或已移除", 
+    "backToHome": "返回首頁",
+    "language": {
+      "zhCN": "簡體中文（中國大陸）",  
+      "enUS": "英文（美國）",
+      "jaJP": "日文（日本）",
+      "frFR": "法文（法國）"
+    }
+  },
+  "home": {
+    "prevMonth": "上個月",
+    "nextMonth": "下個月",
+    "dailyTrend": "每日消費趨勢圖",
+    "dailyDescending": "依金額由高到低排序",
+    "noData": "目前沒有消費紀錄",
+    "type": {
+      "food": "飲食餐飲",          
+      "shopping": "購物消費",
+      "entertainment": "娛樂休閒",
+      "transport": "交通出行",    
+      "communication": "電信費用",  
+      "housing": "房租/房貸",      
+      "travel": "旅遊住宿",
+      "fitness": "運動健身",      
+      "beauty": "美容美髮",
+      "pet": "寵物照護",
+      "books": "書籍雜誌",
+      "digital": "3C數位",      
+      "home": "居家用品",
+      "gift": "禮品交際",
+      "office": "辦公事務",
+      "sports": "運動裝備",
+      "repair": "維修保固",      
+      "medical": "醫療保健",
+      "education": "教育進修",
+      "utility": "水電瓦斯",      
+      "other": "其他支出"
+    }
+  },
+  "expense": {
+    "addFailed": "新增失敗：{error}，請檢查後再試", 
+    "exportFilename": "消費紀錄_{date}",
+    "columns": {
+      "type": "消費類型",
+      "amount": "金額（新台幣）",   
+      "date": "消費日期",
+      "remark": "備註說明"          
+    },
+    "emptyText": "暫無消費紀錄，點擊上方按鈕開始記帳",
+    "chart": {
+      "title": "消費類型占比分析",  
+      "legend": "消費分布比例",
+      "trendLabel": "近期消費趨勢"  
+    },
+    "common": {
+      "requestCanceled": "已取消操作",
+      "networkError": "網路連線異常，請檢查後重試", 
+      "requestTimeout": "連線逾時，請稍候再試"   
+    },
+    "labels": {
+      "date": "選擇日期",
+      "type": "選擇消費類型",
+      "amount": "輸入金額",
+      "remark": "備註（選填）"     
+    },
+    "buttons": {
+      "submit": "確認送出"         
+    }
+  },"monthLabel.zh-TW":"{year}年{month}月"
+}

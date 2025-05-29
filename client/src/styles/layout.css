@@ -1,0 +1,31 @@
+/* 现代自适应布局 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: relative;
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+}
+
+#app.dark .container {
+  background: rgba(26, 26, 26, 0.95); /* 深色模式背景色，与#1a1a1a同色系 */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  padding-bottom: 1.5rem;
+}
+
+.lang-switcher {
+  display: flex;
+  gap: 1rem;
+}

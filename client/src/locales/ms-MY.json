@@ -1,0 +1,73 @@
+{
+    "app.title":"Buku Tunai Digital",
+    "app": {
+        "title": "Buku Tunai Digital",
+        "addRecord": "Catat Perbelanjaan Baru",
+        "statistics": "Analisis Kewangan",
+        "export": "Eksport ke Excel",
+        "recordList": "Rekod Transaksi",
+        "consumptionTrend": "Corak Perbelanjaan",
+        "notFound": "Halaman Tidak Wujud",
+        "pageNotFound": "Halaman yang diminta tidak ditemui",
+        "backToHome": "Ke Dashboard Utama",
+        "language": {
+            "zhCN": "Bahasa Cina (Ringkas)",
+            "enUS": "Bahasa Inggeris",
+            "jaJP": "Bahasa Jepun",
+            "frFR": "Bahasa Perancis",
+            "msMY": "Bahasa Melayu"  
+        },
+        "buttons": {
+            "refresh": "Muat Semula",
+            "autoFill": "AI Isian Pintar"
+        }
+    },
+    "home": {
+        "prevMonth": "Bulan Lepas",
+        "nextMonth": "Bulan Depan",
+        "dailyTrend": "Perbelanjaan Harian",
+        "dailyDescending": "Transaksi Tertinggi",
+        "noData": "Tiada Transaksi"
+    },
+    "expense": {
+        "type": {
+            "food": "Makan & Minum",
+            "shopping": "Belanja Dapur",
+            "transport": "Pengangkutan",
+            "entertainment": "Aktiviti Keluarga",
+            "other": "Lain-Lain",
+            "housing": "Sewa Rumah",
+            "telekom": "Bil Telekom", 
+            "zakat": "Zakat/Infaq",
+            "toll": "Tol/Lebuhraya"
+        },
+        "addFailed": "Gagal Direkod ▶ {error} [Kod:001]",
+        "exportFilename": "Rekod_{nama}_{tarikh}",
+        "columns": {
+            "type": "Kategori",
+            "name": "Penerima",
+            "amount": "Amaun (RM)",
+            "time": "Masa Transaksi"
+        },
+        "emptyText": "Tiada transaksi 7 hari terkini",
+        "chart": {
+            "title": "Taburan Perbelanjaan",
+            "legend": "Peratusan Kategori",
+            "trendLabel": "Aliran Bulanan"
+        },
+        "common": {
+            "requestCanceled": "Transaksi Dibatalkan",
+            "networkError": "Sambungan Internet Terputus",
+            "requestTimeout": "Masa Tunggu Habis"
+        },
+        "labels": {
+            "date": "Tarikh (HH/BB/TTTT)",
+            "type": "Jenis Transaksi",
+            "amount": "Jumlah (RM)",
+            "remark": "Contoh: Touch 'n Go # GrabPay # DuitNow"
+        },
+        "buttons": {
+            "submit": "Rekod Sekarang"
+        }
+    },"monthLabel.ms-MY":"{month} {year}"
+}

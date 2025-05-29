@@ -1,0 +1,73 @@
+{
+  "app.title": "Comptabilité Familiale Pro",
+  "app": {
+    "title": "Comptabilité Familiale Pro",
+    "addRecord": "Nouvelle Opération",
+    "statistics": "Analyse Financière",
+    "export": "Exporter vers Excel",
+    "recordList": "Relevé Bancaire",
+    "consumptionTrend": "Suivi Budgétaire",
+    "notFound": "Page Non Trouvée",
+    "pageNotFound": "La page demandée n'existe pas",
+    "backToHome": "Retour au Tableau de Bord",
+    "language": {
+      "zhCN": "Chinois Simplifié",
+      "enUS": "Anglais (États-Unis)",
+      "jaJP": "Japonais",
+      "frFR": "Français",
+      "esES": "Espagnol"  
+    },
+    "buttons": {
+      "refresh": "Actualiser",
+      "autoFill": "IA Pré-remplissage"
+    }
+  },
+  "home": {
+    "prevMonth": "Mois Précédent",
+    "nextMonth": "Mois Prochain",
+    "dailyTrend": "Dépenses Journalières",
+    "dailyDescending": "Top Dépenses",
+    "noData": "Aucune opération"
+  },
+  "expense": {
+    "type": {
+      "food": "Courses Alimentaires",
+      "shopping": "E-commerce",
+      "transport": "Transport/Carburant",
+      "entertainment": "Loisirs Culturels",
+      "other": "Divers",
+      "housing": "Loyer/Prêt",
+      "charges": "Charges (EDF/GDF)",  
+      "abonnements": "Abonnements",
+      "impots": "Impôts/Taxes"
+    },
+    "addFailed": "Erreur : {error} ▶ Code:001",
+    "exportFilename": "Releve_{mois}_{annee}",
+    "columns": {
+      "type": "Catégorie",
+      "name": "Bénéficiaire",
+      "amount": "Montant (€)",
+      "time": "Date/Heure"
+    },
+    "emptyText": "Aucune transaction 7 derniers jours",
+    "chart": {
+      "title": "Répartition des Dépenses",
+      "legend": "Pourcentage par Catégorie",
+      "trendLabel": "Courbe Budgétaire"
+    },
+    "common": {
+      "requestCanceled": "Opération Annulée",
+      "networkError": "Erreur Orange/SFR",
+      "requestTimeout": "Délai Dépassé"
+    },
+    "labels": {
+      "date": "Date (JJ/MM/AAAA)",
+      "type": "Type de Dépense",
+      "amount": "Montant €",
+      "remark": "Ex: Lydia # PayPal # Virement SEPA"
+    },
+    "buttons": {
+      "submit": "Valider"
+    }
+  },"monthLabel.fr-FR":"{month} {year}"
+}

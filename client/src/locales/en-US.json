@@ -1,0 +1,73 @@
+{
+  "app.title": "Household Finance Manager",
+  "app": {
+    "title": "Household Finance Manager", 
+    "addRecord": "Log Expense",         
+    "statistics": "Spending Analysis",  
+    "export": "Export Data",
+    "recordList": "Transaction History", 
+    "consumptionTrend": "Spending Trends",
+    "notFound": "404 - Page Not Found", 
+    "pageNotFound": "This page does not exist or has been moved",
+    "backToHome": "Back to Dashboard",   
+    "language": {
+      "zhCN": "Chinese (Simplified)",    
+      "enUS": "English (United States)", 
+      "jaJP": "Japanese (Japan)",
+      "frFR": "French (France)",
+      "esES": "Spanish (Spain)"          
+    },
+    "buttons": {
+      "refresh": "Refresh Now",         
+      "autoFill": "Smart Auto-fill"     
+    }
+  },
+  "home": {
+    "prevMonth": "Previous Month",
+    "nextMonth": "Next Month",
+    "dailyTrend": "Daily Spending",     
+    "dailyDescending": "High to Low",   
+    "noData": "No transactions yet"      
+  },
+  "expense": {
+    "type": {
+      "food": "Dining Out/Groceries",   
+      "shopping": "Retail Shopping",
+      "transport": "Transportation",     
+      "entertainment": "Entertainment",
+      "housing": "Rent/Mortgage",       
+      "utilities": "Utilities",          
+      "healthcare": "Medical Care",     
+      "subscriptions": "Subscriptions",  
+      "other": "Miscellaneous"
+    },
+    "addFailed": "Failed to log expense: {error}. Please check and try again.", 
+    "exportFilename": "Expenses_{MMM_YYYY}", 
+    "columns": {
+      "type": "Category",
+      "name": "Description",           
+      "amount": "Amount (USD)",         
+      "time": "Date & Time"             
+    },
+    "emptyText": "Start tracking your first expense!", 
+    "chart": {
+      "title": "Spending Breakdown",
+      "legend": "By Category",
+      "trendLabel": "30-Day Trend"       
+    },
+    "common": {
+      "requestCanceled": "Action canceled",
+      "networkError": "Connection failed. Check Wi-Fi or cellular data.", 
+      "requestTimeout": "Request timed out. Try again later."
+    },
+    "labels": {
+      "date": "Date (MM/DD/YYYY)",      
+      "type": "Select Category",
+      "amount": "Enter Amount ($)",   
+      "remark": "Notes (e.g. Venmo username)" 
+    },
+    "buttons": {
+      "submit": "Save Expense"        
+    }
+  },"monthLabel.en-US":"{month} {year}"
+}

@@ -1,0 +1,81 @@
+{
+  "app.title":"家庭开支管理系统",
+  "app": {
+    "title": "家庭开支管理系统",
+    "addRecord": "添加记录",
+    "statistics": "开支分析",
+    "export": "导出数据",
+    "recordList": "消费记录清单",
+    "consumptionTrend": "开支趋势图",
+    "notFound": "页面不存在",
+    "pageNotFound": "您访问的页面不存在或已被移除",
+    "backToHome": "返回主页",
+    "language": {
+      "zhCN": "简体中文（新加坡）",  
+      "enUS": "英语（美国）",
+      "jaJP": "日语（日本）",
+      "frFR": "法语（法国）",
+      "msMY": "马来语"            
+    }
+  },
+  "home": {
+    "prevMonth": "上个月",
+    "nextMonth": "下个月",
+    "dailyTrend": "每日开支走势",
+    "dailyDescending": "按金额从高到低排序",
+    "noData": "暂无消费记录",
+    "type": {
+      "food": "食阁/餐饮",        
+      "shopping": "购物消费",
+      "entertainment": "娱乐休闲",
+      "transport": "交通/ERP费用",
+      "communication": "电信费用",  
+      "housing": "组屋贷款/租金",  
+      "travel": "旅行度假",
+      "fitness": "健身运动",
+      "beauty": "美容护理",
+      "pet": "宠物照护",
+      "books": "书籍杂志",
+      "digital": "数码电子",
+      "home": "家居用品",
+      "gift": "礼品人情",
+      "office": "办公用品",
+      "sports": "运动装备",
+      "repair": "维修保养",
+      "medical": "医疗保健",
+      "education": "教育补习",    
+      "utility": "水电杂费",      
+      "other": "其他支出"
+    }
+  },
+  "expense": {
+    "addFailed": "添加失败：{error}，请检查后重试", 
+    "exportFilename": "开支记录_{date}",
+    "columns": {
+      "type": "消费类型",
+      "amount": "金额（新元）",   
+      "date": "消费日期",
+      "remark": "备注（如PayNow转账编号）"
+    },
+    "emptyText": "暂无记录，点击上方按钮开始记录",
+    "chart": {
+      "title": "消费类型占比分析",
+      "legend": "开支分布比例",
+      "trendLabel": "近期消费走势"  
+    },
+    "common": {
+      "requestCanceled": "操作已取消",
+      "networkError": "网络连接异常，请检查Wi-Fi或移动数据",
+      "requestTimeout": "请求超时，请稍后重试"
+    },
+    "labels": {
+      "date": "选择日期（DD/MM/YYYY）", 
+      "type": "选择消费类型",
+      "amount": "输入金额（SGD）",
+      "remark": "备注（可选）"
+    },
+    "buttons": {
+      "submit": "确认提交"
+    }
+  },"monthLabel.zh-SG":"{year}年{month}月"
+}

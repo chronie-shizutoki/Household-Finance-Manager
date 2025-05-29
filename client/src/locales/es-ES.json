@@ -1,0 +1,73 @@
+{
+    "app.title":"Gestor Financiero Inteligente",
+    "app": {
+        "title": "Gestor Financiero Inteligente",
+        "addRecord": "Nuevo Gasto",
+        "statistics": "Análisis Financiero",
+        "export": "Exportar a Excel",
+        "recordList": "Historial de Movimientos",
+        "consumptionTrend": "Evolución de Gastos",
+        "notFound": "404 - Página no encontrada",
+        "pageNotFound": "El recurso solicitado no existe",
+        "backToHome": "Volver al Dashboard",
+        "language": {
+            "zhCN": "Chino Simplificado",
+            "enUS": "Inglés (EE.UU.)",
+            "jaJP": "Japonés",
+            "frFR": "Francés",
+            "esES": "Español (España)"  
+        },
+        "buttons": {
+            "refresh": "Actualizar",
+            "autoFill": "Autocompletado IA"
+        }
+    },
+    "home": {
+        "prevMonth": "Mes Previo",
+        "nextMonth": "Próximo Mes",
+        "dailyTrend": "Gastos Diarios",
+        "dailyDescending": "Top 5 Gastos",
+        "noData": "Sin movimientos"
+    },
+    "expense": {
+        "type": {
+            "food": "Supermercado",
+            "shopping": "Compras Online",
+            "transport": "Transporte/Gasolina",
+            "entertainment": "Ocio",
+            "other": "Varios",
+            "housing": "Hipoteca/Alquiler",
+            "utilities": "Luz/Agua/Gas",  
+            "comunidad": "Gastos Comunidad",
+            "seguros": "Seguros"
+        },
+        "addFailed": "Error: {error} ▶ Código:001",
+        "exportFilename": "Informe_{usuario}_{mes}",
+        "columns": {
+            "type": "Categoría",
+            "name": "Proveedor",
+            "amount": "Importe (€)",
+            "time": "Fecha/Hora"
+        },
+        "emptyText": "Sin movimientos en 7 días",
+        "chart": {
+            "title": "Distribución de Gastos",
+            "legend": "Composición",
+            "trendLabel": "Tendencia Mensual"
+        },
+        "common": {
+            "requestCanceled": "Operación cancelada",
+            "networkError": "Error de conexión (Vodafone/Orange)",
+            "requestTimeout": "Timeout de conexión"
+        },
+        "labels": {
+            "date": "Fecha (DD/MM/AAAA)",
+            "type": "Categoría",
+            "amount": "Importe €",
+            "remark": "Ejemplo: Bizum # PayPal # Transferencia SEPA"
+        },
+        "buttons": {
+            "submit": "Registrar"
+        }
+    },"monthLabel.es-ES":"{month} de {year}"
+}

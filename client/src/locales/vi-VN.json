@@ -1,0 +1,73 @@
+{
+    "app.title": "Sổ Thu Chi Thông Minh",
+    "app": {
+        "title": "Sổ Thu Chi Thông Minh",
+        "addRecord": "Thêm Giao Dịch",
+        "statistics": "Phân Tích Tài Chính",
+        "export": "Xuất File Excel",
+        "recordList": "Lịch Sử Giao Dịch",
+        "consumptionTrend": "Biểu Đồ Chi Tiêu",
+        "notFound": "Không Tìm Thấy Trang",
+        "pageNotFound": "Trang này không tồn tại",
+        "backToHome": "Về Trang Chính",
+        "language": {
+            "zhCN": "Tiếng Trung (Phồn thể)",
+            "enUS": "Tiếng Anh",
+            "jaJP": "Tiếng Nhật",
+            "frFR": "Tiếng Pháp",
+            "viVN": "Tiếng Việt"  
+        },
+        "buttons": {
+            "refresh": "Tải lại",
+            "autoFill": "AI Tự Động"
+        }
+    },
+    "home": {
+        "prevMonth": "Tháng Trước",
+        "nextMonth": "Tháng Sau",
+        "dailyTrend": "Chi Tiêu Hàng Ngày",
+        "dailyDescending": "Top Chi Tiêu",
+        "noData": "Không có dữ liệu"
+    },
+    "expense": {
+        "type": {
+            "food": "Ăn Uống",
+            "shopping": "Mua Sắm Online",
+            "transport": "Xăng Xe/Grab",
+            "entertainment": "Giải Trí",
+            "other": "Chi Phí Khác",
+            "housing": "Thuê Nhà",
+            "utilities": "Điện Nước",  
+            "education": "Học Phí",
+            "health": "Y Tế"
+        },
+        "addFailed": "Lỗi: {error} [Mã:001]",
+        "exportFilename": "BaoCao_{ngay}_{thang}",
+        "columns": {
+            "type": "Loại Chi",
+            "name": "Đơn Vị/Nhà Cung Cấp",
+            "amount": "Số Tiền (₫)",
+            "time": "Thời Gian GD"
+        },
+        "emptyText": "Không có giao dịch trong 7 ngày",
+        "chart": {
+            "title": "Phân Bổ Chi Tiêu",
+            "legend": "Tỷ Trọng",
+            "trendLabel": "Xu Hướng Tháng"
+        },
+        "common": {
+            "requestCanceled": "Đã Hủy Yêu Cầu",
+            "networkError": "Mất Kết Nối Internet",
+            "requestTimeout": "Quá Thời Gian Chờ"
+        },
+        "labels": {
+            "date": "Ngày (DD/MM/YYYY)",
+            "type": "Danh Mục",
+            "amount": "Số Tiền",
+            "remark": "Ví dụ: Ví Momo # ZaloPay # Chuyển Khoản"
+        },
+        "buttons": {
+            "submit": "Lưu Lại"
+        }
+    },"monthLabel.vi-VN":"{month} {year}"
+}

@@ -1,0 +1,72 @@
+{
+    "app.title":"모바일 가계부",
+    "app": {
+        "title": "모바일 가계부",
+        "addRecord": "소비 기록",
+        "statistics": "소비 분석",
+        "export": "엑셀 출력",
+        "recordList": "거래 내역",
+        "consumptionTrend": "지출 패턴",
+        "notFound": "페이지 없음",
+        "pageNotFound": "존재하지 않는 페이지입니다",
+        "backToHome": "메인 화면",
+        "language": {
+            "zhCN": "중국어(간체)",
+            "enUS": "영어(미국)",
+            "jaJP": "일본어",
+            "frFR": "프랑스어",
+            "koKR": "한국어" 
+        },
+        "buttons": {
+            "refresh": "새로고침",
+            "autoFill": "AI 자동기입"
+        }
+    },
+    "home": {
+        "prevMonth": "전월",
+        "nextMonth": "다음달",
+        "dailyTrend": "일별 소비",
+        "dailyDescending": "지출 TOP",
+        "noData": "내역 없음"
+    },
+    "expense": {
+        "type": {
+            "food": "식비/카페",
+            "shopping": "온라인쇼핑",
+            "transport": "교통/주유",
+            "entertainment": "문화생활",
+            "other": "기타경비",
+            "housing": "월세/관리비",
+            "communication": "통신비",  
+            "insurance": "보험료"
+        },
+        "addFailed": "저장 실패 ▶ {error}",
+        "exportFilename": "가계부_내역_{date}",
+        "columns": {
+            "type": "구분",
+            "name": "결제처",
+            "amount": "금액(원)",
+            "time": "결제시각"
+        },
+        "emptyText": "최근 7일간 거래내역 없음",
+        "chart": {
+            "title": "카테고리별 지출",
+            "legend": "소비 구성",
+            "trendLabel": "월별 추이"
+        },
+        "common": {
+            "requestCanceled": "취소된 요청",
+            "networkError": "인터넷 연결 확인",
+            "requestTimeout": "응답시간 초과"
+        },
+        "labels": {
+            "date": "사용일자(YYYY-MM-DD)",
+            "type": "소비유형",
+            "amount": "결제금액",
+            "remark": "메모 예시 ▶ 카카오페이#네이버페이#통장이체"
+        },
+        "buttons": {
+            "submit": "기록하기"
+        }
+    },"monthLabel.ko-KR":"{year}년 {month}월"
+}

@@ -1,0 +1,79 @@
+{
+  "app.title":"スマート家計簿アプリ",
+  "app": {
+    "title": "スマート家計簿アプリ",
+    "addRecord": "入出金登録",
+    "statistics": "支出レポート",
+    "export": "CSV出力",
+    "recordList": "取引明細",
+    "consumptionTrend": "資産管理",
+    "notFound": "404 - ページが見つかりません",
+    "pageNotFound": "指定のURLは存在しません",
+    "backToHome": "ホームに戻る",
+    "language": {
+      "zhCN": "簡体中文",
+      "enUS": "英語（米国）",
+      "jaJP": "日本語",
+      "frFR": "フランス語",
+      "koKR": "한국어"
+    },
+    "buttons": {
+      "refresh": "再読込",
+      "autoFill": "AI自動入力"
+    }
+  },
+  "home": {
+    "prevMonth": "前月",
+    "nextMonth": "翌月",
+    "dailyTrend": "日別収支",
+    "dailyDescending": "支出TOP",
+    "noData": "データが存在しません"
+  },
+  "expense": {
+    "type": {
+      "food": "食費（外食含む）",
+      "shopping": "日用雑貨",
+      "transport": "交通費（定期券）",
+      "entertainment": "娯楽・交際費",
+      "housing": "家賃・住宅ローン",
+      "utilities": "電気・ガス・水道",
+      "communications": "通信費（WiMAX含む）",
+      "insurance": "保険・年金",
+      "education": "教育・習い事",
+      "medical": "医療・介護",
+      "travel": "旅行・レジャー",
+      "fashion": "衣服・美容",
+      "tax": "税金・社会保険",  
+      "convenience": "コンビニ支出",
+      "other": "その他経費"
+    },
+    "addFailed": "エラー：{error} [コード:001]",
+    "exportFilename": "家計簿_{元号}{年}年{月}期",
+    "columns": {
+      "type": "勘定科目",
+      "name": "取引先",
+      "amount": "金額（￥）",
+      "time": "取引日時"
+    },
+    "emptyText": "直近1週間の取引なし",
+    "chart": {
+      "title": "費目別割合",
+      "legend": "支出構成比",
+      "trendLabel": "月次推移グラフ"
+    },
+    "common": {
+      "requestCanceled": "操作を中断しました",
+      "networkError": "通信エラー（docomo/au/SoftBank）",
+      "requestTimeout": "接続が集中しています"
+    },
+    "labels": {
+      "date": "日付（YYYY-MM-DD）",
+      "type": "科目選択",
+      "amount": "金額入力（税込）",
+      "remark": "備考例：PayPay払い # 楽天ポイント # 銀行振込"
+    },
+    "buttons": {
+      "submit": "確定登録"
+    }
+  },"monthLabel.ja-JP":"{year}年{month}月"
+}

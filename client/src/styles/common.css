@@ -1,0 +1,50 @@
+/* 样式入口文件，导入所有模块 */
+@import './variables.css';
+@import './responsive.css';
+@import './layout.css';
+@import './components.css';
+@import './animations.css';
+@import './base.css';
+@import './modal.css';
+@import './messages.css';
+
+/* 基础变量 (浅色模式) */
+:root {
+    --container-bg: #f9fafb;
+    --shadow: 0 4px 24px rgba(0,0,0,0.10);
+  }
+  
+  /* 系统级深色模式 */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) { /* 排除手动切换 */
+      --container-bg: #2d2d2d;
+      --shadow: 0 4px 24px rgba(255,255,255,0.05);
+    }
+  }
+  
+  /* 手动深色模式 */
+  [data-theme="dark"] {
+    --container-bg: #2d2d2d;
+    --shadow: 0 4px 24px rgba(255,255,255,0.05);
+  }
+  
+  /* 应用样式 */
+  .data-section {
+    background: var(--container-bg);
+    box-shadow: var(--shadow);
+  }
+  /* element-plus深色模式兼容 */
+:root.dark {
+    --el-bg-color-overlay: #1f1f1f;
+    --el-border-color-light: rgba(255,255,255,0.1);
+    --el-text-color-regular: rgba(255,255,255,0.8);
+    --el-fill-color-light: rgba(255,255,255,0.1);
+    --el-box-shadow-dark: 0 12px 32px 4px rgba(0, 0, 0, 0.36);
+  }
+  
+  /* 明亮模式默认值 */
+  :root {
+    --el-color-primary: #4CAF50;
+    --primary-hover-color: #2E7D32;
+    --el-border-radius-base: 8px;
+  }

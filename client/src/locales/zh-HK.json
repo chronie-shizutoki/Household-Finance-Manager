@@ -1,0 +1,80 @@
+{
+  "app.title":"家庭使錢管理系統",
+  "app": {
+    "title": "家庭使錢管理系統",
+    "addRecord": "記低使咗幾多",
+    "statistics": "使錢計數",
+    "export": "攞數據出嚟",
+    "recordList": "使錢清單",
+    "consumptionTrend": "使錢走勢",
+    "notFound": "搵唔到呢版",
+    "pageNotFound": "你搵嘅版唔喺度或者冇咗啦", 
+    "backToHome": "返去主頁",
+    "language": {
+      "zhCN": "簡體字（大陸）",
+      "enUS": "英文（美國）",
+      "jaJP": "日本話",
+      "frFR": "法蘭西文"
+    }
+  },
+  "home": {
+    "prevMonth": "上個月",
+    "nextMonth": "下個月",
+    "dailyTrend": "每日使錢走勢",
+    "dailyDescending": "由多到少排",
+    "noData": "冇使錢記錄喎",
+    "type": {
+      "food": "飲飲食食",
+      "shopping": "買嘢血拼",        
+      "entertainment": "玩樂消遣",
+      "transport": "搭車出行",
+      "communication": "電話上網", 
+      "housing": "交租/供樓",
+      "travel": "去旅行",
+      "fitness": "做gym",       
+      "beauty": "扮靚",
+      "pet": "養寵物",
+      "books": "書簿雜誌",
+      "digital": "電子嘢",
+      "home": "家頭細務",
+      "gift": "人情世故",
+      "office": "返工用品",
+      "sports": "波具球鞋", 
+      "repair": "整嘢維修",
+      "medical": "睇醫生",
+      "education": "補習進修",
+      "utility": "水電煤",
+      "other": "其他使費"
+    }
+  },
+  "expense": {
+    "addFailed": "記數失敗：{error}，check清楚再試啦",
+    "exportFilename": "使錢記錄_{date}",
+    "columns": {
+      "type": "使錢類別",
+      "amount": "銀碼（港紙）",
+      "date": "使錢日子",
+      "remark": "備註（有就寫）"
+    },
+    "emptyText": "未有使錢記錄，撳上面個掣開始記數",
+    "chart": {
+      "title": "使錢分佈圖",
+      "legend": "各類使費佔比",
+      "trendLabel": "近排使錢走勢"
+    },
+    "common": {
+      "requestCanceled": "取消咗操作",
+      "networkError": "上唔到網，check吓Wi-Fi啦",
+      "requestTimeout": "等太耐冇反應，遲啲再試"
+    },
+    "labels": {
+      "date": "揀日子",
+      "type": "揀使錢類別",
+      "amount": "填銀碼",
+      "remark": "備註（有需要就寫）"
+    },
+    "buttons": {
+      "submit": "搞掂"
+    }
+  },"monthLabel.zh-HK":"{year}年{month}月"
+}

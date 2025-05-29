@@ -1,0 +1,13 @@
+# 依赖目录
+node_modules/
+# 构建输出
+client/dist/
+server/public/
+# 本地配置
+.env
+# Windows系统文件
+Thumbs.db
+# VSCode配置
+.vscode/
+.DS_Store
+Thumbs.db
