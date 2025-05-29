@@ -1,4 +1,4 @@
-> 🔍 Browse in other languages:  
+> 🔍 languages:  
 [English（United States）](#en-US) | [简体中文（中国大陆）](#zh-CN) | [日本語（日本）](#ja-JP) | [Français(France)](#fr-FR) | [繁體中文(香港特別行政區)](#zh-HK) | [繁體中文(台灣地區)](#zh-TW) |  
 [简体中文(新加坡)](#zh-SG) | [Español](#es-ES) | [한국어(대한민국)](#ko-KR) | [Bahasa Melayu](#ms-MY) | [Tiếng Việt(việt nam)](#vi-VN)
 
