@@ -76,6 +76,7 @@ let csvExpenses = ref([])
 import { useI18n } from 'vue-i18n'
 import Papa from 'papaparse'
 import dayjs from 'dayjs'
+import { formatMonthLabelByLocale } from '@/utils/dateFormatter'
 import MessageTip from '@/components/MessageTip.vue'
 import Header from '@/components/Header.vue'
 import ActionButtons from '@/components/ActionButtons.vue'
@@ -193,39 +194,11 @@ onMounted(() => {
 let currentMonth = ref(dayjs().format('YYYY-MM'))
 let chartType = ref(1)
 
-// 修复后的计算属性
+// 使用新的日期格式化工具
 let monthLabel = computed(() => {
-  let d = dayjs(currentMonth.value)
-  // 确保所有分支都获取基础年份
-  let baseYear = d.year()
-  let baseMonth = d.month() + 1 // 月份从1开始
-
-  // 统一获取其他语言的年份
-  let yearValue = baseYear
-  let monthValue
-
-  // 各语言月份格式处理
-  switch (locale.value) {
-    case 'en-US':
-      monthValue = d.format('MMMM') // April
-      break
-    case 'ko':
-      monthValue = `${baseMonth}월` // 4월
-      break
-    case 'vi':
-    case 'ms':
-      monthValue = baseMonth; // 数字
-      break
-    default: // 中文及其他语言
-      monthValue = String(baseMonth).padStart(2, '0');
-      yearValue = `${baseYear}`;
-      break;
-  }
-
-  return t(`monthLabel.${locale.value}`, {
-    year: yearValue,
-    month: monthValue
-  })})
+  // 直接使用formatMonthLabelByLocale处理所有语言的日期格式
+  return formatMonthLabelByLocale(currentMonth.value, locale.value);
+})
 
 
 

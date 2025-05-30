@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import './styles/common.css' // 导入公共样式文件
+import './styles/fonts.css' // 导入自定义字体
 import 'element-plus/dist/index.css' // 导入Element Plus基础样式
 import App from './App.vue'
 import router from './router'

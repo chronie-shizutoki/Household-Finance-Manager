@@ -20,20 +20,26 @@
 
 <script>
 import { TextConfig } from '@/config/textConfig';
-import { addExpenseApi, getExpensesApi, getStatisticsApi } from '@/api/expense';
+import { ExpenseAPI } from '@/api/expenses';
 import { Chart, ArcElement, Tooltip, Legend, LineController, LinearScale, CategoryScale, PointElement, LineElement } from 'chart.js';
 import axios from 'axios';
 import FileSaver from 'file-saver';
+import { useI18n } from 'vue-i18n';
 
 Chart.register(ArcElement, Tooltip, Legend, LineController, LinearScale, CategoryScale, PointElement, LineElement);
 
 export default {
   data() {
+    const { t } = useI18n();
     return {
       TextConfig,
-      expenseTypes: [i18n.t('expense.type.food'), i18n.t('expense.type.shopping'), i18n.t('expense.type.transport'), i18n.t('expense.type.entertainment'), i18n.t('expense.type.other')],  // 可扩展的支出类型
+      loading: {
+        form: false,
+        chart: false
+      },
+      expenseTypes: [t('expense.type.food'), t('expense.type.shopping'), t('expense.type.transport'), t('expense.type.entertainment'), t('expense.type.other')],  // 可扩展的支出类型
       newExpense: {
-        type: i18n.t('expense.type.food'),
+        type: t('expense.type.food'),
         itemName: '',
         amount: 0,
         time: new Date().toISOString().slice(0, 16)
@@ -48,21 +54,31 @@ export default {
     await this.updateChart();
   },
   methods: {
-    async mounted() {
-      this.Chart = (await import('chart.js/auto')).default;
-      await this.loadExpenses();
-      await this.updateChart();
-    },
     async addExpense() {
-      await addExpenseApi(this.newExpense);
-      this.newExpense = { ...this.newExpense, itemName: '', amount: 0 };
-      await this.loadExpenses();
-      await this.updateChart();
+      try {
+        await ExpenseAPI.addExpense(this.newExpense);
+        this.newExpense = { 
+          ...this.newExpense, 
+          itemName: '', 
+          amount: 0 
+        };
+        await this.loadExpenses();
+        await this.updateChart();
+      } catch (error) {
+        console.error('添加记录失败:', error);
+      }
     },
     async loadExpenses() {
       this.loading.form = true;
       try {
-        this.expenses = await getExpensesApi();
+        const response = await ExpenseAPI.getExpenses();
+        if (response.error) {
+          throw new Error(response.error);
+        }
+        this.expenses = response.data || [];
+      } catch (error) {
+        console.error('获取消费数据失败:', error);
+        this.expenses = [];
       } finally {
         this.loading.form = false;
       }
@@ -70,7 +86,8 @@ export default {
     async updateChart() {
       this.loading.chart = true;
       try {
-        const statistics = await getStatisticsApi();
+        const response = await ExpenseAPI.getStatistics();
+        const statistics = response.data || [];
         
         // 销毁旧图表实例
         if (this.chartInstance) this.chartInstance.destroy();
@@ -80,7 +97,13 @@ export default {
         if (this.chartInstance) this.chartInstance.destroy();
         if (this.trendChartInstance) this.trendChartInstance.destroy();
         
-        this.chartInstance = new this.Chart(this.$refs.ratioChart, {
+        // 确保DOM元素存在
+        if (!this.$refs.ratioChart) {
+          console.error('图表DOM元素不存在');
+          return;
+        }
+        
+        this.chartInstance = new Chart(this.$refs.ratioChart, {
           type: 'doughnut',
           data: {
             labels: (statistics || []).map(s => s.type),
@@ -99,6 +122,12 @@ export default {
         });
     
         // 初始化消费趋势折线图
+        // 确保DOM元素存在
+        if (!this.$refs.trendChart) {
+          console.error('趋势图表DOM元素不存在');
+          return;
+        }
+        
         this.trendChartInstance = new Chart(this.$refs.trendChart, {
           type: 'line',
           data: {
