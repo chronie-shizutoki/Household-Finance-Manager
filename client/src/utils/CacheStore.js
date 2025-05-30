@@ -1,20 +1,53 @@
 // 缓存存储工具类，封装浏览器Cache API操作
+// 增强版：确保在任何环境下都能安全运行，包括SSR和非浏览器环境
 
-// 检测运行环境：浏览器环境且支持Cache API
-// 严格检测浏览器环境且支持Cache API（避免SSR等伪浏览器环境）
-const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
-const isCacheSupported = isBrowser && typeof caches !== 'undefined' && typeof caches.open === 'function';
+/**
+ * 安全检测运行环境
+ * 使用try-catch避免任何可能的引用错误
+ */
+const checkEnvironment = () => {
+  try {
+    // 检测是否为浏览器环境
+    const isBrowser = typeof window !== 'undefined' && 
+                     typeof window.document !== 'undefined';
+    
+    // 仅在确认为浏览器环境后再检测Cache API
+    let isCacheSupported = false;
+    if (isBrowser) {
+      // 安全检测caches对象
+      isCacheSupported = typeof window.caches !== 'undefined' && 
+                        typeof window.caches.open === 'function';
+    }
+    
+    return { isBrowser, isCacheSupported };
+  } catch (e) {
+    // 任何错误都视为不支持
+    console.warn('环境检测失败，将使用内存缓存:', e);
+    return { isBrowser: false, isCacheSupported: false };
+  }
+};
 
-// 降级存储：内存缓存（适用于非浏览器环境）
-const memoryCache = new Map();
+// 执行环境检测
+const { isBrowser, isCacheSupported } = checkEnvironment();
+
+// 降级存储：全局内存缓存（适用于非浏览器环境）
+const globalMemoryCache = new Map();
 
 export default class CacheStore {
   constructor(cacheName = 'home-money-cache') {
     this.cacheName = cacheName;
-    this.isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
-    this.isCacheSupported = this.isBrowser && typeof caches !== 'undefined' && typeof caches.open === 'function';
+    
+    // 使用已检测的环境变量，避免重复检测
+    this.isBrowser = isBrowser;
+    this.isCacheSupported = isCacheSupported;
+    
     // 初始化内存缓存（当Cache API不可用时使用）
     this.memoryCache = new Map();
+    
+    // 记录初始化状态
+    if (!this.isCacheSupported) {
+      console.info(`CacheStore: 浏览器缓存API不可用，将使用内存缓存 (${cacheName})`);
+    }
   }
 
   /**
@@ -23,6 +56,7 @@ export default class CacheStore {
    * @returns {Promise<any>}
    */
   async get(key) {
+    // 首先检查是否支持Cache API
     if (!this.isCacheSupported) {
       // 使用内存缓存
       const item = this.memoryCache.get(key);
@@ -35,12 +69,12 @@ export default class CacheStore {
     }
     
     try {
-      // 确保caches对象存在且可用
-      if (typeof caches === 'undefined' || !this.isCacheSupported) {
+      // 安全访问caches对象
+      if (!window || !window.caches) {
         throw new Error('Cache API not available');
       }
       
-      const cache = await caches.open(this.cacheName);
+      const cache = await window.caches.open(this.cacheName);
       const response = await cache.match(key);
       if (!response) return null;
       
@@ -87,12 +121,12 @@ export default class CacheStore {
     }
     
     try {
-      // 确保caches对象存在且可用
-      if (typeof caches === 'undefined' || !this.isCacheSupported) {
+      // 安全访问caches对象
+      if (!window || !window.caches) {
         throw new Error('Cache API not available');
       }
       
-      const cache = await caches.open(this.cacheName);
+      const cache = await window.caches.open(this.cacheName);
       const response = new Response(JSON.stringify({ 
         value, 
         timestamp: Date.now(), 
@@ -116,12 +150,12 @@ export default class CacheStore {
     // 如果支持Cache API，也清除浏览器缓存
     if (this.isCacheSupported) {
       try {
-        // 确保caches对象存在且可用
-        if (typeof caches === 'undefined' || !this.isCacheSupported) {
+        // 安全访问caches对象
+        if (!window || !window.caches) {
           throw new Error('Cache API not available');
         }
         
-        const cache = await caches.open(this.cacheName);
+        const cache = await window.caches.open(this.cacheName);
         await cache.delete(key);
       } catch (error) {
         console.error('Cache remove failed:', error);
@@ -145,12 +179,12 @@ export default class CacheStore {
     // 如果支持Cache API，也清理浏览器缓存
     if (this.isCacheSupported) {
       try {
-        // 确保caches对象存在且可用
-        if (typeof caches === 'undefined' || !this.isCacheSupported) {
+        // 安全访问caches对象
+        if (!window || !window.caches) {
           throw new Error('Cache API not available');
         }
         
-        const cache = await caches.open(this.cacheName);
+        const cache = await window.caches.open(this.cacheName);
         const keys = await cache.keys();
         for (const key of keys) {
           try {
@@ -171,6 +205,33 @@ export default class CacheStore {
         console.error('Cache cleanup failed:', error);
         // 错误已记录，内存缓存已清理，无需额外操作
       }
+    }
+  }
+  
+  /**
+   * 获取带TTL的缓存项（自动选择存储方案）
+   * @param {string} key 缓存键
+   * @param {number} defaultTTL 默认TTL（毫秒）
+   * @returns {Promise<any>} 缓存值
+   */
+  async getWithTTL(key, defaultTTL = 3600000) {
+    try {
+      // 尝试从缓存获取
+      const cachedItem = await this.get(key);
+      
+      // 如果缓存存在且未过期，直接返回
+      if (cachedItem && cachedItem.timestamp) {
+        const isExpired = Date.now() - cachedItem.timestamp > defaultTTL;
+        if (!isExpired) {
+          return cachedItem.value || cachedItem;
+        }
+      }
+      
+      // 缓存不存在或已过期，返回null
+      return null;
+    } catch (error) {
+      console.error('Cache getWithTTL failed:', error);
+      return null;
     }
   }
 }
