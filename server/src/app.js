@@ -8,11 +8,16 @@ const corsOptions = {
     ? 'https://yourdomain.com'
     : function (origin, callback) {
       // 开发环境动态允许本地及局域网前端源（支持任意端口）
-      const isDev = process.env.NODE_ENV === 'development';
+      const isDev = process.env.NODE_ENV !== 'production'; // 默认视为开发环境
       if (isDev) {
         // 允许所有开发环境源（包括预检请求时origin为undefined的情况）
         if (!origin) return callback(null, true);
-        const isLocal = origin.startsWith('http://localhost:') || origin.startsWith('http://192.168.0.');
+        // 扩展本地IP范围，确保覆盖所有开发场景
+        const isLocal = origin.startsWith('http://localhost:') || 
+                        origin.startsWith('http://127.0.0.1:') || 
+                        origin.startsWith('http://192.168.') || 
+                        origin.startsWith('http://172.') || 
+                        origin.startsWith('http://10.');
         return callback(null, isLocal);
       }
       // 生产环境严格校验

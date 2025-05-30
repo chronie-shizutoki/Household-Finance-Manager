@@ -26,12 +26,17 @@ export default class CacheStore {
     if (!this.isCacheSupported) {
       // 使用内存缓存
       const item = this.memoryCache.get(key);
+      // 检查内存缓存中的项是否过期
+      if (item && item.expires !== Infinity && item.expires < Date.now()) {
+        this.memoryCache.delete(key);
+        return null;
+      }
       return item ? item.value : null;
     }
     
     try {
-      // 确保caches对象存在
-      if (typeof caches === 'undefined') {
+      // 确保caches对象存在且可用
+      if (typeof caches === 'undefined' || !this.isCacheSupported) {
         throw new Error('Cache API not available');
       }
       
@@ -51,6 +56,11 @@ export default class CacheStore {
       console.error('Cache get failed:', error);
       // 异常时回退到内存缓存
       const item = this.memoryCache.get(key);
+      // 检查内存缓存中的项是否过期
+      if (item && item.expires !== Infinity && item.expires < Date.now()) {
+        this.memoryCache.delete(key);
+        return null;
+      }
       return item ? item.value : null;
     }
   }
@@ -77,8 +87,8 @@ export default class CacheStore {
     }
     
     try {
-      // 确保caches对象存在
-      if (typeof caches === 'undefined') {
+      // 确保caches对象存在且可用
+      if (typeof caches === 'undefined' || !this.isCacheSupported) {
         throw new Error('Cache API not available');
       }
       
@@ -106,8 +116,8 @@ export default class CacheStore {
     // 如果支持Cache API，也清除浏览器缓存
     if (this.isCacheSupported) {
       try {
-        // 确保caches对象存在
-        if (typeof caches === 'undefined') {
+        // 确保caches对象存在且可用
+        if (typeof caches === 'undefined' || !this.isCacheSupported) {
           throw new Error('Cache API not available');
         }
         
@@ -135,8 +145,8 @@ export default class CacheStore {
     // 如果支持Cache API，也清理浏览器缓存
     if (this.isCacheSupported) {
       try {
-        // 确保caches对象存在
-        if (typeof caches === 'undefined') {
+        // 确保caches对象存在且可用
+        if (typeof caches === 'undefined' || !this.isCacheSupported) {
           throw new Error('Cache API not available');
         }
         
