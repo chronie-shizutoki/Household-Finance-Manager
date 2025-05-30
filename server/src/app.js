@@ -37,13 +37,15 @@ const fs = require('fs');
 
 
 const app = express();
-const PORT = 3001; // 修改端口为3001，确保与前端代理一致
+// 动态端口分配，避免端口冲突
+const PORT = process.env.PORT || 3010; // 修改为3010，避免与可能被占用的3001和3002冲突
 
 // 统一CORS配置（移除重复的中间件调用）
 app.use(cors(corsOptions)); // 应用优化后的CORS配置
 
 // 定义路由
 app.use('/api/expenses', require('./routes/expenses'));
+app.use('/api/blocklist', require('./routes/blocklist'));
 
   // 添加请求日志中间件（记录请求路径和时间）
   app.use((req, res, next) => {
