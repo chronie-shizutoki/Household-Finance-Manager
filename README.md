@@ -1,8 +1,8 @@
 > 🔍 languages:  
-[English（United States）](#en-US) | [简体中文（中国大陆）](#zh-CN) | [日本語（日本）](#ja-JP) | [Français(France)](#fr-FR) | [繁體中文(香港特別行政區)](#zh-HK) | [繁體中文(台灣地區)](#zh-TW) |  [简体中文(新加坡)](#zh-SG) | [Español](#es-ES) | [한국어(대한민국)](#ko-KR) | [Bahasa Melayu](#ms-MY) | [Tiếng Việt(việt nam)](#vi-VN)
+[English（United States）](#en-US) | [简体中文（中国大陆）](#zh-CN) | [日本語（日本）](#ja-JP) | [Français（France）](#fr-FR) | [繁體中文（香港特別行政區）](#zh-HK) | [繁體中文（台灣地區）](#zh-TW) | [简体中文（新加坡）](#zh-SG) | [Español（Spain）](#es-ES) | [한국어（대한민국）](#ko-KR) | [Bahasa Melayu（Malaysia）](#ms-MY) | [Tiếng Việt（Việt Nam）](#vi-VN)
 
 <a id="en-US"></a>
-# Household Finance Manager (English-US)
+# Household Finance Manager [English（United States）]
 
 ## Project Overview
 The Household Finance Manager is a multilingual financial management tool designed to help users easily track income/expenses, analyze spending patterns, and improve financial transparency. Supports real-time data sync and cross-device access.
@@ -46,7 +46,7 @@ npm run dev  # Start both frontend (http://localhost:5173) and backend (http://l
 
 
 <a id="zh-CN"></a>
-# 家庭财务管理系统 (简体中文-中国大陆)
+# 家庭财务管理系统 [简体中文（中国大陆）]
 
 ## 项目概述
 家庭财务管理系统是一款支持多语言界面的财务管理工具，旨在帮助用户便捷记录家庭收支、统计消费数据并进行多维度分析，提升家庭财务透明度和管理效率。
@@ -89,7 +89,7 @@ npm run dev  # 同时启动前端（http://localhost:5173）和后端（http://l
 
 ---
 <a id="zh-SG"></a>
-# 家庭财务管理系统 (简体中文-新加坡)
+# 家庭财务管理系统 [简体中文（新加坡）]
 
 ## 项目简介
 家庭财务管理系统是一款多语言财务管理工具，帮助用户轻松追踪日常收支、分析消费习惯，提升家庭理财效率。系统自动适配新加坡地区语言习惯与日期格式。
@@ -141,7 +141,7 @@ npm run dev  # 启动前端(http://localhost:5173)与后端(http://localhost:300
 
 ---
 <a id="zh-HK"></a>
-# 家庭財務管理系統 (繁體中文-香港特別行政區)
+# 家庭財務管理系統 [繁體中文（香港特別行政區）]
 
 ## 項目簡介
 呢個家庭理財幫手專為香港家庭設計，幫你輕鬆記錄日常使費、分析消費習慣，等你可以更醒咁管理屋企開支。系統自動配對香港日期格式同埋港幣顯示，仲支援本地化嘅消費分類㗎！
@@ -194,7 +194,7 @@ npm run dev  # 同時開前端(http://localhost:5173)同後端(http://localhost:
 
 ---
 <a id="zh-TW"></a>
-# 家庭財務管理系統 (繁體中文-台灣地區)
+# 家庭財務管理系統 [繁體中文（台灣地區）]
 
 ## 專案介紹
 這款家庭理財工具專為台灣用戶設計，提供在地化操作體驗，協助您輕鬆管理家庭收支、分析消費模式，實現更有效的財務規劃。系統自動採用台灣日期格式及新台幣顯示，並支援本地化消費分類。
@@ -253,7 +253,7 @@ npm run dev  # 同時啟動前端(http://localhost:5173)與後端(http://localho
 
 ---
 <a id="ja-JP"></a>
-# 家計簿管理システム (日本語-日本)
+# 家計簿管理システム [日本語（日本）]
 
 ## プロジェクト概要
 この家計簿管理システムは日本のご家庭向けに設計された多言語対応ツールで、収支記録の効率化と支出分析を支援します。和暦表示や円貨記号の自動対応など、日本の利用環境に最適化されています。
@@ -324,7 +324,7 @@ npm run dev  # フロントエンド(http://localhost:5173)とバックエンド
 
 ---
 <a id="ko-KR"></a>
-# 가정 재정 관리 시스템 (한국어)
+# 가정 재정 관리 시스템 [한국어（대한민국）]
 
 ## 프로젝트 개요
 이 가계부 관리 시스템은 한국 가정을 위해 특별히 설계된 다국어 지원 도구로, 가계 수입과 지출을 체계적으로 기록하고 분석할 수 있도록 도와줍니다. 한국식 날짜 형식과 원화 표시를 자동 지원하며, 현지화된 소비 카테고리를 제공합니다.
@@ -391,7 +391,7 @@ npm run dev  # 프론트엔드(http://localhost:5173)와 백엔드(http://localh
 
 ---
 <a id="ms-MY"></a>
-# Sistem Pengurusan Kewangan Keluarga (Bahasa Malaysia)
+# Sistem Pengurusan Kewangan Keluarga [Bahasa Melayu（Malaysia）]
 
 ## Gambaran Projek
 Sistem Pengurusan Kewangan Keluarga ini direka khusus untuk pengguna Malaysia, membantu keluarga mengurus perbelanjaan harian dengan lebih efektif. Sistem ini menyokong format tarikh tempatan dan simbol mata wang Ringgit secara automatik.
@@ -458,7 +458,7 @@ Contoh rekod perbelanjaan:
 
 ---
 <a id="vi-VN"></a>
-# Hệ Thống Quản Lý Tài Chính Gia Đình (Tiếng Việt)
+# Hệ Thống Quản Lý Tài Chính Gia Đình [Tiếng Việt（Việt Nam）](#vi-VN)
 
 ## Giới Thiệu Dự Án
 Hệ thống Quản Lý Tài Chính Gia Đình được thiết kế dành riêng cho người dùng Việt Nam, hỗ trợ quản lý thu chi hàng ngày một cách hiệu quả. Hệ thống tự động áp dụng định dạng ngày tháng Việt Nam và hiển thị ký hiệu tiền tệ VND.
@@ -525,7 +525,7 @@ Ví dụ giao dịch:
 
 ---
 <a id="es-ES"></a>
-# Gestor de Finanzas Familiares (Español de España)
+# Gestor de Finanzas Familiares [Español（Spain）]
 
 ## Resumen del Proyecto
 Este sistema de gestión financiera familiar está diseñado para usuarios españoles, facilitando el control de ingresos y gastos domésticos con soporte multilingüe. Adaptado a formatos locales como DD/MM/AAAA y símbolo del euro (€).
@@ -592,7 +592,7 @@ Ejemplo de registro:
 
 ---
 <a id="fr-FR"></a>
-# Gestionnaire de Finances Familiales (Français)
+# Gestionnaire de Finances Familiales [Français（France）]
 
 ## Présentation du Projet
 Ce système de gestion financière familiale est spécialement conçu pour les utilisateurs français, facilitant le suivi des dépenses quotidiennes et l'analyse des habitudes de consommation. Adapté aux formats locaux (JJ/MM/AAAA) avec support de l'euro (€).
