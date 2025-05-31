@@ -1,10 +1,10 @@
 <!--
- * @file ConsumptionChart.vue
- * @package 家庭记账本
- * @module 公共组件
- * @description 消费趋势图表组件
- * @author 开发者
- * @version 1.0
+* @file ConsumptionChart.vue
+* @package 家庭记账本
+* @module 公共组件
+* @description 消费趋势图表组件
+* @author 开发者
+* @version 1.0
 -->
 <template>
   <div :class="['chart-container', { 'scene-style': showSceneStyle }]">
@@ -15,21 +15,27 @@
 
 <script setup>
 import { Line as LineChart } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement } from 'chart.js'
-import { defineComponent } from 'vue'
+// 导入所有 Chart.js 核心模块和 datalabels, Filler 插件
+import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement, Filler } from 'chart.js' // 导入 Filler 插件
+import ChartDataLabels from 'chartjs-plugin-datalabels' // 导入 datalabels 插件
+import { defineProps } from 'vue'
+import { useI18n } from 'vue-i18n' // 引入 useI18n 用于模板中的 $t
 
-// 注册图表核心模块（合并通用逻辑）
-ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement)
+const { t } = useI18n()
+
+// 注册图表核心模块和 datalabels, Filler 插件
+ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement, Filler, ChartDataLabels) // 确保 Filler 和 ChartDataLabels 都被注册
 
 /**
- * 组件属性定义（兼容原两个组件的参数）
- * @typedef {Object} ConsumptionChartProps
- * @property {Object} chartData - 图表数据（包含labels和datasets，必填）
- * @property {Object} [chartOptions] - 图表配置项（可选）
- * @property {boolean} [showTitle] - 是否显示标题（默认true，兼容原Consumption场景）
- * @property {boolean} [showSceneStyle] - 是否应用场景化样式（默认true，兼容原悬停效果）
- */
-const props = defineProps({  chartData: {
+* 组件属性定义
+* @typedef {Object} ConsumptionChartProps
+* @property {Object} chartData - 图表数据（包含labels和datasets，必填）
+* @property {Object} [chartOptions] - 图表配置项（可选）
+* @property {boolean} [showTitle] - 是否显示标题（默认true，兼容原Consumption场景）
+* @property {boolean} [showSceneStyle] - 是否应用场景化样式（默认true，兼容原悬停效果）
+*/
+const props = defineProps({
+  chartData: {
     type: Object,
     required: true,
     validator: (value) => {
@@ -39,134 +45,23 @@ const props = defineProps({  chartData: {
       }
       return true
     }
-  },  chartOptions: Object,  showTitle: { type: Boolean, default: true },  showSceneStyle: { type: Boolean, default: true }})
-
-/**
- * 图表渲染错误处理（来自原ChartComponent的优化）
- */
-const LineChartWrapper = defineComponent({  extends: LineChart,  mounted() {    try {
-      // 验证chartData结构
-      if (!this.chartData?.labels || !this.chartData?.datasets) {
-        console.error('图表数据不完整，需包含labels和datasets字段')
-        return
-      }
-      this.renderChart(this.chartData, this.chartOptions)    } catch (error) {      console.error('图表渲染失败:', error)    }  }})
-// 新增深色模式检测逻辑
-import { watchEffect, ref, onMounted, onBeforeUnmount } from 'vue'
-
-const isDark = ref(false)
-
-
-// 图表颜色配置生成器
-const getChartColors = () => ({
-  textColor: isDark.value ? '#e0e0e0' : '#333',
-  gridColor: isDark.value ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-  pointBackgroundColor: isDark.value ? '#4f9cf1' : '#1a73e8',
-  borderColor: isDark.value ? '#4f9cf1' : '#1a73e8',
-  backgroundColor: isDark.value ? 'rgba(79,156,241,0.2)' : 'rgba(26,115,232,0.2)'
-})
-
-// 动态图表配置
-const chartOptions = ref({
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      labels: {
-        color: getChartColors().textColor // 图例文字颜色
-      }
-    },
-    tooltip: {
-      backgroundColor: isDark.value ? '#3a3a3a' : '#ffffff',
-      titleColor: getChartColors().textColor,
-      bodyColor: getChartColors().textColor,
-      borderColor: 'rgba(0,0,0,0.1)'
-    }
   },
-  scales: {
-    x: {
-      grid: {
-        color: getChartColors().gridColor // X轴网格线
-      },
-      ticks: {
-        color: getChartColors().textColor // X轴文字
-      }
-    },
-    y: {
-      grid: {
-        color: getChartColors().gridColor // Y轴网格线
-      },
-      ticks: {
-        color: getChartColors().textColor // Y轴文字
-      }
-    }
+  chartOptions: {
+    type: Object,
+    default: () => ({}) // 默认值为空对象，避免未定义
+  },
+  showTitle: {
+    type: Boolean,
+    default: true
+  },
+  showSceneStyle: {
+    type : Boolean,
+    default: true
   }
 })
 
-// 监听主题变化
-const updateTheme = () => {
-  const html = document.documentElement
-  isDark.value = html.dataset.theme === 'dark' || 
-    (window.matchMedia('(prefers-color-scheme: dark)').matches && !html.dataset.theme)
-  
-  // 动态更新图表配置
-  chartOptions.value = {
-    ...chartOptions.value,
-    plugins: {
-      ...chartOptions.value.plugins,
-      legend: {
-        labels: {
-          color: getChartColors().textColor
-        }
-      },
-      tooltip: {
-        backgroundColor: isDark.value ? '#3a3a3a' : '#ffffff',
-        titleColor: getChartColors().textColor,
-        bodyColor: getChartColors().textColor
-      }
-    },
-    scales: {
-      x: {
-        grid: { color: getChartColors().gridColor },
-        ticks: { color: getChartColors().textColor }
-      },
-      y: {
-        grid: { color: getChartColors().gridColor },
-        ticks: { color: getChartColors().textColor }
-      }
-    }
-  }
-}
-
-// 生命周期钩子
-onMounted(() => {
-  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-  const themeObserver = new MutationObserver(updateTheme)
-  
-  mediaQuery.addEventListener('change', updateTheme)
-  themeObserver.observe(document.documentElement, { 
-    attributes: true,
-    attributeFilter: ['data-theme']
-  })
-})
-
-onBeforeUnmount(() => {
-  mediaQuery.removeEventListener('change', updateTheme)
-  themeObserver.disconnect()
-})
-
-// 初始化数据集颜色（在传入chartData时处理）
-watchEffect(() => {
-  if (props.chartData?.datasets) {
-    const colors = getChartColors()
-    props.chartData.datasets = props.chartData.datasets.map(dataset => ({
-      ...dataset,
-      borderColor: colors.borderColor,
-      pointBackgroundColor: colors.pointBackgroundColor,
-      backgroundColor: colors.backgroundColor
-    }))
-  }
-})
+// 注意：此组件不再包含深色模式检测逻辑和内部 chartOptions。
+// 所有的图表配置（包括颜色和数据标签）都将从父组件 homeview.vue 通过 chartOptions prop 传递。
 </script>
 
 <style scoped>
