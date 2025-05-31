@@ -23,11 +23,35 @@
         }
     },
     "home": {
-        "prevMonth": "Tháng Trước",
-        "nextMonth": "Tháng Sau",
-        "dailyTrend": "Chi Tiêu Hàng Ngày",
-        "dailyDescending": "Top Chi Tiêu",
-        "noData": "Không có dữ liệu"
+      "prevMonth": "Tháng Trước",
+      "nextMonth": "Tháng Sau",
+      "dailyTrend": "Chi Tiêu Hàng Ngày",
+      "dailyDescending": "Top Chi Tiêu",
+      "noData": "Không có dữ liệu",
+      "type": {
+        "food": "Ăn Uống",
+        "shopping": "Mua Sắm Online",
+        "transport": "Xăng Xe/Grab",
+        "entertainment": "Giải Trí",
+        "communication": "Cước Điện Thoại",
+        "housing": "Thuê Nhà",
+        "utilities": "Điện Nước",  
+        "travel": "Du Lịch",
+        "fitness": "Gym/Thể Dục",
+        "beauty": "Làm Đẹp",
+        "pet": "Thú Cưng",
+        "books": "Sách/Giáo Trình",
+        "digital": "Điện Tử",
+        "home": "Nội Thất",
+        "gift": "Quà Tặng",
+        "office": "Văn Phòng Phẩm",
+        "sports": "Thiết Bị Thể Thao",
+        "repair": "Bảo Trì",
+        "medical": "Khám Chữa Bệnh",
+        "education": "Học Phí",
+        "utility": "Tiện Ích",
+        "other": "Chi Phí Khác"
+      }
     },
     "expense": {
         "type": {

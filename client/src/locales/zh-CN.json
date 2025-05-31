@@ -1,85 +1,85 @@
 {
- "app.title": "家庭消费管理系统",
-  "app": {
-    "title": "家庭消费管理系统",
-    "addRecord": "新增记录",
-    "statistics": "消费统计",
-    "export": "导出数据",
-    "recordList": "消费记录列表",
-    "consumptionTrend": "消费趋势分析",
-    "notFound": "页面未找到",
-    "pageNotFound": "您访问的页面不存在或已删除",
-    "backToHome": "返回首页",
-    "language": {
-      "zhCN": "简体中文",
-      "enUS": "英语",
-      "jaJP": "日语",
-      "frFR": "法语"
-    }
-  },
-
-  "home": {
-    "prevMonth": "上一月",
-    "nextMonth": "下一月",
-    "dailyTrend": "每日消费趋势",
-    "dailyDescending": "按日降序排列",
-    "noData": "当前无消费记录",
-    "type": {
-      "food": "餐饮",
-      "shopping": "购物",
-      "entertainment": "娱乐",
-      "transport": "交通出行",
-      "communication": "通讯费用",
-      "housing": "房租/房贷",
-      "travel": "旅行度假",
-      "fitness": "健身运动",
-      "beauty": "美容护理",
-      "pet": "宠物相关",
-      "books": "书籍学习",
-      "digital": "数码产品",
-      "home": "家居用品",
-      "gift": "礼物人情",
-      "office": "办公用品",
-      "sports": "体育用品",
-      "repair": "维修保养",
-      "medical": "医疗健康",
-      "education": "教育培训",
-      "utility": "水电燃气",
-      "other": "其他支出"
-    }
-  },
-  "expense": {
-   "addFailed": "添加失败：{error}，请检查后重试",
-    "exportFilename": "消费记录_{date}",
-    "food": "餐饮",
-    "transport": "交通",
-    "housing": "住房",
-    "columns": {
-      "type": "消费类型",
-      "amount": "金额（元）",
-      "date": "消费日期",
-      "remark": "备注说明"
-    },
-    "emptyText": "暂无消费记录，点击上方按钮添加",
-    "chart": {
-      "title": "消费类型占比分析",
-      "legend": "消费类型分布",
-      "trendLabel": "近30日消费趋势"
-    },
-    "common": {
-      "requestCanceled": "操作已取消",
-      "networkError": "网络异常，请检查连接后重试",
-      "requestTimeout": "请求超时，请稍后再试"
-    },
-
-    "labels": {
-        "date": "消费日期（YYYY-MM-DD）",      
-        "type": "支出分类",
-        "amount": "金额录入（¥）",    
-        "remark": "用途说明（例：微信红包/美团外卖/滴滴出行）" 
-    },
-    "buttons": {
-        "submit": "记一笔"        
-    }
-},"monthLabel.zh-CN":"{year}年{month}月"
-}
+  "app.title": "家庭消费管理系统",
+   "app": {
+     "title": "家庭消费管理系统",
+     "addRecord": "新增记录",
+     "statistics": "消费统计",
+     "export": "导出数据",
+     "recordList": "消费记录列表",
+     "consumptionTrend": "消费趋势分析",
+     "notFound": "页面未找到",
+     "pageNotFound": "您访问的页面不存在或已删除",
+     "backToHome": "返回首页",
+     "language": {
+       "zhCN": "简体中文",
+       "enUS": "英语",
+       "jaJP": "日语",
+       "frFR": "法语"
+     }
+   },
+ 
+   "home": {
+     "prevMonth": "上一月",
+     "nextMonth": "下一月",
+     "dailyTrend": "每日消费趋势",
+     "dailyDescending": "按日降序排列",
+     "noData": "当前无消费记录",
+     "type": {
+       "food": "餐饮",
+       "shopping": "购物",
+       "entertainment": "娱乐",
+       "transport": "交通出行",
+       "communication": "通讯费用",
+       "housing": "房租/房贷",
+       "travel": "旅行度假",
+       "fitness": "健身运动",
+       "beauty": "美容护理",
+       "pet": "宠物相关",
+       "books": "书籍学习",
+       "digital": "数码产品",
+       "home": "家居用品",
+       "gift": "礼物人情",
+       "office": "办公用品",
+       "sports": "体育用品",
+       "repair": "维修保养",
+       "medical": "医疗健康",
+       "education": "教育培训",
+       "utility": "水电燃气",
+       "other": "其他支出"
+     }
+   },
+   "expense": {
+    "addFailed": "添加失败：{error}，请检查后重试",
+     "exportFilename": "消费记录_{date}",
+     "food": "餐饮",
+     "transport": "交通",
+     "housing": "住房",
+     "columns": {
+       "type": "消费类型",
+       "amount": "金额（元）",
+       "date": "消费日期",
+       "remark": "备注说明"
+     },
+     "emptyText": "暂无消费记录，点击上方按钮添加",
+     "chart": {
+       "title": "消费类型占比分析",
+       "legend": "消费类型分布",
+       "trendLabel": "近30日消费趋势"
+     },
+     "common": {
+       "requestCanceled": "操作已取消",
+       "networkError": "网络异常，请检查连接后重试",
+       "requestTimeout": "请求超时，请稍后再试"
+     },
+ 
+     "labels": {
+         "date": "消费日期（YYYY-MM-DD）",      
+         "type": "支出分类",
+         "amount": "金额录入（¥）",    
+         "remark": "用途说明（例：微信红包/美团外卖/滴滴出行）" 
+     },
+     "buttons": {
+         "submit": "记一笔"        
+     }
+ },"monthLabel.zh-CN":"{year}年{month}月"
+ }

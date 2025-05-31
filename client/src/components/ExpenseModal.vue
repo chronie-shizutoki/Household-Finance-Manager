@@ -20,7 +20,7 @@
           <div class="form-group">
             <label>{{ $t('expense.labels.type') }}：</label>
             <select v-model="newExpense.type" required>
-              <option v-for="(typeName, typeKey) in expenseTypes" :key="typeKey">{{ typeName }}</option>
+              <option v-for="type in expenseTypesArray" :key="type.typeKey" :value="type.typeKey">{{ type.typeName }}</option>
             </select>
           </div>
           <div class="form-group">
@@ -40,35 +40,42 @@
 
 <script setup>
 import { ref, defineProps, defineEmits, watch, computed } from 'vue'
-// 直接定义20个消费类型键值对（硬编码防止i18n访问错误）
-const expenseTypeOptions = {
-      "food": "餐饮",
-      "shopping": "购物",
-      "entertainment": "娱乐",
-      "transport": "交通出行",
-      "communication": "通讯费用",
-      "housing": "房租/房贷",
-      "travel": "旅行度假",
-      "fitness": "健身运动",
-      "beauty": "美容护理",
-      "pet": "宠物相关",
-      "books": "书籍学习",
-      "digital": "数码产品",
-      "home": "家居用品",
-      "gift": "礼物人情",
-      "office": "办公用品",
-      "sports": "体育用品",
-      "repair": "维修保养",
-      "medical": "医疗健康",
-      "education": "教育培训",
-      "utility": "水电燃气",
-      "other": "其他支出"
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+// 定义支出类型（使用 home.type 命名空间）
+const expenseTypes = {
+  food: 'home.type.food',
+  shopping: 'home.type.shopping',
+  entertainment: 'home.type.entertainment',
+  transport: 'home.type.transport',
+  communication: 'home.type.communication',
+  housing: 'home.type.housing',
+  travel: 'home.type.travel',
+  fitness: 'home.type.fitness',
+  beauty: 'home.type.beauty',
+  pet: 'home.type.pet',
+  books: 'home.type.books',
+  digital: 'home.type.digital',
+  home: 'home.type.home',
+  gift: 'home.type.gift',
+  office: 'home.type.office',
+  sports: 'home.type.sports',
+  repair: 'home.type.repair',
+  medical: 'home.type.medical',
+  education: 'home.type.education',
+  utility: 'home.type.utility',
+  other: 'home.type.other'
 };
 
-const expenseTypes = computed(() => expenseTypeOptions);
+const expenseTypesArray = computed(() => {
+  return Object.entries(expenseTypes).map(([typeKey, typeName]) => ({
+    typeKey,
+    typeName: t(typeName)
+  }))
+})
 
 // 调试：输出当前获取的类型数据
-watch(expenseTypes, (val) => {
+watch(expenseTypesArray, (val) => {
   console.log('ExpenseModal 类型数据调试：', val);
 }, { immediate: true });
 

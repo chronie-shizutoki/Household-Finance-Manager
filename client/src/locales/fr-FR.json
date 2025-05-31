@@ -27,7 +27,31 @@
     "nextMonth": "Mois Prochain",
     "dailyTrend": "Dépenses Journalières",
     "dailyDescending": "Top Dépenses",
-    "noData": "Aucune opération"
+    "noData": "Aucune opération",
+    "type": {
+      "food": "Courses Alimentaires",
+      "shopping": "E-commerce",
+      "transport": "Transport/Carburant",
+      "entertainment": "Loisirs Culturels",
+      "communication": "Communications",
+      "housing": "Loyer/Prêt",
+      "utilities": "Électricité/Eau/Gaz",
+      "travel": "Voyage/Loisir",
+      "fitness": "Sport/Salle de Sport",
+      "beauty": "Beauté/Soins",
+      "pet": "Animaux de Compagnie",
+      "books": "Livres/Études",
+      "digital": "High-Tech",
+      "home": "Mobilier/Déco",
+      "gift": "Cadeaux/Événements",
+      "office": "Fournitures Bureau",
+      "sports": "Équipement Sportif",
+      "repair": "Réparations/Maintenance",
+      "medical": "Santé/Médecine",
+      "education": "Éducation/Formations",
+      "utility": "Services Publics",
+      "other": "Divers"
+    }
   },
   "expense": {
     "type": {

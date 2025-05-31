@@ -23,11 +23,35 @@
         }
     },
     "home": {
-        "prevMonth": "Mes Previo",
-        "nextMonth": "Próximo Mes",
-        "dailyTrend": "Gastos Diarios",
-        "dailyDescending": "Top 5 Gastos",
-        "noData": "Sin movimientos"
+      "prevMonth": "Mes Previo",
+      "nextMonth": "Próximo Mes",
+      "dailyTrend": "Gastos Diarios",
+      "dailyDescending": "Top 5 Gastos",
+      "noData": "Sin movimientos",
+      "type": {
+        "food": "Supermercado",
+        "shopping": "Compras Online",
+        "transport": "Transporte/Gasolina",
+        "entertainment": "Ocio/Cultura",
+        "communication": "Comunicaciones",
+        "housing": "Hipoteca/Alquiler",
+        "utilities": "Luz/Agua/Gas",
+        "travel": "Viaje/Vacaciones",
+        "fitness": "Deporte/Gimnasio",
+        "beauty": "Belleza/Cuidado",
+        "pet": "Mascotas",
+        "books": "Libros/Formación",
+        "digital": "Tecnología",
+        "home": "Hogar",
+        "gift": "Regalos/Eventos",
+        "office": "Material Oficina",
+        "sports": "Equipamiento Deportivo",
+        "repair": "Reparaciones/Mantenimiento",
+        "medical": "Salud/Medicina",
+        "education": "Formación/Escuela",
+        "utility": "Servicios Públicos",
+        "other": "Varios"
+      }
     },
     "expense": {
         "type": {

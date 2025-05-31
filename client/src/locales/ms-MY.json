@@ -23,11 +23,34 @@
         }
     },
     "home": {
-        "prevMonth": "Bulan Lepas",
-        "nextMonth": "Bulan Depan",
-        "dailyTrend": "Perbelanjaan Harian",
-        "dailyDescending": "Transaksi Tertinggi",
-        "noData": "Tiada Transaksi"
+      "prevMonth": "Bulan Lepas",
+      "nextMonth": "Bulan Depan",
+      "dailyTrend": "Perbelanjaan Harian",
+      "dailyDescending": "Transaksi Tertinggi",
+      "noData": "Tiada Transaksi",
+      "type": {
+        "food": "Makan & Minum",
+        "shopping": "Belanja Dapur",
+        "transport": "Pengangkutan",
+        "entertainment": "Aktiviti Keluarga",
+        "communication": "Bil Telefon",
+        "housing": "Sewa Rumah",
+        "travel": "Perjalanan",
+        "fitness": "Gym/Sukan",
+        "beauty": "Kecantikan",
+        "pet": "Haiwan Peliharaan",
+        "books": "Buku/Pendidikan",
+        "digital": "Elektronik",
+        "home": "Perabot Rumah",
+        "gift": "Hadiah/Perayaan",
+        "office": "Barangan Pejabat",
+        "sports": "Peralatan Sukan",
+        "repair": "Penyelenggaraan",
+        "medical": "Perubatan",
+        "education": "Yuran Sekolah",
+        "utility": "Utiliti",
+        "other": "Lain-Lain"
+      }
     },
     "expense": {
         "type": {

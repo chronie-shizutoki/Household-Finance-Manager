@@ -27,7 +27,31 @@
     "nextMonth": "Next Month",
     "dailyTrend": "Daily Spending",     
     "dailyDescending": "High to Low",   
-    "noData": "No transactions yet"      
+    "noData": "No transactions yet",      
+    "type": {
+      "food": "Dining Out/Groceries",
+      "shopping": "Retail Shopping",
+      "transport": "Transportation",
+      "entertainment": "Entertainment",
+      "communication": "Communication",
+      "housing": "Rent/Mortgage",
+      "utilities": "Utilities",
+      "travel": "Travel/Vacation",
+      "fitness": "Fitness",
+      "beauty": "Beauty Care",
+      "pet": "Pet Expenses",
+      "books": "Books/Education",
+      "digital": "Electronics",
+      "home": "Household Items",
+      "gift": "Gifts/Occasions",
+      "office": "Office Supplies",
+      "sports": "Sports Equipment",
+      "repair": "Maintenance",
+      "medical": "Medical",
+      "education": "Education",
+      "utility": "Utilities",
+      "other": "Miscellaneous"
+    }
   },
   "expense": {
     "type": {

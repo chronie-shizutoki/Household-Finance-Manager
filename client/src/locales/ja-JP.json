@@ -26,8 +26,32 @@
     "prevMonth": "前月",
     "nextMonth": "翌月",
     "dailyTrend": "日別収支",
-    "dailyDescending": "支出TOP",
-    "noData": "データが存在しません"
+    "dailyDescending": "TOP支出",
+    "noData": "データなし",
+    "type": {
+      "food": "食費（外食含む）",
+      "shopping": "日用雑貨",
+      "transport": "交通費（定期券）",
+      "entertainment": "娯楽・交際費",
+      "communication": "通信費（携帯電話）",
+      "housing": "家賃・住宅ローン",
+      "utilities": "電気・ガス・水道",
+      "travel": "旅行・レジャー",
+      "fitness": "スポーツジム",
+      "beauty": "美容・エステ",
+      "pet": "ペット関連",
+      "books": "書籍・教材",
+      "digital": "家電・ガジェット",
+      "home": "家具・インテリア",
+      "gift": "贈答品・お祝い",
+      "office": "文房具・OA機器",
+      "sports": "スポーツ用品",
+      "repair": "修理・メンテナンス",
+      "medical": "医療・介護",
+      "education": "教育・習い事",
+      "utility": "公共料金",
+      "other": "その他経費"
+    }
   },
   "expense": {
     "type": {
