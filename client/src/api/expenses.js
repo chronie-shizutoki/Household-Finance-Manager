@@ -44,7 +44,16 @@ export const ExpenseAPI = {
   
   async addExpense(data) {
     try {
-      return await axios.post(`${API_BASE}/expenses`, data);
+      return await axios.post(`${API_BASE}/expenses`, data, {
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest'
+  },
+  transformRequest: [(data) => JSON.stringify({
+    ...data,
+    amount: parseFloat(data.amount)
+  })]
+});
     } catch (error) {
       console.error('添加消费数据失败:', error);
       throw error; // 添加操作失败需要向上抛出错误

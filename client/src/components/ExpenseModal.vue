@@ -25,7 +25,12 @@
           </div>
           <div class="form-group">
             <label>{{ $t('expense.labels.amount') }}：</label>
-            <input type="number" v-model.number="newExpense.amount" min="0" max="99999" step="0.01" required>
+            <input type="number" 
+       v-model.number="newExpense.amount"
+       min="0"
+       step="0.01"
+       required>
+       <p class="error" v-if="amountError">{{ amountError }}</p>
           </div>
           <div class="form-group">
             <label>{{ $t('expense.labels.remark') }}：</label>
@@ -100,6 +105,8 @@ watch(() => props.show, (newVal) => {
 
 // 声明重置事件
 const emit = defineEmits(['submit-expense', 'update:show', 'reset-expense'])
+const timeError = ref('')
+const amountError = ref('')
 
 /**
  * 关闭弹窗处理函数
@@ -116,6 +123,14 @@ const handleSubmit = () => {
 }
 
 // 监听金额变化，处理整数补两位小数逻辑
+// 金额验证逻辑
+const validateAmount = () => {
+  if (isNaN(newExpense.value.amount)) {
+    amountError.value = t('error.invalidNumber');
+  } else if (newExpense.value.amount <= 0) {
+    amountError.value = t('error.positiveRequired');
+  }
+}
 watch(() => props.newExpense.amount, (newVal) => {
   if (typeof newVal === 'number' && newVal % 1 === 0) {
     // 整数转换为两位小数格式（如33 → 33.00）

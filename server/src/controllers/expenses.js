@@ -60,21 +60,42 @@ exports.getCsvPath = async (req, res) => {
 
 exports.addExpense = async (req, res) => {
   try {
+    // 新增数据预处理
+    const processedData = {
+      type: String(req.body.type || '').trim(),
+      itemName: String(req.body.itemName || '').trim(),
+      amount: parseFloat(req.body.amount) || 0,
+      time: dayjs(req.body.time).isValid() 
+        ? dayjs(req.body.time).format('YYYY-MM-DD')
+        : dayjs().format('YYYY-MM-DD')
+    };
+
+    // 新增必填字段验证
+    if (!processedData.type) {
+      throw new Error('消费类型不能为空');
+    }
+
     const expense = new ExpenseBuilder()
-      .setType(req.body.type)
-      .setItemName(req.body.itemName)
-      .setAmount(req.body.amount)
-      .setTime(req.body.time)
+      .setType(processedData.type)
+      .setItemName(processedData.itemName)
+      .setAmount(processedData.amount)
+      .setTime(processedData.time)
       .build();
     await req.app.locals.db.addExpense(expense);
 
     // 新增：同步写入CSV并打印日志
     const exportService = new ExportService(req.app.locals.db);
     const data = await exportService.getFullData();
-    const csvContent = [
-      '类型,备注,金额,日期',
-      ...data.map(item => `${item.type},${item.remark},${item.amount},${item.time}`)
-    ].join('\n');
+    const csvContent = Papa.unparse(data.map(item => ({
+      type: item.type || '未分类',
+      remark: item.remark || '',
+      amount: Number(item.amount || 0).toFixed(2),
+      time: item.time ? dayjs(item.time).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD')
+    })), {
+      quotes: true,
+      header: true,
+      skipEmptyLines: true
+    });
     const csvFilePath = path.join(__dirname, '../../exports/expenses_initial.csv');
     console.log('写入CSV路径:', csvFilePath);
     console.log('写入CSV内容:', csvContent);

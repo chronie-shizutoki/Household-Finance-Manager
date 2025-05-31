@@ -1,8 +1,4 @@
-/**
- * 消费记录路由配置
- * @module routes/expenseRoutes
- * @desc 定义消费记录相关的API端点（GET/POST）
- */
+const dayjs = require('dayjs');
 const express = require('express');
 const router = express.Router();
 const { getExpenses, addExpense, getCsvPath } = require('../controllers/expenses');
@@ -29,7 +25,15 @@ router.get('/api/expenses', getExpenses);
  * @apiParam {string} time 消费时间（ISO格式）
  * @apiSuccess {string} message 操作成功提示
  */
-router.post('/api/expenses', addExpense);
+router.post('/api/expenses', (req, res, next) => {
+  try {
+    req.body.amount = parseFloat(req.body.amount);
+    req.body.time = dayjs(req.body.time).format('YYYY-MM-DD');
+    next();
+  } catch (e) {
+    res.status(400).json({ error: '数据格式错误: ' + e.message });
+  }
+}, addExpense);
 
 /**
  * @api {get} /api/expenses/csv 获取最新CSV文件路径
