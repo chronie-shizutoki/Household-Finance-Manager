@@ -25,7 +25,7 @@
           </div>
           <div class="form-group">
             <label>{{ $t('expense.labels.amount') }}：</label>
-            <input type="number" v-model.number="newExpense.amount" min="0.1" max="99999" step="0.01" required>
+            <input type="number" v-model.number="newExpense.amount" min="0" max="99999" step="0.01" required>
           </div>
           <div class="form-group">
             <label>{{ $t('expense.labels.remark') }}：</label>
