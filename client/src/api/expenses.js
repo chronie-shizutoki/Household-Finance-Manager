@@ -33,31 +33,60 @@ export const ExpenseAPI = {
       const response = await axios.get(`${API_BASE}/expenses`);
       // 确保返回数据是数组
       if (response && response.data) {
-        return Array.isArray(response.data) ? response.data : [];
+        return { data: Array.isArray(response.data) ? response.data : [] };
       }
-      return [];
+      return { data: [] };
     } catch (error) {
       console.error('获取消费数据失败:', error);
-      return [];  // 出错时返回空数组而非错误对象，确保前端不会崩溃
+      return { data: [], error: error.message };  // 出错时返回空数组和错误信息，确保前端不会崩溃
     }
   },
   
   async addExpense(data) {
     try {
-      return await axios.post(`${API_BASE}/expenses`, data);
+      // 数据预处理和验证
+      if (!data || typeof data !== 'object') {
+        throw new Error('无效的数据格式');
+      }
+      
+      // 确保金额是数字类型
+      const formattedData = {
+        ...data,
+        amount: Number(data.amount)
+      };
+      
+      // 发送请求
+      const response = await axios.post(`${API_BASE}/expenses`, formattedData);
+      return response.data || { message: '记录添加成功' };
     } catch (error) {
       console.error('添加消费数据失败:', error);
-      throw error; // 添加操作失败需要向上抛出错误
+      // 返回结构化错误对象，便于前端处理
+      return { 
+        error: error.message || '添加记录失败',
+        status: error.response?.status || 500,
+        details: error.response?.data || {}
+      };
     }
   },
   
   async getStatistics() {
     try {
       const response = await axios.get(`${API_BASE}/expenses/statistics`);
-      return response.data;
+      
+      // 确保返回数据格式正确
+      if (response && response.data) {
+        // 如果返回的不是数组，尝试从response.data中提取数据
+        const statistics = Array.isArray(response.data) ? 
+          response.data : 
+          (response.data.data || []);
+          
+        return { data: statistics };
+      }
+      
+      return { data: [] };
     } catch (error) {
       console.error('获取统计数据失败:', error);
-      return { error: error.message };
+      return { data: [], error: error.message };
     }
   }
 }
