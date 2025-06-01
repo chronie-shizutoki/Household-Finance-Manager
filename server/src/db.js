@@ -14,8 +14,8 @@ class ExpenseBuilder {
     }
 
     setItemName(itemName) {
-      if (!itemName) throw new Error('消费项目名称不能为空');
-      this.expense.itemName = itemName;
+      // 使用remark替代itemName，不再强制验证
+      this.expense.itemName = itemName || '';
       return this;
     }
 
@@ -33,7 +33,6 @@ class ExpenseBuilder {
 
     build() {
       if (!this.expense.type) throw new Error('消费类型不能为空');
-      if (!this.expense.itemName) throw new Error('消费项目名称不能为空');
       if (typeof this.expense.amount !== 'number' || this.expense.amount <= 0) throw new Error('消费金额必须为正数');
       if (!this.expense.time || isNaN(Date.parse(this.expense.time))) throw new Error('时间格式无效');
       return this.expense;

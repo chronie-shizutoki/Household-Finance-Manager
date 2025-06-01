@@ -63,7 +63,7 @@ exports.addExpense = async (req, res) => {
     // 新增数据预处理
     const processedData = {
       type: String(req.body.type || '').trim(),
-      itemName: String(req.body.itemName || '').trim(),
+      itemName: String(req.body.remark || '').trim(), // 使用remark替代itemName
       amount: parseFloat(req.body.amount) || 0,
       time: dayjs(req.body.time).isValid() 
         ? dayjs(req.body.time).format('YYYY-MM-DD')
@@ -88,7 +88,7 @@ exports.addExpense = async (req, res) => {
     const data = await exportService.getFullData();
     const csvContent = Papa.unparse(data.map(item => ({
       type: item.type || '未分类',
-      remark: item.remark || '',
+      remark: item.remark || item.itemName || '',
       amount: Number(item.amount || 0).toFixed(2),
       time: item.time ? dayjs(item.time).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD')
     })), {
