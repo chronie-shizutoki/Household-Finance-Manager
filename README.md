@@ -253,12 +253,12 @@ npm run dev  # 同時啟動前端(http://localhost:5173)與後端(http://localho
 
 ---
 <a id="zh-Classical"></a>  
-**家計理財簿** [文言（中國）]  
+# **家計理財簿** [文言（中國）]  
 
-### 綱要  
+## 綱要  
 家計理財簿者，多邦言錢穀之器也。助君錄金帛出入，察用度之跡，使財貨昭明。諸器皆可覽實時數籍，雲端同調。  
 
-### 要術  
+## 要術  
 - **十一邦言通曉**：文牘自易其字，曆法隨域而遷（英漢、和文、佛郎機語等）  
 - **錄記出入**：添新籍（類目、銀數、時日、批註），CSV自同契  
 - **造冊呈報**：生CSV帳冊（`server/exports/expenses_initial.csv`）  
@@ -268,12 +268,12 @@ npm run dev  # 同時啟動前端(http://localhost:5173)與後端(http://localho
   - 瞬息數籍自新（依`useExpenseData.js`）  
 - **通體架構**：Vue.js為門面，Node.js/Express為機樞（以`npm run dev`啟之）  
 
-### 啟用法  
+## 啟用法  
 **根基要件**  
 - Node.js ≥ 十四版（十八版為佳）  
 - npm ≥ 六版  
 
-**速啟訣**  
+### **速啟訣**  
 ```bash  
 git clone https://github.com/your-username/Household-Finance-Manager.git  
 cd Household-Finance-Manager  
@@ -283,12 +283,12 @@ cd ../server && npm install
 npm run dev  # 門面啟於 http://localhost:5173，機樞啟於 http://localhost:3000  
 ```  
 
-### 操持指南  
+## 操持指南  
 1. **錄新籍**：點「記用度」> 填牘 > 呈契  
 2. **易邦言**：右上垂簾擇之  
 3. **觀數圖**：用度分剖圖（圓儀），流變圖（線譜）  
 
-### 技藝樞要  
+## 技藝樞要  
 - 門面：Vue 3 + Chart.js + Vue I18n  
 - 機樞：Express + Papa Parse (CSV)  
 - 儲籍：CSV 帳冊（可易為府庫架構）  
