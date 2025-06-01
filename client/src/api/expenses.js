@@ -52,8 +52,8 @@ export const ExpenseAPI = {
         transformRequest: [(data) => JSON.stringify({
           ...data,
           amount: parseFloat(data.amount),
-          // 修复：确保itemName字段存在，如果没有则使用remark字段的值
-          itemName: data.itemName || data.remark || ''
+          // 使用remark字段，不再需要itemName
+          remark: data.remark || ''
         })]
       });
     } catch (error) {
