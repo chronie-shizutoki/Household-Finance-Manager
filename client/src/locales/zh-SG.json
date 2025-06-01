@@ -24,6 +24,7 @@
     "dailyTrend": "每日开支走势",
     "dailyDescending": "按金额从高到低排序",
     "noData": "暂无消费记录",
+    "noDataForExport":"暂无数据可供导出",
     "type": {
       "food": "食阁/餐饮",        
       "shopping": "购物消费",

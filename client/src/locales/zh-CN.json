@@ -24,6 +24,7 @@
      "dailyTrend": "每日消费趋势",
      "dailyDescending": "按日降序排列",
      "noData": "当前无消费记录",
+     "noDataForExport":"暂无数据可供导出",
      "type": {
        "food": "餐饮",
        "shopping": "购物",

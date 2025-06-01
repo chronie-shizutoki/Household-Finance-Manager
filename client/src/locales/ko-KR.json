@@ -28,6 +28,7 @@
       "dailyTrend": "일별 소비",
       "dailyDescending": "지출 TOP",
       "noData": "내역 없음",
+      "noDataForExport":"내보낼 데이터가 없습니다",
       "type": {
         "food": "식비/카페",
         "shopping": "온라인쇼핑",

@@ -23,6 +23,7 @@
     "dailyTrend": "每日使錢走勢",
     "dailyDescending": "由多到少排",
     "noData": "冇使錢記錄喎",
+    "noDataForExport":"冇數據可以攞出嚟",
     "type": {
       "food": "飲飲食食",
       "shopping": "買嘢血拼",        

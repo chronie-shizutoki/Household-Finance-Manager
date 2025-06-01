@@ -28,6 +28,7 @@
       "dailyTrend": "Chi Tiêu Hàng Ngày",
       "dailyDescending": "Top Chi Tiêu",
       "noData": "Không có dữ liệu",
+      "noDataForExport":"Không có dữ liệu để xuất",
       "type": {
         "food": "Ăn Uống",
         "shopping": "Mua Sắm Online",

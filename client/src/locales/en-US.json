@@ -27,7 +27,8 @@
     "nextMonth": "Next Month",
     "dailyTrend": "Daily Spending",     
     "dailyDescending": "High to Low",   
-    "noData": "No transactions yet",      
+    "noData": "No transactions yet",
+    "noDataForExport":"No data available for export",
     "type": {
       "food": "Dining Out/Groceries",
       "shopping": "Retail Shopping",

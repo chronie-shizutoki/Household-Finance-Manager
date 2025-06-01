@@ -28,6 +28,7 @@
     "dailyTrend": "日別収支",
     "dailyDescending": "TOP支出",
     "noData": "データなし",
+    "noDataForExport":"エクスポートするデータがありません",
     "type": {
       "food": "食費（外食含む）",
       "shopping": "日用雑貨",

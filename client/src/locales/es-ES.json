@@ -28,6 +28,7 @@
       "dailyTrend": "Gastos Diarios",
       "dailyDescending": "Top 5 Gastos",
       "noData": "Sin movimientos",
+      "noDataForExport": "No hay datos para exportar",
       "type": {
         "food": "Supermercado",
         "shopping": "Compras Online",

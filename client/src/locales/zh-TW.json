@@ -23,6 +23,7 @@
     "dailyTrend": "每日消費趨勢圖",
     "dailyDescending": "依金額由高到低排序",
     "noData": "目前沒有消費紀錄",
+    "noDataForExport":"暫無資料可供匯出",
     "type": {
       "food": "飲食餐飲",          
       "shopping": "購物消費",

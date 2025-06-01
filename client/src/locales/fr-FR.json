@@ -28,6 +28,7 @@
     "dailyTrend": "Dépenses Journalières",
     "dailyDescending": "Top Dépenses",
     "noData": "Aucune opération",
+    "noDataForExport":"Aucune donnée à exporter",
     "type": {
       "food": "Courses Alimentaires",
       "shopping": "E-commerce",

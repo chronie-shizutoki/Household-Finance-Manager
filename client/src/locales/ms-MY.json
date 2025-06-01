@@ -28,6 +28,7 @@
       "dailyTrend": "Perbelanjaan Harian",
       "dailyDescending": "Transaksi Tertinggi",
       "noData": "Tiada Transaksi",
+      "noDataForExport":"Tiada data untuk dieksport",
       "type": {
         "food": "Makan & Minum",
         "shopping": "Belanja Dapur",
