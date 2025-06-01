@@ -1,5 +1,5 @@
 > 🔍 languages:  
-[English（United States）](#en-US) | [简体中文（中国大陆）](#zh-CN) | [日本語（日本）](#ja-JP) | [Français（France）](#fr-FR) | [繁體中文（香港特別行政區）](#zh-HK) | [繁體中文（台灣地區）](#zh-TW) | [简体中文（新加坡）](#zh-SG) | [Español（Spain）](#es-ES) | [한국어（대한민국）](#ko-KR) | [Bahasa Melayu（Malaysia）](#ms-MY) | [Tiếng Việt（Việt Nam）](#vi-VN)
+[English（United States）](#en-US) | [简体中文（中国大陆）](#zh-CN) | [日本語（日本）](#ja-JP) | [Français（France）](#fr-FR) | [繁體中文（香港特別行政區）](#zh-HK) | [繁體中文（台灣地區）](#zh-TW) | [简体中文（新加坡）](#zh-SG) | [文言（中國）](#zh-Classical) |  [Español（Spain）](#es-ES) | [한국어（대한민국）](#ko-KR) | [Bahasa Melayu（Malaysia）](#ms-MY) | [Tiếng Việt（Việt Nam）](#vi-VN)
 
 <a id="en-US"></a>
 # Household Finance Manager [English（United States）]
@@ -252,6 +252,48 @@ npm run dev  # 同時啟動前端(http://localhost:5173)與後端(http://localho
 - 消費備註支援台灣常用詞彙（如：超商、機車加油、夜市小吃等）
 
 ---
+<a id="zh-Classical"></a>  
+**家計理財簿** [文言（中國）]  
+
+### 綱要  
+家計理財簿者，多邦言錢穀之器也。助君錄金帛出入，察用度之跡，使財貨昭明。諸器皆可覽實時數籍，雲端同調。  
+
+### 要術  
+- **十一邦言通曉**：文牘自易其字，曆法隨域而遷（英漢、和文、佛郎機語等）  
+- **錄記出入**：添新籍（類目、銀數、時日、批註），CSV自同契  
+- **造冊呈報**：生CSV帳冊（`server/exports/expenses_initial.csv`）  
+- **洞明析數**：  
+  - 分門別類（庖廚、市易、舟輿）  
+  - 用度流變圖（指掌可察）  
+  - 瞬息數籍自新（依`useExpenseData.js`）  
+- **通體架構**：Vue.js為門面，Node.js/Express為機樞（以`npm run dev`啟之）  
+
+### 啟用法  
+**根基要件**  
+- Node.js ≥ 十四版（十八版為佳）  
+- npm ≥ 六版  
+
+**速啟訣**  
+```bash  
+git clone https://github.com/your-username/Household-Finance-Manager.git  
+cd Household-Finance-Manager  
+npm install  
+cd client && npm install  
+cd ../server && npm install  
+npm run dev  # 門面啟於 http://localhost:5173，機樞啟於 http://localhost:3000  
+```  
+
+### 操持指南  
+1. **錄新籍**：點「記用度」> 填牘 > 呈契  
+2. **易邦言**：右上垂簾擇之  
+3. **觀數圖**：用度分剖圖（圓儀），流變圖（線譜）  
+
+### 技藝樞要  
+- 門面：Vue 3 + Chart.js + Vue I18n  
+- 機樞：Express + Papa Parse (CSV)  
+- 儲籍：CSV 帳冊（可易為府庫架構）  
+
+---  
 <a id="ja-JP"></a>
 # 家計簿管理システム [日本語（日本）]
 
