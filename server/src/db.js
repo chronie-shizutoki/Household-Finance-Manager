@@ -13,9 +13,9 @@ class ExpenseBuilder {
       return this;
     }
 
-    setItemName(itemName) {
+    setRemark(remark) {
       // 使用remark替代itemName，不再强制验证
-      this.expense.itemName = itemName || '';
+      this.expense.remark = remark || '';
       return this;
     }
 
@@ -43,7 +43,7 @@ class ExpenseBuilder {
 
   async function addExpense(expense) {
     // 构造CSV行（列顺序与现有CSV文件一致）
-    const csvLine = `${expense.type},${expense.itemName},${expense.amount},${expense.time}\n`;
+    const csvLine = `${expense.type},${expense.remark},${expense.amount},${expense.time}\n`;
     try {
       await fs.appendFile(csvPath, csvLine);
       return { success: true, message: '数据已成功追加到CSV文件' };

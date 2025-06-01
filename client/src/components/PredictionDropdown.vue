@@ -9,7 +9,7 @@
         @click="selectPrediction(prediction)"
       >
         <span class="type-tag">{{ prediction.type }}</span>
-        {{ prediction.itemName }} (最近使用{{ prediction.count }}次)
+        {{ prediction.remark }} (最近使用{{ prediction.count }}次)
       </div>
     </div>
   </div>

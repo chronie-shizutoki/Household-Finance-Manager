@@ -17,7 +17,7 @@ class ExportService {
     const data = await this.getFullData(); // 等待数据获取完成
     const csvContent = [
       '消费类型,备注,金额,时间',
-      ...data.map(item => `${item.type},${item.remark || item.itemName || ''},${item.amount},${item.time}`)
+      ...data.map(item => `${item.type},${item.remark || item.remark || ''},${item.amount},${item.time}`)
     ].join('\n');
     
     const exportDir = path.join(__dirname, '../../exports/');

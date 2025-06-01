@@ -20,7 +20,7 @@ router.get('/api/expenses', getExpenses);
  * @apiName AddExpense
  * @apiGroup Expenses
  * @apiParam {string} type 消费类型
- * @apiParam {string} itemName 消费项目名称
+ * @apiParam {string} remark 消费项目名称
  * @apiParam {number} amount 消费金额
  * @apiParam {string} time 消费时间（ISO格式）
  * @apiSuccess {string} message 操作成功提示

@@ -40,7 +40,7 @@ export default {
       expenseTypes: [t('expense.type.food'), t('expense.type.shopping'), t('expense.type.transport'), t('expense.type.entertainment'), t('expense.type.other')],  // 可扩展的支出类型
       newExpense: {
         type: t('expense.type.food'),
-        itemName: '',
+        remark: '',
         amount: 0,
         time: new Date().toISOString().slice(0, 16)
       },
@@ -59,7 +59,7 @@ export default {
         await ExpenseAPI.addExpense(this.newExpense);
         this.newExpense = { 
           ...this.newExpense, 
-          itemName: '', 
+          remark: '', 
           amount: 0 
         };
         await this.loadExpenses();
