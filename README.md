@@ -1,5 +1,5 @@
 > 🔍 languages:  
-[English（United States）](#en-US) | [简体中文（中国大陆）](#zh-CN) | [日本語（日本）](#ja-JP) |  [偽中国語（日本）](#kanji-JP) | [Français（France）](#fr-FR) | [繁體中文（香港特別行政區）](#zh-HK) | [繁體中文（台灣地區）](#zh-TW) | [简体中文（新加坡）](#zh-SG) | [文言（中國）](#zh-Classical) |  [Español（Spain）](#es-ES) | [한국어（대한민국）](#ko-KR) | [Bahasa Melayu（Malaysia）](#ms-MY) | [Tiếng Việt（Việt Nam）](#vi-VN)
+[English（United States）](#en-US) | [简体中文（中国大陆）](#zh-CN) | [日本語（日本）](#ja-JP) |  [偽中国語（日本）](#kanji-JP) | [Français（France）](#fr-FR) | [繁體中文（香港特別行政區）](#zh-HK) | [繁體中文（台灣地區）](#zh-TW) | [简体中文（新加坡）](#zh-SG) | [文言（中國）](#zh-Classical) |  [Español（Spain）](#es-ES) | [한국어（대한민국）](#ko-KR) | [韓國語（大韓民國）](#kanji-KR) | [Bahasa Melayu（Malaysia）](#ms-MY) | [Tiếng Việt（Việt Nam）](#vi-VN)
 
 <a id="en-US"></a>
 # Household Finance Manager [English（United States）]
@@ -500,6 +500,73 @@ npm run dev  # 프론트엔드(http://localhost:5173)와 백엔드(http://localh
 2024년 3월 15일, 식비, ₩12,000, 점심 회식
 2024년 3월 16일, 교통비, ₩65,000, 주유비
 2024년 3월 17일, 쇼핑, ₩89,500, 온라인 쇼핑
+```
+
+---
+<a id="kanji-KR"></a>
+# 家庭 財政 管理 system [韓國語（大韓民國）]
+
+## 計劃 槪要  
+이 家計簿 管理 system은 韓國 家庭을 위해 特別히 設計된 多國語 支援 道具로, 家計 收入과 支出을 體系的으로 記錄하고 分析할 수 있도록 돕니다. 韓國式 日期 形式과 圓貨 表示를 自動 支援하며, 現地化된 消費 category를 提供합니다.
+
+## 主要 機能  
+- **消費 記錄**: 直觀的인 支出 追加 機能 (類型, 金額, 日期, memo)  
+- **實時間 同期化**: 모든 data가 CSV 檔案에 自動 貯藏  
+- **smart 分析**:  
+  - 消費 category別 圓形 graph (食費, shopping, 交通費 등)  
+  - 月別 支出 趨勢 broken line graph  
+  - 15秒 間隔 自動 data update  
+- **data 持出**: one-click CSV report 生成  
+
+## 設置 guide  
+### system 要求事項  
+- Node.js ≥ 14.0.0 (18.x 版 勸奬)  
+- npm ≥ 6.0.0  
+
+### 始作하기  
+```bash  
+git clone https://github.com/your-username/Household-Finance-Manager.git  
+cd Household-Finance-Manager  
+npm install  
+cd client && npm install  
+cd ../server && npm install  
+npm run dev  # frontend(http://localhost:5173)와 backend(http://localhost:3000) 同時 運行  
+```  
+
+## 使用 方法  
+1. **記錄 追加**:  
+   - "消費 記錄" button click  
+   - 消費 類型, 金額(₩), 日期 등 情報 入力  
+   - 提出 시 自動 貯藏  
+   
+2. **分析 確認**:  
+   - main 畫面에서 消費 比率 確認  
+   - 日日 支出 追跡  
+   - 高支出 category 自動 表示  
+   
+3. **data 管理**:  
+   - 언제든 CSV 形式으로 持出  
+   - 檔案 經路: `server/exports/expenses_initial.csv`  
+   - Excel 互換 可能  
+
+## 韓國 特化 機能  
+- **日期 形式**: 2024-03-15 → 2024年 3月 15日  
+- **現地化 category**: 食費, 交通費, 通信費, 敎育費, 文化生活 등  
+- **通貨 表示**: 圓貨 記號(₩) 自動 適用  
+- **韓國 特殊 支出 項目**: 便宜店, 大衆交通 card 充塡, 配達 飮食 등  
+- **稅金 處理**: 附加稅 包含/未包含 option (後日 擴張 豫定)  
+
+## 技術 stack  
+- **frontend**: Vue 3 + Chart.js data 視覺化  
+- **backend**: Node.js + Express data 處理  
+- **現地化**: Day.js 韓國式 日期 format  
+- **data 貯藏**: CSV 檔案 形式 (簡便 管理)  
+
+```  
+支出 記錄 例示:  
+2024年 3月 15日, 食費, ₩12,000, 午餐 會食  
+2024年 3月 16日, 交通費, ₩65,000, 注油費  
+2024年 3月 17日, shopping, ₩89,500, online shopping  
 ```
 
 ---
