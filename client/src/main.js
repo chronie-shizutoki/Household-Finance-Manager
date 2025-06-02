@@ -33,4 +33,8 @@ app.use(ElementPlus, {
 })
 app.use(router)
 app.use(i18n)
-app.mount('#app')
+try {
+  app.mount('#app');
+} catch (error) {
+  console.error('应用挂载失败:', error);
+}

@@ -28,9 +28,13 @@ const currentLang = ref(i18n.global.locale.value)
    */
   const switchLanguage = (lang) => {
     // 项目使用组合式API模式（legacy: false），直接访问i18n.global.locale
-i18n.global.locale.value = lang
-    currentLang.value = lang
-    localStorage.setItem('appLang', lang) // 持久化存储语言设置
+try {
+      i18n.global.locale.value = lang;
+      currentLang.value = lang;
+      localStorage.setItem('appLang', lang); // 持久化存储语言设置
+    } catch (error) {
+      console.error('切换语言失败:', error);
+    }
   }
 
   /**
