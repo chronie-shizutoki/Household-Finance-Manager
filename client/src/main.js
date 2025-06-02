@@ -17,7 +17,14 @@ export { i18n }; // 正确命名导出i18n实例供其他模块使用
 import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/dark/css-vars.css' // 官方暗黑模式
 
+import { createPinia } from 'pinia';
+const pinia = createPinia();
+
+import { initializeTheme } from './stores/theme';
+
 const app = createApp(App)
+app.use(pinia); // 安装Pinia实例
+initializeTheme(); // 初始化主题（在Pinia安装后调用）
 app.use(ElementPlus, { 
   zIndex: 3000,
   cssVar: {

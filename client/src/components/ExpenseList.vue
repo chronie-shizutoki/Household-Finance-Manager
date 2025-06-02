@@ -8,7 +8,7 @@
 -->
 <template>
   <div class="data-section">
-    <h2>{{ title }}</h2>
+
     <table>
       <thead>
         <tr>
@@ -75,6 +75,7 @@ const props = defineProps({  expenses: Array,  title: String })
   /* 浅色默认值 */
   /* 增加 !important 保证优先级 */
   --container-bg: #f9fafb !important;
+  --data-section-bg: var(--container-bg); /* 新增容器专用背景变量（浅色模式与container-bg同步） */
   --table-bg: white;
   --th-bg: #f3f6fa;
   --text-primary: #333;
@@ -97,8 +98,9 @@ const props = defineProps({  expenses: Array,  title: String })
 /* 系统级深色模式 */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-    --container-bg: #3b3b3b;
-    --table-bg: #2a2929;
+    --container-bg: #6b6b6b; /* 保留原容器变量 */
+    --data-section-bg: #424141; /* 新增容器专用背景变量（深色模式调浅） */
+    --table-bg: #555555; /* 再次调浅深色模式表格背景 */
     --th-bg: #4f4f4f;
     --text-primary: #e0e0e0;
     --text-secondary: #a2a2a2;
@@ -119,24 +121,23 @@ const props = defineProps({  expenses: Array,  title: String })
 
 /* 手动深色模式 */
 [data-theme="dark"] {
-  /* 修正颜色值为纯黑色 */
-  --container-bg: #404040 !important;
-  --table-bg: #1a1a1a;
-  --th-bg: #484848;
-  --text-primary: #e0e0e0;
-  --text-secondary: #b0b0b0;
-  --border-color: #404040;
-  --hover-bg: #3a4d5c;
-  --shadow-base: 0 4px 24px 
-  --shadow-base: 0 4px 24px rgba(0,0,0,0.4);
-  --shadow-hover: 0 8px 32px rgba(0,0,0,0.5);
-  --shadow-table: 0 2px 8px rgba(255,255,255,0.03);
-  --scroll-mask: linear-gradient(
-    to right,
-    transparent,
-    #4d4c4c 20px,
-    #2d2d2d calc(100% - 20px),
-    transparent
+  --container-bg: #6b6b6b; /* 保留原容器变量 */
+    --data-section-bg: #7c7c7c; /* 新增容器专用背景变量（手动深色模式调浅） */
+    --table-bg: #555555; /* 再次调浅手动深色模式表格背景 */
+    --th-bg: #4f4f4f;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a2a2a2;
+    --border-color: #454545;
+    --hover-bg: #545556;
+    --shadow-base: 0 4px 24px rgba(0,0,0,0.4);  /* 加深阴影透明度 */
+    --shadow-hover: 0 8px 32px rgba(0,0,0,0.5);
+    --shadow-table: 0 2px 8px rgba(255,255,255,0.03);
+    --scroll-mask: linear-gradient(
+      to right,
+      transparent,
+      #393939 20px,
+      #424242 calc(100% - 20px),
+      transparent
   );
 }
 
@@ -145,32 +146,30 @@ const props = defineProps({  expenses: Array,  title: String })
   margin: 0;
   padding: 1.5rem;
   box-sizing: border-box;
-  max-width: 100%;
+  width: max-content; /* 适配表格长度 */
+  max-width: 100%; /* 防止溢出屏幕 */
+  overflow-x: auto; /* 中间容器铺满屏幕 */
   border-radius: 16px;
-  background: var(--container-bg);
-  box-shadow: var(--shadow-base);
-  transition: box-shadow 0.3s, transform 0.3s;
-  box-shadow: var(--shadow-base);
+  background: var(--data-section-bg); /* 使用专用背景变量 */
+  transition: none; /* 移除阴影过渡效果 */
   position: relative; /* 新增定位层 */
   z-index: 1;
 }
 
 /* 悬停效果 */
 .data-section:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: var(--shadow-hover);
+  transform: none; /* 移除悬停变换 */
 }
 
 /* 表格系统 */
 .data-section table {
-  width: 100%;
   border-collapse: separate;
   border-spacing: 0;
   background: var(--table-bg);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: var(--shadow-table);
-  min-width: 600px; /* 保证表格最小宽度 */
+  min-width: max-content; /* 保留表格内容自适应 */
 }
 
 /* 表头样式 */
@@ -193,7 +192,6 @@ const props = defineProps({  expenses: Array,  title: String })
   border-bottom: 1px solid var(--border-color);
   font-size: 1rem;
   white-space: nowrap; /* 禁止内容换行 */
-  max-width: 220px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -265,16 +263,6 @@ const props = defineProps({  expenses: Array,  title: String })
   }
 }
 
-
-/* 标题样式 */
-.data-section h2 {
-  color: var(--text-primary);
-  margin: 0 0 1.5rem;
-  font-size: 1.3rem;
-  padding: 0 18px;
-  position: relative;
-}
-
 .data-section h2::after {
   content: "";
   position: absolute;
@@ -288,26 +276,6 @@ const props = defineProps({  expenses: Array,  title: String })
 .data-section {
   transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.data-section::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 16px;
-  box-shadow: inset 0 0 12px rgba(255,255,255,0.05);
-  pointer-events: none;
-  display: none;
-}
-[data-theme="dark"] .data-section::after {
-  display: block;
-}
 
-@media (prefers-color-scheme: dark) {
-  .data-section::after {
-    display: block;
-  }
-}
 </style>
 

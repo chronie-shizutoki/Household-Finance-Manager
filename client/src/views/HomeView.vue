@@ -3,6 +3,8 @@
     <div v-if="error" class="error-alert">{{ error }}</div>
     <MessageTip v-model:message="successMessage" type="success" />
     <MessageTip v-model:message="errorMessage" type="error" />
+    <MessageTip v-model:message="successMessage" type="success" theme="dark" />
+    <MessageTip v-model:message="errorMessage" type="error" theme="dark" />
 
     <Header :title="$t('app.title')" />
    
@@ -23,6 +25,9 @@
 
     <ExpenseList :expenses="csvExpenses" />
 
+    <div :class="['header', currentTheme]">
+    </div>
+    
     <div class="chart-controls">
       <div class="month-control">
         <button class="btn btn-scale prev-btn" @click="prevMonth">&lt;</button>
@@ -87,6 +92,10 @@ import { useExcelExport } from '@/composables/useExcelExport'
 import CacheStore from '@/utils/CacheStore'
 import GenAIWebpageEligibilityService from '@/utils/GenAIWebpageEligibilityService'
 import { safeShouldShowTouchpoints, initContentScript } from '@/utils/content-script-utils'
+import { useThemeStore } from '@/stores/theme';
+
+const themeStore = useThemeStore();
+const currentTheme = computed(() => themeStore.currentTheme);
 
 // 响应式数据：所有费用记录
 let csvExpenses = ref([])
