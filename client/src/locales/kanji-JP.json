@@ -1,0 +1,104 @@
+{
+  "app.title": "自動家計簿",
+  "app": {
+    "title": "自動家計簿",
+    "addRecord": "入出金登録",
+    "statistics": "支出報告",
+    "export": "表出力",
+    "recordList": "取引明細",
+    "consumptionTrend": "資産管理",
+    "notFound": "頁面見付不可",
+    "pageNotFound": "指定場所存在不可",
+    "backToHome": "元画面戻",
+    "language": {
+      "zhCN": "簡体字",
+      "enUS": "英語米国",
+      "jaJP": "日本語",
+      "frFR": "仏蘭西語",
+      "koKR": "韓国語"
+    },
+    "buttons": {
+      "refresh": "再読込",
+      "autoFill": "自動入力"
+    }
+  },
+  "home": {
+    "prevMonth": "前月",
+    "nextMonth": "翌月",
+    "dailyTrend": "日別収支",
+    "dailyDescending": "支出上位",
+    "noData": "表示内容無",
+    "noDataForExport": "出力対象無",
+    "type": {
+      "food": "食費外食込",
+      "shopping": "日用雑貨",
+      "transport": "交通費定期込",
+      "entertainment": "娯楽交際費",
+      "communication": "通信費携帯込",
+      "housing": "家賃住宅貸",
+      "utilities": "電気瓦斯水道",
+      "travel": "旅行行楽",
+      "fitness": "運動施設",
+      "beauty": "美容整容",
+      "pet": "愛玩動物",
+      "books": "書籍教材",
+      "digital": "電化製品",
+      "home": "家具調度",
+      "gift": "贈答品祝儀",
+      "office": "文具事務機器",
+      "sports": "運動具",
+      "repair": "修理整備",
+      "medical": "医療介護",
+      "education": "教育習事",
+      "utility": "公共料金",
+      "other": "其之他"
+    }
+  },
+  "expense": {
+    "type": {
+      "food": "食費外食込",
+      "shopping": "日用雑貨",
+      "transport": "交通費定期込",
+      "entertainment": "娯楽交際費",
+      "housing": "家賃住宅貸",
+      "utilities": "電気瓦斯水道",
+      "communications": "通信費無線込",
+      "insurance": "保険年金",
+      "education": "教育習事",
+      "medical": "医療介護",
+      "travel": "旅行行楽",
+      "fashion": "衣類美容",
+      "tax": "税金社保",  
+      "convenience": "小売店支出",
+      "other": "其之他"
+    },
+    "addFailed": "登録不可：{錯誤} [番号〇〇一]",
+    "exportFilename": "家計簿_{元号}{年}年{月}期",
+    "columns": {
+      "type": "勘定科目",
+      "name": "取引先",
+      "amount": "金額円",
+      "time": "取引日時"
+    },
+    "emptyText": "直近七日取引無",
+    "chart": {
+      "title": "費目別割合",
+      "legend": "支出構成",
+      "trendLabel": "月次推移"
+    },
+    "common": {
+      "requestCanceled": "操作中断",
+      "networkError": "通信障害携帯会社",
+      "requestTimeout": "接続混雑"
+    },
+    "labels": {
+      "date": "日付年月日",
+      "type": "科目選択",
+      "amount": "金額税込",
+      "remark": "備考例電子決済楽天点銀行振込"
+    },
+    "buttons": {
+      "submit": "登録確定"
+    }
+  },"monthLabel.ja-JP":"{year}年{month}月"
+}
