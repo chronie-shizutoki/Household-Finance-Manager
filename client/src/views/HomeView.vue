@@ -52,13 +52,11 @@
         v-if="chartType===1 && chart1Data.labels.length > 0"
         :chart-data="chart1Data"
         :chart-options="computedChartOptions"
-        :key="`chart1-${chartUpdateKey}`"
       />
       <ConsumptionChart
         v-else-if="chartType===2 && chart2Data.labels.length > 0"
         :chart-data="chart2Data"
         :chart-options="computedChartOptions"
-        :key="`chart2-${chartUpdateKey}`"
       />
       <div v-else class="no-data">{{ t('home.noData') }}</div>
     </Transition>
@@ -92,9 +90,6 @@ import { safeShouldShowTouchpoints, initContentScript } from '@/utils/content-sc
 
 // 响应式数据：所有费用记录
 let csvExpenses = ref([])
-
-// 添加图表更新键，用于强制重新渲染图表组件
-const chartUpdateKey = ref(0)
 
 // Excel 导出功能
 const { exportToExcel } = useExcelExport()
@@ -366,10 +361,6 @@ const updateCharts = async () => {
         timestamp: Date.now()
       }, 1800 * 1000);
     }
-    
-    // 修复：每次更新图表数据后，增加chartUpdateKey以强制重新渲染图表组件
-    chartUpdateKey.value++;
-    
   } catch (err) {
     console.error('更新图表缓存失败:', err);
     errorMessage.value = t('error.chartUpdateFailed', { error: err.message });
@@ -379,15 +370,21 @@ const updateCharts = async () => {
   }
 };
 
-// 修复：使用watch替代watchEffect，明确依赖项，避免不必要的重复渲染
-watch([() => csvExpenses.value, () => currentMonth.value, () => chartType.value], () => {
-  console.log('watch triggered by changes in dependencies.');
-  
+// 使用watchEffect监听相关数据变化并防抖更新图表
+watchEffect(() => {
+  // 监听 csvExpenses, currentMonth, chartType 的变化
+  // 任何一个变化都会触发 watchEffect
+  // 注意：watchEffect 依赖的是 csvExpenses.value 的引用，而不是其深层内容。
+  // 但由于我们在 loadCsvExpenses 中已经做了深层比较，如果内容没变，引用也不会变。
+  // currentMonth 和 chartType 的变化是预期的。
+  const dependencies = [csvExpenses.value, currentMonth.value, chartType.value];
+  console.log('watchEffect triggered by changes in dependencies.');
+ 
   if (chartUpdateTimer.value) {
     clearTimeout(chartUpdateTimer.value);
   }
   chartUpdateTimer.value = setTimeout(updateCharts, 500); // 500ms 防抖
-}, { deep: false }); // 不使用深度监听，避免不必要的触发
+});
 
 // 清理定时器
 onBeforeUnmount(() => {
@@ -532,165 +529,162 @@ onBeforeUnmount(() => {
   darkModeMedia.removeEventListener('change', updateSystemTheme);
 });
 
-// 监听金额变化，处理整数补两
+// 监听金额变化，处理整数补两位小数逻辑 (注意：直接修改 props.newExpense.amount 不推荐，但为了保持原有功能，暂时保留)
 watch(() => newExpense.value.amount, (newVal) => {
-  if (typeof newVal === 'string') {
-    // 如果输入的是字符串，尝试转换为数字
-    const numVal = parseFloat(newVal);
-    if (!isNaN(numVal)) {
-      newExpense.value.amount = numVal;
-    }
+  if (typeof newVal === 'number' && newVal % 1 === 0) {
+    newExpense.value.amount = Number(newVal.toFixed(2));
   }
-});
+}, { immediate: true });
+
 </script>
 
 <style scoped>
+/* 定义 CSS 变量 */
+:root {
+  --text-primary: #333;
+  --text-secondary: #666;
+  --bg-primary: #fff;
+  --border-primary: #e0e0e0;
+  --primary-color: #4CAF50;
+  --error-bg: #ffebee;
+  --error-border: #ffcdd2;
+}
+
+/* 媒体查询：系统深色模式 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) { /* 当没有手动设置 data-theme 时生效 */
+    --text-primary: #fff;
+    --text-secondary: #b0b0b0;
+    --bg-primary: #1a1a1a;
+    --border-primary: #404040;
+    --primary-color: #81C784;
+    --error-bg: #3a1a1a;
+    --error-border: #5a2a2a;
+  };
+}
+
+/* 手动设置深色模式 */
+[data-theme="dark"] {
+  --text-primary: #fff;
+  --text-secondary: #b0b0b0;
+  --bg-primary: #1a1a1a;
+  --border-primary: #404040;
+  --primary-color: #81C784;
+  --error-bg: #3a1a1a;
+  --error-border: #5a2a2a;
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 2rem 1rem;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  transition: all 0.3s ease;
 }
 
 .error-alert {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 0.75rem 1.25rem;
+  padding: 1rem;
   margin-bottom: 1rem;
-  border: 1px solid #f5c6cb;
-  border-radius: 0.25rem;
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+  border-radius: 8px;
+  color: #d32f2f;
 }
 
 .chart-controls {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  margin: 1rem 0;
-  flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1.5rem;
+  margin: 2.5rem 0;
 }
 
 .month-control {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
+  font-size: 1.2rem;
 }
 
 .month-label {
-  min-width: 100px;
-  text-align: center;
   font-weight: bold;
+  color: var(--text-primary);
 }
 
 .chart-toggle {
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .btn {
   padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: #f0f0f0;
+  border-radius: 8px;
   transition: all 0.2s ease;
+  cursor: pointer; /* 添加手势 */
 }
 
-.btn:hover {
-  background-color: #e0e0e0;
-}
-
-.btn.active {
-  background-color: #4BC0C0;
+.prev-btn, .next-btn {
+  background: var(--primary-color);
   color: white;
+  border: none;
 }
 
-.btn-scale:active {
-  transform: scale(0.95);
+.chart-btn {
+  background: rgba(76, 175, 80, 0.1);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+}
+
+.chart-btn.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: transparent;
 }
 
 .no-data {
   text-align: center;
+  color: var(--text-secondary);
   padding: 2rem;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  margin: 1rem 0;
-  color: #666;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .chart-controls {
+    margin: 1.5rem 0;
+  }
+
+  .month-label {
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
 }
 
 /* 过渡动画 */
-.modal-fade-enter-active,
-.modal-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.modal-fade-enter-from,
-.modal-fade-leave-to {
-  opacity: 0;
-}
-
 .chart-enter-active,
 .chart-leave-active {
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity 0.5s ease;
 }
 
 .chart-enter-from,
 .chart-leave-to {
   opacity: 0;
-  transform: translateY(20px);
 }
 
 .button-enter-active,
 .button-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.5s ease;
 }
 
 .button-enter-from,
 .button-leave-to {
   opacity: 0;
-  transform: translateY(10px);
-}
-
-/* 深色模式适配 */
-:root {
-  --text-primary: #333333;
-  --text-secondary: #666666;
-  --bg-primary: #ffffff;
-  --border-primary: #e0e0e0;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    --text-primary: #ffffff;
-    --text-secondary: #b0b0b0;
-    --bg-primary: #1a1a1a;
-    --border-primary: #404040;
-  }
-}
-
-[data-theme="dark"] {
-  --text-primary: #ffffff;
-  --text-secondary: #b0b0b0;
-  --bg-primary: #1a1a1a;
-  --border-primary: #404040;
-}
-
-.container {
-  color: var(--text-primary);
-  background-color: var(--bg-primary);
-}
-
-.btn {
-  background-color: var(--border-primary);
-  color: var(--text-primary);
-}
-
-.btn:hover {
-  background-color: var(--text-secondary);
-}
-
-.no-data {
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-primary);
-  color: var(--text-secondary);
 }
 </style>
