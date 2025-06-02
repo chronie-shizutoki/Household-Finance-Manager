@@ -88,12 +88,12 @@
     "labels": {
       "date": "時日（MM/DD/YYYY）",      
       "type": "擇類目",
-      "amount": "書銀數（$）",   
-      "remark": "批註（如Venmo戶名）" 
+      "amount": "書銀數（两）",   
+      "remark": "批註" 
     },
     "buttons": {
       "submit": "存用度"        
     }
   },
-  "monthLabel.zh-Classical": "{month} {year}"
+  "monthLabel.zh-Classical": "{year}年{month}"
 }

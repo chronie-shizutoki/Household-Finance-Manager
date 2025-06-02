@@ -40,17 +40,20 @@ const currentTheme = computed(() => themeStore.currentTheme); // 响应式获取
 
 // 定义支持的语言列表
 const languages = [
+  { code: 'en-US', label: 'English (United States)' },
   { code: 'zh-CN', label: '简体中文 (中国大陆)' },
+  { code: 'ja-JP', label: '日本語 (日本)' },
+  { code: 'kanji-JP', label: '偽中国語 (日本)' },
+  { code: 'fr-FR', label: 'Français (France)' },
   { code: 'zh-HK', label: '繁體中文 (香港特別行政區)' },
   { code: 'zh-TW', label: '繁體中文 (台灣地區)' },
   { code: 'zh-SG', label: '简体中文 (新加坡)' },
-  { code: 'en-US', label: 'English (United States)' },
-  { code: 'ja-JP', label: '日本語 (日本)' },
+  { code: 'zh-Classical', label: '文言 (中國)' },
+  { code: 'es-ES', label: 'Español (España)' },
   { code: 'ko-KR', label: '한국어 (대한민국)' },
+  { code: 'kanji-KR', label: '韓國語 (大韓民國)' },
   { code: 'ms-MY', label: 'Bahasa Melayu (Malaysia)' },
   { code: 'vi-VN', label: 'Tiếng Việt (Việt Nam)' },
-  { code: 'es-ES', label: 'Español (España)' },
-  { code: 'fr-FR', label: 'Français (France)' },
 ];
 </script>
 

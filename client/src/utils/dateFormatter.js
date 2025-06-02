@@ -2,8 +2,50 @@
  * 日期格式化工具
  * 支持多语言日期格式化，包括特殊格式如台湾民国纪年、日本年号等
  */
-
 import dayjs from 'dayjs';
+import { solarToLunar } from 'chinese-lunar'; // 确保这个库已正确安装并可用
+
+/**
+ * 阿拉伯数字转汉字数字（简体）
+ * @param {number} num - 要转换的数字
+ * @returns {string} 汉字数字字符串
+ */
+export const numberToChinese = (num) => {
+  const digits = ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+  const str = num.toString();
+  let result = '';
+  for (let i = 0; i < str.length; i++) {
+    result += digits[parseInt(str[i], 10)];
+  }
+  return result;
+};
+
+// 古风月份名称 (周礼·月令) - 基于公历月份
+const CLASSICAL_MONTHS = [
+  '孟春', '仲春', '季春', 
+  '孟夏', '仲夏', '季夏',
+  '孟秋', '仲秋', '季秋',
+  '孟冬', '仲冬', '季冬'
+];
+
+/**
+ * 将公历日期转换为古风农历表示所需的信息
+ * @param {Date} date - 公历日期对象
+ * @returns {object} 包含古风月份（公历）、干支年和农历日期字符串的对象
+ */
+export const toClassicalDate = (date) => {
+  // solarToLunar 函数的月份参数是 1-12，Date.getMonth() 返回 0-11，所以需要 +1
+  const lunar = solarToLunar(date.getFullYear(), date.getMonth() + 1, date.getDate());
+  
+  return {
+    // classicalMonth 是基于公历月份的古风名称（例如：6月是仲夏）
+    classicalMonth: CLASSICAL_MONTHS[date.getMonth()],
+    // ganZhiYear 直接使用 chinese-lunar 库提供的干支年字符串（例如：乙巳）
+    ganZhiYear: lunar.ganZhiYear, 
+    // lunarDayStr 是农历日期字符串（例如：初八）
+    lunarDayStr: lunar.dayStr 
+  };
+};
 
 /**
  * 获取台湾民国纪年
@@ -24,22 +66,22 @@ export const getTaiwanYear = (year) => {
  */
 export const getJapaneseEra = (year, month, day) => {
   // 令和: 2019年5月1日至今
-  if (year > 2019 || (year === 2019 && month >= 4 && day >= 1)) {
+  if (year > 2019 || (year === 2019 && month >= 4 && day >= 1)) { // month >= 4 对应 5月
     return { era: '令和', year: year - 2019 + 1 };
   }
   // 平成: 1989年1月8日至2019年4月30日
-  else if (year > 1989 || (year === 1989 && ((month > 0) || (month === 0 && day >= 8)))) {
+  else if (year > 1989 || (year === 1989 && ((month > 0) || (month === 0 && day >= 8)))) { // month > 0 对应 2-12月, month === 0 && day >= 8 对应 1月8日及以后
     return { era: '平成', year: year - 1989 + 1 };
   }
   // 昭和: 1926年12月25日至1989年1月7日
-  else if (year > 1926 || (year === 1926 && month === 11 && day >= 25)) {
+  else if (year > 1926 || (year === 1926 && month === 11 && day >= 25)) { // month === 11 对应 12月
     return { era: '昭和', year: year - 1926 + 1 };
   }
   // 大正: 1912年7月30日至1926年12月24日
-  else if (year > 1912 || (year === 1912 && ((month > 6) || (month === 6 && day >= 30)))) {
+  else if (year > 1912 || (year === 1912 && ((month > 6) || (month === 6 && day >= 30)))) { // month > 6 对应 8-12月, month === 6 && day >= 30 对应 7月30日及以后
     return { era: '大正', year: year - 1912 + 1 };
   }
-  // 明治: 1868年1月25日至1912年7月29日 (简化处理)
+  // 明治: 1868年1月25日至1912年7月29日 (简化处理，实际起始日期更早)
   else {
     return { era: '明治', year: year - 1868 + 1 };
   }
@@ -93,7 +135,7 @@ export const getSpanishMonthName = (month) => {
 export const formatDateByLocale = (date, locale) => {
   const d = dayjs(date);
   const year = d.year();
-  const month = d.month() + 1; // dayjs月份从0开始
+  const month = d.month() + 1; // dayjs月份从0开始，所以需要 +1
   const day = d.date();
 
   switch (locale) {
@@ -136,6 +178,13 @@ export const formatDateByLocale = (date, locale) => {
       // 越南语日期: 15/04/2024
       return `${day}/${month.toString().padStart(2, '0')}/${year}`;
     
+    case 'kanji-JP':
+    case 'kanji-KR':
+      // 汉字日期（韩国）: 二〇二五年四月一日
+      const chYearKr = numberToChinese(year);
+      const chMonthKr = numberToChinese(month);
+      const chDayKr = numberToChinese(day);
+      return `${chYearKr}年${chMonthKr}月${chDayKr}日`;
     case 'ms-MY':
       // 马来语日期: 15 Mac 2024
       const malayMonths = [
@@ -143,6 +192,14 @@ export const formatDateByLocale = (date, locale) => {
         'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember'
       ];
       return `${day} ${malayMonths[month - 1]} ${year}`;
+    
+    case 'zh-classical': {
+      // 当 locale 为 'zh-classical' 时，调用 toClassicalDate 获取所需信息
+      const classicalInfo = toClassicalDate(d.toDate());
+      // 按照您期望的格式拼接：干支年 + 古风月份 + 农历日期
+      // 例如：乙巳年仲夏初八
+      return `${classicalInfo.ganZhiYear}年${classicalInfo.classicalMonth}${classicalInfo.lunarDayStr}`;
+    }
     
     default:
       // 默认格式: YYYY-MM-DD
@@ -159,7 +216,8 @@ export const formatDateByLocale = (date, locale) => {
 export const formatMonthLabelByLocale = (yearMonth, locale) => {
   const d = dayjs(yearMonth);
   const year = d.year();
-  const month = d.month() + 1; // dayjs月份从0开始
+  // month 是公历月份，dayjs月份从0开始，所以需要 +1
+  const month = d.month() + 1; 
 
   switch (locale) {
     case 'zh-TW':
@@ -169,7 +227,8 @@ export const formatMonthLabelByLocale = (yearMonth, locale) => {
     
     case 'ja-JP':
       // 日本年号: 令和x年x月
-      const japaneseDate = getJapaneseEra(year, d.month(), 1);
+      // 月份标签不需要具体日期，传入1即可
+      const japaneseDate = getJapaneseEra(year, d.month(), 1); 
       return `${japaneseDate.era}${japaneseDate.year}年${month}月`;
     
     case 'fr-FR':
@@ -201,6 +260,12 @@ export const formatMonthLabelByLocale = (yearMonth, locale) => {
       // 越南语月份: 04/2024
       return `${month.toString().padStart(2, '0')}/${year}`;
     
+    case 'kanji-JP':
+    case 'kanji-KR':
+      // 汉字月份（韩国传统）: 二〇二五年四月
+      const chYearKr = numberToChinese(year);
+      const chMonthKr = numberToChinese(month);
+      return `${chYearKr}年${chMonthKr}月`;
     case 'ms-MY':
       // 马来语月份: Mac 2024
       const malayMonths = [
@@ -208,6 +273,15 @@ export const formatMonthLabelByLocale = (yearMonth, locale) => {
         'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember'
       ];
       return `${malayMonths[month - 1]} ${year}`;
+    
+    case 'zh-classical': {
+      // 对于古风月份标签，同样调用 toClassicalDate 获取干支年和古风月份
+      // 注意：这里传入的日期是该年月的1号，以获取正确的干支年和古风月份
+      const classicalInfo = toClassicalDate(d.toDate());
+      // 按照您期望的格式拼接：干支年 + 古风月份
+      // 例如：乙巳年仲夏
+      return `${classicalInfo.ganZhiYear}年${classicalInfo.classicalMonth}`;
+    }
     
     default:
       // 默认格式: YYYY-MM
@@ -222,5 +296,8 @@ export default {
   getJapaneseEra,
   getFrenchMonthName,
   getEnglishMonthName,
-  getSpanishMonthName
+  getSpanishMonthName,
+  numberToChinese,
+  toClassicalDate
 };
+

@@ -19,6 +19,9 @@ import esES from './es-ES.json'
 import koKR from './ko-KR.json'
 import msMY from './ms-MY.json'
 import viVN from './vi-VN.json'
+import zhClassical from './zh-Classical.json'
+import kanjiJP from './kanji-JP.json'
+import kanjiKR from './kanji-KR.json'
 import dayjs from 'dayjs';
 // 导入语言包
 import 'dayjs/locale/zh-cn'; // 中文
@@ -33,7 +36,7 @@ import 'dayjs/locale/ms-my'; // 马来语
 import 'dayjs/locale/vi'; // 越南语
 import { computed } from 'vue' // 必须导入 computed
 
-
+import { solarToLunar } from 'chinese-lunar';
 /**
  * 初始化i18n实例
  * @type {import('vue-i18n').I18n}
@@ -53,7 +56,10 @@ const i18n = createI18n({
     'es-ES': esES,
     'ko-KR': koKR,
     'ms-MY': msMY,
-    'vi-VN': viVN
+    'vi-VN': viVN,
+    'zh-Classical': zhClassical,
+    'kanji-JP': kanjiJP,
+    'kanji-KR': kanjiKR
   }
 })
 

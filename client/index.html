@@ -8,6 +8,10 @@
   </head>
   <body>
     <div id="app"></div>
+    <script>/* 检测系统深色模式并设置data-theme */
+      const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', systemDarkMode ? 'dark' : 'light');
+    </script>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
