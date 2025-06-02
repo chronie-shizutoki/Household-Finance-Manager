@@ -1,0 +1,99 @@
+{
+  "app.title": "家計理財簿",
+  "app": {
+    "title": "家計理財簿", 
+    "addRecord": "錄用度",         
+    "statistics": "用度析",  
+    "export": "造冊以出",
+    "recordList": "金穀簿", 
+    "consumptionTrend": "用度流變",
+    "notFound": "頁失", 
+    "pageNotFound": "此頁亡佚，或已遷矣",
+    "backToHome": "歸總覽",   
+    "language": {
+      "zhCN": "漢文（簡牘）",    
+      "enUS": "英吉利文（米國）", 
+      "jaJP": "和文（日本）",
+      "frFR": "佛郎機文（佛國）",
+      "esES": "西班牙文（西班牙）"          
+    },
+    "buttons": {
+      "refresh": "即刻新之",         
+      "autoFill": "智填"     
+    }
+  },
+  "home": {
+    "prevMonth": "上月",
+    "nextMonth": "下月",
+    "dailyTrend": "日用之度",     
+    "dailyDescending": "自高至低",   
+    "noData": "尚無出入",
+    "noDataForExport":"無籍可出",
+    "type": {
+      "food": "庖廚",
+      "shopping": "市易",
+      "transport": "舟輿",
+      "entertainment": "遊藝",
+      "communication": "通信",
+      "housing": "宅租",
+      "utilities": "公用",
+      "travel": "行旅",
+      "fitness": "健體",
+      "beauty": "容妝",
+      "pet": "寵物",
+      "books": "書冊",
+      "digital": "電器",
+      "home": "家什",
+      "gift": "饋贈",
+      "office": "文房",
+      "sports": "武具",
+      "repair": "修繕",
+      "medical": "醫藥",
+      "education": "教化",
+      "utility": "公用",
+      "other": "雜項"
+    }
+  },
+  "expense": {
+    "type": {
+      "food": "庖廚",   
+      "shopping": "市易",
+      "transport": "舟輿",     
+      "entertainment": "遊藝",
+      "housing": "宅租",       
+      "utilities": "公用",          
+      "healthcare": "醫藥",     
+      "subscriptions": "月貢",  
+      "other": "雜項"
+    },
+    "addFailed": "錄用度敗：{error}。請檢視復試之。", 
+    "exportFilename": "用度簿_{MM_YYYY}", 
+    "columns": {
+      "type": "類目",
+      "name": "事由",           
+      "amount": "銀數（USD）",         
+      "time": "時日"             
+    },
+    "emptyText": "始錄首筆用度", 
+    "chart": {
+      "title": "用度分剖",
+      "legend": "依類別",
+      "trendLabel": "卅日流變"       
+    },
+    "common": {
+      "requestCanceled": "事已罷",
+      "networkError": "連通敗。檢視無線或行網。", 
+      "requestTimeout": "請逾時。少頃復試。"
+    },
+    "labels": {
+      "date": "時日（MM/DD/YYYY）",      
+      "type": "擇類目",
+      "amount": "書銀數（$）",   
+      "remark": "批註（如Venmo戶名）" 
+    },
+    "buttons": {
+      "submit": "存用度"        
+    }
+  },
+  "monthLabel.zh-Classical": "{month} {year}"
+}
