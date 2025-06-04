@@ -54,6 +54,15 @@
       "other": "Divers"
     }
   },
+  "expense.search.monthPlaceholder": "Mois",
+  "expense.search.allType": "Tous types",
+  "expense.search.minAmountPlaceholder": "Montant min",
+  "expense.search.maxAmountPlaceholder": "Montant max",
+  "expense.search.keywordPlaceholder": "Mot-clé",
+  "expense.sort.dateAsc": "Date (anciennes)",
+  "expense.sort.dateDesc": "Date (récentes)",
+  "expense.sort.amountAsc": "Montant (croissant)",
+  "expense.sort.amountDesc": "Montant (décroissant)",
   "expense": {
     "name": "Bénéficiaire",
     "amount": "Montant (€)",

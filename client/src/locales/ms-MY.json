@@ -53,6 +53,15 @@
         "other": "Lain-Lain"
       }
     },
+    "expense.search.monthPlaceholder": "Bulan",
+    "expense.search.allType": "Semua Jenis",
+    "expense.search.minAmountPlaceholder": "Jumlah Min",
+    "expense.search.maxAmountPlaceholder": "Jumlah Maks",
+    "expense.search.keywordPlaceholder": "Kata Kunci",
+    "expense.sort.dateAsc": "Tarikh (Lama)",
+    "expense.sort.dateDesc": "Tarikh (Baru)",
+    "expense.sort.amountAsc": "Jumlah (Rendah ke Tinggi)",
+    "expense.sort.amountDesc": "Jumlah (Tinggi ke Rendah)",
     "expense": {
         "name": "Penerima",
         "amount": "Amaun (RM)",

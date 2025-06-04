@@ -54,6 +54,15 @@
         "other": "Varios"
       }
     },
+    "expense.search.monthPlaceholder": "Mes",
+    "expense.search.allType": "Todos los tipos",
+    "expense.search.minAmountPlaceholder": "Mínimo",
+    "expense.search.maxAmountPlaceholder": "Máximo",
+    "expense.search.keywordPlaceholder": "Palabra clave",
+    "expense.sort.dateAsc": "Fecha (antiguas)",
+    "expense.sort.dateDesc": "Fecha (recientes)",
+    "expense.sort.amountAsc": "Monto (bajo a alto)",
+    "expense.sort.amountDesc": "Monto (alto a bajo)",
     "expense": {
         "name": "Proveedor",
         "amount": "Importe (€)",

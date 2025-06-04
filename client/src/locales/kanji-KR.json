@@ -53,6 +53,15 @@
         "other": "其他經費"
       }
     },
+    "expense.search.monthPlaceholder": "月選擇",
+    "expense.search.allType": "全類型",
+    "expense.search.minAmountPlaceholder": "最小金額",
+    "expense.search.maxAmountPlaceholder": "最大金額",
+    "expense.search.keywordPlaceholder": "檢索語",
+    "expense.sort.dateAsc": "日付 (舊順)",
+    "expense.sort.dateDesc": "日付 (新順)",
+    "expense.sort.amountAsc": "金額 (低順)",
+    "expense.sort.amountDesc": "金額 (高順)",
     "expense": {
         "name": "決濟處",
         "amount": "金額(圓)",

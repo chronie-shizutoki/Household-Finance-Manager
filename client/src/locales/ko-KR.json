@@ -53,6 +53,15 @@
         "other": "기타경비"
       }
     },
+    "expense.search.monthPlaceholder": "월 선택",
+    "expense.search.allType": "전체 유형",
+    "expense.search.minAmountPlaceholder": "최소 금액",
+    "expense.search.maxAmountPlaceholder": "최대 금액",
+    "expense.search.keywordPlaceholder": "검색어",
+    "expense.sort.dateAsc": "날짜 (오래된순)",
+    "expense.sort.dateDesc": "날짜 (최신순)",
+    "expense.sort.amountAsc": "금액 (낮은순)",
+    "expense.sort.amountDesc": "금액 (높은순)",
     "expense": {
         "name": "결제처",
         "amount": "금액(원)",

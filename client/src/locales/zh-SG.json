@@ -49,6 +49,15 @@
       "other": "其他支出"
     }
   },
+  "expense.search.monthPlaceholder": "月份",
+  "expense.search.allType": "全部类型",
+  "expense.search.minAmountPlaceholder": "最低金额",
+  "expense.search.maxAmountPlaceholder": "最高金额",
+  "expense.search.keywordPlaceholder": "搜索关键词",
+  "expense.sort.dateAsc": "日期 (升序)",
+  "expense.sort.dateDesc": "日期 (降序)",
+  "expense.sort.amountAsc": "金额 (低至高)",
+  "expense.sort.amountDesc": "金额 (高至低)",
   "expense": {
     "type":{
       "type": "消费类型"

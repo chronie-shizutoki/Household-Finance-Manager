@@ -48,6 +48,15 @@
       "other": "其他使費"
     }
   },
+  "expense.search.monthPlaceholder": "揀邊個月",
+"expense.search.allType": "全部類型",
+"expense.search.minAmountPlaceholder": "最少錢",
+"expense.search.maxAmountPlaceholder": "最多錢",
+"expense.search.keywordPlaceholder": "搵乜嘢",
+"expense.sort.dateAsc": "日期 (舊嘅先)",
+"expense.sort.dateDesc": "日期 (新嘅先)",
+"expense.sort.amountAsc": "金額 (少嘅先)",
+"expense.sort.amountDesc": "金額 (多嘅先)",
   "expense": {
     "date": "日子",
     "type":{

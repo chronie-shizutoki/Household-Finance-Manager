@@ -54,6 +54,15 @@
         "other": "Chi Phí Khác"
       }
     },
+    "expense.search.monthPlaceholder": "Tháng",
+    "expense.search.allType": "Tất cả loại",
+    "expense.search.minAmountPlaceholder": "Số tiền tối thiểu",
+    "expense.search.maxAmountPlaceholder": "Số tiền tối đa",
+    "expense.search.keywordPlaceholder": "Từ khóa tìm kiếm",
+    "expense.sort.dateAsc": "Ngày (cũ nhất)",
+    "expense.sort.dateDesc": "Ngày (mới nhất)",
+    "expense.sort.amountAsc": "Số tiền (thấp đến cao)",
+    "expense.sort.amountDesc": "Số tiền (cao đến thấp)",
     "expense": {
         "name": "Đơn Vị/Nhà Cung Cấp",
         "amount": "Số Tiền (₫)",

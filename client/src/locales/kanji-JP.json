@@ -54,6 +54,15 @@
       "other": "其之他"
     }
   },
+  "expense.search.monthPlaceholder": "月選択",
+  "expense.search.allType": "全類別",
+  "expense.search.minAmountPlaceholder": "最小金額",
+  "expense.search.maxAmountPlaceholder": "最大金額",
+  "expense.search.keywordPlaceholder": "關鍵詞検索",
+  "expense.sort.dateAsc": "日付 (昇順)",
+  "expense.sort.dateDesc": "日付 (降順)",
+  "expense.sort.amountAsc": "金額 (低→高)",
+  "expense.sort.amountDesc": "金額 (高→低)",
   "expense": {
     "name": "取引先",
     "amount": "金額円",

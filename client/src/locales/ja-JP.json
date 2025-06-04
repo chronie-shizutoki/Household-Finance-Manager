@@ -54,6 +54,15 @@
       "other": "その他経費"
     }
   },
+  "expense.search.monthPlaceholder": "月を選択",
+  "expense.search.allType": "全タイプ",
+  "expense.search.minAmountPlaceholder": "最低金額",
+  "expense.search.maxAmountPlaceholder": "最高金額",
+  "expense.search.keywordPlaceholder": "キーワード検索",
+  "expense.sort.dateAsc": "日付 (古い順)",
+  "expense.sort.dateDesc": "日付 (新しい順)",
+  "expense.sort.amountAsc": "金額 (低い順)",
+  "expense.sort.amountDesc": "金額 (高い順)",
   "expense": {
     "name": "取引先",
     "amount": "金額（￥）",

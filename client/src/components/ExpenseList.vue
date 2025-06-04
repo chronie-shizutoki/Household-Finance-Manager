@@ -9,31 +9,49 @@
 <template>
   <div class="data-section">
 
-    <table>
-      <thead>
-        <tr>
-          <th>{{ $t('expense.date') }}</th>
-          <th>{{ $t('expense.type.type') }}</th>
-          <th>{{ $t('expense.amount') }}</th>
-          <th>{{ $t('expense.remark') }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="expense in expenses" :key="expense.id"> <!-- 使用唯一id作为key优化渲染性能 -->
-          <td>{{ expense.time }}</td>
-          <td>{{ expense.type }}</td>
-          <td>¥{{ expense.amount }}</td>
-          <td>{{ expense.remark || '-' }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="search-container" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+    <input type="month" v-model="selectedMonth" :placeholder="$t('expense.search.monthPlaceholder')">
+    <select v-model="selectedType">
+      <option value="">{{ $t('expense.search.allType') }}</option>
+      <option v-for="type in uniqueTypes" :key="type" :value="type">{{ type }}</option>
+    </select>
+    <select v-model="sortOption">
+      <option value="dateAsc">{{ $t('expense.sort.dateAsc') }}</option>
+      <option value="dateDesc">{{ $t('expense.sort.dateDesc') }}</option>
+      <option value="amountAsc">{{ $t('expense.sort.amountAsc') }}</option>
+      <option value="amountDesc">{{ $t('expense.sort.amountDesc') }}</option>
+    </select>
+    <input type="number" v-model="minAmount" :placeholder="$t('expense.search.minAmountPlaceholder')">
+    <span style="align-self: center;">~</span>
+    <input type="number" v-model="maxAmount" :placeholder="$t('expense.search.maxAmountPlaceholder')">
+    <input type="text" v-model="searchKeyword" :placeholder="$t('expense.search.keywordPlaceholder')">
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>{{ $t('expense.date') }}</th>
+        <th>{{ $t('expense.type.type') }}</th>
+        <th>{{ $t('expense.amount') }}</th>
+        <th>{{ $t('expense.remark') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="expense in filteredExpenses" :key="expense.id"> <!-- 使用唯一id作为key优化渲染性能 -->
+        <td>{{ expense.time }}</td>
+        <td>{{ expense.type }}</td>
+        <td>¥{{ expense.amount }}</td>
+        <td>{{ expense.remark || '-' }}</td>
+      </tr>
+    </tbody>
+  </table>
   </div>
 </template>
 
 <script setup>
 
-import { onMounted, onBeforeUnmount } from 'vue'
-
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 // 系统主题状态跟踪
 let systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -66,10 +84,133 @@ onBeforeUnmount(() => {
  * @property {Array} expenses - 消费记录数组
  * @property {string} title - 列表标题
  */
+const searchKeyword = ref('')
+const selectedType = ref('')
+const selectedMonth = ref('') // 格式：YYYY-MM
+const minAmount = ref('') // 最小金额
+const maxAmount = ref('') // 最大金额
+const uniqueTypes = computed(() => {
+  return [...new Set(props.expenses.map(expense => expense.type))]
+})
+const sortOption = ref('dateAsc') // 默认日期升序
+const filteredExpenses = computed(() => {
+  let filtered = props.expenses.slice() // 避免修改原数组
+  // 原有筛选逻辑...
+  // 新增排序逻辑
+  switch (sortOption.value) {
+    case 'dateAsc':
+      filtered.sort((a, b) => new Date(a.time) - new Date(b.time));
+      break;
+    case 'dateDesc':
+      filtered.sort((a, b) => new Date(b.time) - new Date(a.time));
+      break;
+    case 'amountAsc':
+      filtered.sort((a, b) => a.amount - b.amount);
+      break;
+    case 'amountDesc':
+      filtered.sort((a, b) => b.amount - a.amount);
+      break;
+  }
+  // 类型筛选
+  if (selectedType.value) {
+    filtered = filtered.filter(expense => expense.type === selectedType.value)
+  }
+  // 月份筛选（提取时间的年月部分匹配）
+  if (selectedMonth.value) {
+    filtered = filtered.filter(expense => expense.time?.slice(0,7) === selectedMonth.value)
+  }
+  // 金额范围筛选
+  if (minAmount.value) {
+    filtered = filtered.filter(expense => expense.amount >= Number(minAmount.value))
+  }
+  if (maxAmount.value) {
+    filtered = filtered.filter(expense => expense.amount <= Number(maxAmount.value))
+  }
+  // 关键词搜索
+  if (searchKeyword.value) {
+    const keyword = searchKeyword.value.toLowerCase()
+    filtered = filtered.filter(expense => {
+      return expense.time.toLowerCase().includes(keyword) || 
+             expense.type.toLowerCase().includes(keyword) || 
+             expense.remark.toLowerCase().includes(keyword)
+    })
+  }
+  return filtered
+})
+
 const props = defineProps({  expenses: Array,  title: String })
 </script>
 
-<style>
+<style scoped>
+/* 基础输入组件样式 */
+.search-container > input,
+.search-container > select {
+  background: var(--input-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem 0rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  flex-shrink: 1;
+  margin-left: 1rem;
+}
+
+/* 金额输入框缩小 */
+.search-container > input[type="number"] {
+  max-width: 60px;
+}
+
+.search-container > input[type="text"] {
+  max-width: 100px;
+}
+.search-container > input[type="month"]{
+  max-width: 80px;
+}
+
+.search-container > select:first-of-type{
+  max-width: 80px;
+}
+.search-container > select:last-of-type {
+  max-width: 80px
+};
+/* 聚焦动画 */
+.search-container > input:focus,
+.search-container > select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.15);
+}
+
+/* 分隔符样式 */
+.search-container > span {
+  align-self: center;
+  color: var(--text-secondary);
+  padding: auto auto rem;
+}
+
+/* 深色模式适配 */
+[data-theme="dark"] {
+  --input-bg: #363636;
+  --border-color: #4a4a4a;
+  --primary-color: #79bbff;
+  --primary-rgb: 121, 187, 255;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a2a2a2;
+  --select-bg: #363636; /* 下拉框背景 */
+  --select-border: #4a4a4a; /* 下拉框边框 */
+}
+
+[data-theme="light"] {
+  --input-bg: #ffffff;
+  --border-color: #e4e7ed;
+  --primary-color: #409eff;
+  --primary-rgb: 64, 158, 255;
+  --text-primary: #303133;
+  --text-secondary: #606266;
+}
 /* 深色模式变量体系 */
 :root {
   /* 浅色默认值 */
@@ -116,6 +257,9 @@ const props = defineProps({  expenses: Array,  title: String })
       #424242 calc(100% - 20px),
       transparent
     );
+    --input-bg: #363636;
+    --select-bg: #363636;
+    --select-border: #4a4a4a;
   }
 }
 
@@ -220,6 +364,31 @@ const props = defineProps({  expenses: Array,  title: String })
     background: var(--container-bg) !important;
   }
 
+  /* 调整搜索容器布局 */
+  .search-container {
+    gap: 0.5rem;
+  }
+  .search-container > input[type="month"],
+  .search-container > select,
+  .search-container > select:last-of-type {
+    flex-basis: calc(20% - 0.25rem); /* 第一行三个元素（月份、类型、排序）各占33% */
+    flex-shrink: 0;
+  }
+  /* 金额输入框+分隔符组合占半行 */
+  .search-container > input[type="number"],
+  .search-container > span {
+    flex-basis: calc((50% - 1rem) / 2); /* 两个金额框各占(50%-1rem)/2，分隔符占1rem间隔 */
+    flex-shrink: 0;
+  }
+  /* 搜索框占半行 */
+  .search-container > input[type="text"] {
+    flex-basis: calc(50% - 0.5rem); /* 搜索框占50%宽度，减去右侧间隔 */
+    flex-shrink: 0;
+  }
+  .search-container > span {
+    flex-basis: auto; /* 分隔符保持自动宽度 */
+  }
+
   .data-section table {
     width: auto;
     min-width: 100%;
@@ -228,9 +397,6 @@ const props = defineProps({  expenses: Array,  title: String })
     margin-right: 1rem;
     transform: translateX(-1px); /* 微调对齐 */
     box-shadow: none;
-    td:first-child, th:first-child {
-    padding-left: 1.5rem !important;
-  }
   }
 
   .data-section th,

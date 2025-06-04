@@ -54,6 +54,15 @@
       "other": "Miscellaneous"
     }
   },
+   "expense.search.monthPlaceholder": "Month",
+    "expense.search.allType": "All Types",
+    "expense.search.minAmountPlaceholder": "Min Amount",
+    "expense.search.maxAmountPlaceholder": "Max Amount",
+    "expense.search.keywordPlaceholder": "Search Keyword",
+    "expense.sort.dateAsc": "Date (Oldest First)",
+    "expense.sort.dateDesc": "Date (Newest First)",
+    "expense.sort.amountAsc": "Amount (Low to High)",
+    "expense.sort.amountDesc": "Amount (High to Low)",
   "expense": {
     "name": "Description",           
     "amount": "Amount (USD)",         
