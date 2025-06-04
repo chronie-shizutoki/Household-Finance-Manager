@@ -49,6 +49,11 @@
     }
   },
   "expense": {
+    "date": "日子",
+    "type":{
+    "type": "使錢類別"},
+    "amount": "銀碼",
+    "remark": "備註",
     "addFailed": "記數失敗：{error}，check清楚再試啦",
     "exportFilename": "使錢記錄_{date}",
     "columns": {

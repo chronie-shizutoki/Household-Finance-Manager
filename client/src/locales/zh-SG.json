@@ -50,6 +50,12 @@
     }
   },
   "expense": {
+    "type":{
+      "type": "消费类型"
+    },
+    "amount": "金额（新元）",   
+    "date": "消费日期",
+    "remark": "备注（如PayNow转账编号）",
     "addFailed": "添加失败：{error}，请检查后重试", 
     "exportFilename": "开支记录_{date}",
     "columns": {

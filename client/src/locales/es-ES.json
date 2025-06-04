@@ -55,7 +55,12 @@
       }
     },
     "expense": {
+        "name": "Proveedor",
+        "amount": "Importe (€)",
+        "date": "Fecha/Hora",
+        "remark": "Ejemplo: Bizum # PayPal # Transferencia SEPA",
         "type": {
+            "type": "Categoría",
             "food": "Supermercado",
             "shopping": "Compras Online",
             "transport": "Transporte/Gasolina",

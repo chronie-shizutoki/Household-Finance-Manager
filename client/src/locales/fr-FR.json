@@ -55,7 +55,12 @@
     }
   },
   "expense": {
+    "name": "Bénéficiaire",
+    "amount": "Montant (€)",
+    "date": "Date/Heure",
+    "remark": "Remarques (ex: Lydia # PayPal # Virement SEPA)",
     "type": {
+      "type": "Catégorie",
       "food": "Courses Alimentaires",
       "shopping": "E-commerce",
       "transport": "Transport/Carburant",

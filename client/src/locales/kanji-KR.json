@@ -54,7 +54,11 @@
       }
     },
     "expense": {
+        "name": "決濟處",
+        "amount": "金額(圓)",
+        "time": "決濟時刻",
         "type": {
+            "type": "區分",
             "food": "食費/cafe",
             "shopping": "online shopping",
             "transport": "交通/注油",

@@ -55,7 +55,12 @@
     }
   },
   "expense": {
+    "name": "Description",           
+    "amount": "Amount (USD)",         
+    "date": "Date & Time",
+    "remark": "Notes (e.g. Venmo username)",
     "type": {
+      "type": "Category",
       "food": "Dining Out/Groceries",   
       "shopping": "Retail Shopping",
       "transport": "Transportation",     

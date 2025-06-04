@@ -54,7 +54,12 @@
       }
     },
     "expense": {
+        "name": "Penerima",
+        "amount": "Amaun (RM)",
+        "datee": "Masa Transaksi",
+        "remark": "Catatan (Contoh: Touch 'n Go # GrabPay # DuitNow)",
         "type": {
+            "type": "Kategori",
             "food": "Makan & Minum",
             "shopping": "Belanja Dapur",
             "transport": "Pengangkutan",

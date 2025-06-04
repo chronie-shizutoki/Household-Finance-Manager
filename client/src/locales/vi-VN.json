@@ -55,7 +55,12 @@
       }
     },
     "expense": {
+        "name": "Đơn Vị/Nhà Cung Cấp",
+        "amount": "Số Tiền (₫)",
+        "date": "Thời Gian GD",
+        "remark": "Ví dụ: Ví Momo # ZaloPay # Chuyển Khoản",
         "type": {
+            "type": "Loại Chi",
             "food": "Ăn Uống",
             "shopping": "Mua Sắm Online",
             "transport": "Xăng Xe/Grab",

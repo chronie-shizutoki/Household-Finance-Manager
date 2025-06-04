@@ -12,10 +12,10 @@
     <table>
       <thead>
         <tr>
-          <th>日期</th>
-          <th>类型</th>
-          <th>金额</th>
-          <th>备注</th>
+          <th>{{ $t('expense.date') }}</th>
+          <th>{{ $t('expense.type.type') }}</th>
+          <th>{{ $t('expense.amount') }}</th>
+          <th>{{ $t('expense.remark') }}</th>
         </tr>
       </thead>
       <tbody>

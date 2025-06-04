@@ -55,7 +55,12 @@
     }
   },
   "expense": {
+    "name": "取引先",
+    "amount": "金額（￥）",
+    "date": "取引日時",
+    "remark": "備考（例：PayPal支払い # 楽天ポイント # 銀行振込）",
     "type": {
+      "type": "勘定科目",
       "food": "食費（外食含む）",
       "shopping": "日用雑貨",
       "transport": "交通費（定期券）",

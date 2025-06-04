@@ -54,7 +54,12 @@
       }
     },
     "expense": {
+        "name": "결제처",
+        "amount": "금액(원)",
+        "date": "결제시각",
+        "remark": "메모 예시 ▶ 카카오페이#네이버페이#통장이체",
         "type": {
+            "type": "구분",
             "food": "식비/카페",
             "shopping": "온라인쇼핑",
             "transport": "교통/주유",

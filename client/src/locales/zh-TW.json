@@ -49,6 +49,11 @@
     }
   },
   "expense": {
+    "type":{
+    "type": "消費類型"},
+    "amount": "金額（新台幣）",   
+    "date": "消費日期",
+    "remark": "備註說明",   
     "addFailed": "新增失敗：{error}，請檢查後再試", 
     "exportFilename": "消費紀錄_{date}",
     "columns": {

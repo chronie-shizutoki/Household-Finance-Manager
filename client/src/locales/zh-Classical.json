@@ -55,7 +55,12 @@
     }
   },
   "expense": {
+    "name": "事由",           
+    "amount": "銀數",         
+    "date": "時日",
+    "remark": "批註",       
     "type": {
+      "type": "類目",
       "food": "庖廚",   
       "shopping": "市易",
       "transport": "舟輿",     
@@ -71,7 +76,7 @@
     "columns": {
       "type": "類目",
       "name": "事由",           
-      "amount": "銀數（USD）",         
+      "amount": "銀數",         
       "time": "時日"             
     },
     "emptyText": "始錄首筆用度", 
