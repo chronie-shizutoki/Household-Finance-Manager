@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onUnmounted } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount, onUnmounted } from 'vue';
 
 // 使用 defineProps 声明组件接收的属性
 const props = defineProps({
@@ -19,10 +19,10 @@ const props = defineProps({
     default: 'success',
     validator: val => ['success', 'error'].includes(val)
   },
-  // 主题类型，可以是 'light' 或 'dark'，默认为 'light'
+  // 主题类型，可以是 'light' 或 'dark'，默认跟随父组件主题（强制浅色）
   theme: {
     type: String,
-    default: 'light',
+    default: 'light', // 明确设置默认值为浅色，避免父组件未传递时使用其他值
     validator: val => ['light', 'dark'].includes(val)
   }
 });
@@ -87,28 +87,28 @@ onUnmounted(() => {
   word-wrap: break-word; /* 允许长单词或URL地址在必要时换行 */
 }
 
-/* 成功消息的样式 (浅色模式) */
-.message-tip.success {
+/* 浅色模式成功消息样式 */
+.message-tip.light.success {
   background-color: #e6f7d9; /* 浅绿色背景 */
   color: #389e0d; /* 深绿色文本 */
   border: 1px solid #b7eb8f; /* 绿色边框 */
 }
 
-/* 错误消息的样式 (浅色模式) */
-.message-tip.error {
+/* 浅色模式错误消息样式 */
+.message-tip.light.error {
   background-color: #fff1f0; /* 浅红色背景 */
   color: #cf1322; /* 深红色文本 */
   border: 1px solid #ffa39e; /* 红色边框 */
 }
 
-/* 深色模式下的成功消息样式 */
+/* 深色模式成功消息样式 */
 .message-tip.dark.success {
   background-color: #333333; /* 灰黑色背景 */
   color: #95de64; /* 亮绿色文本 */
   border: 1px solid #52c41a; /* 绿色边框 */
 }
 
-/* 深色模式下的错误消息样式 */
+/* 深色模式错误消息样式 */
 .message-tip.dark.error {
   background-color: #333333; /* 灰黑色背景 */
   color: #ff7875; /* 亮红色文本 */

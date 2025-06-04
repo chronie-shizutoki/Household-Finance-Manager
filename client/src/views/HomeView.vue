@@ -3,8 +3,8 @@
     <div v-if="error" class="error-alert">{{ error }}</div>
     <MessageTip v-model:message="successMessage" type="success" />
     <MessageTip v-model:message="errorMessage" type="error" />
-    <MessageTip v-model:message="successMessage" type="success" theme="dark" />
-    <MessageTip v-model:message="errorMessage" type="error" theme="dark" />
+    <MessageTip v-model:message="successMessage" type="success" />
+    <MessageTip v-model:message="errorMessage" type="error" />
 
     <Header :title="$t('app.title')" />
    
