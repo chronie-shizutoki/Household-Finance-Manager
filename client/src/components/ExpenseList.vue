@@ -9,6 +9,17 @@
 <template>
   <div class="data-section">
 
+    <div class="stats-container" style="margin-bottom: 1rem; padding: 0 1rem; color: var(--text-primary);">
+      <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+        <span>{{ $t('expense.stats.rowCount') }}：{{ filteredExpenses.length }}</span>
+        <span>{{ $t('expense.stats.totalAmount') }}：¥{{ totalAmount }}</span>
+        <span>{{ $t('expense.stats.averageAmount') }}：¥{{ averageAmount }}</span>
+        <span>{{ $t('expense.stats.medianAmount') }}：¥{{ medianAmount }}</span>
+        <span>{{ $t('expense.stats.amountRange') }}：¥{{ minAmountVal }}-¥{{ maxAmountVal }}</span>
+        <span>{{ $t('expense.stats.typeCount') }}：{{ uniqueTypes.length }}</span>
+      </div>
+    </div>
+
     <div class="search-container" style="display: flex; gap: 1rem; flex-wrap: wrap;">
     <input type="month" v-model="selectedMonth" :placeholder="$t('expense.search.monthPlaceholder')">
     <select v-model="selectedType">
@@ -50,8 +61,7 @@
 <script setup>
 
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
+
 // 系统主题状态跟踪
 let systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -93,6 +103,32 @@ const uniqueTypes = computed(() => {
   return [...new Set(props.expenses.map(expense => expense.type))]
 })
 const sortOption = ref('dateAsc') // 默认日期升序
+const totalAmount = computed(() => {
+  return filteredExpenses.value.reduce((sum, expense) => sum + expense.amount, 0).toFixed(2);
+});
+
+const averageAmount = computed(() => {
+  return filteredExpenses.value.length > 0 ? (totalAmount.value / filteredExpenses.value.length).toFixed(2) : '0.00';
+});
+
+const sortedAmounts = computed(() => {
+  return filteredExpenses.value.map(expense => expense.amount).sort((a, b) => a - b);
+});
+
+const medianAmount = computed(() => {
+  const amounts = sortedAmounts.value;
+  const mid = Math.floor(amounts.length / 2);
+  return amounts.length ? (amounts.length % 2 !== 0 ? amounts[mid] : (amounts[mid - 1] + amounts[mid]) / 2).toFixed(2) : '0.00';
+});
+
+const minAmountVal = computed(() => {
+  return sortedAmounts.value.length > 0 ? sortedAmounts.value[0].toFixed(2) : '0.00';
+});
+
+const maxAmountVal = computed(() => {
+  return sortedAmounts.value.length > 0 ? sortedAmounts.value[sortedAmounts.value.length - 1].toFixed(2) : '0.00';
+});
+
 const filteredExpenses = computed(() => {
   let filtered = props.expenses.slice() // 避免修改原数组
   // 原有筛选逻辑...

@@ -57,6 +57,12 @@
   "expense.sort.dateDesc": "日期 (由新至舊)",
   "expense.sort.amountAsc": "金額 (低至高)",
   "expense.sort.amountDesc": "金額 (高至低)",
+  "expense.stats.rowCount": "資料筆數",
+  "expense.stats.totalAmount": "總金額",
+  "expense.stats.averageAmount": "平均金額",
+  "expense.stats.medianAmount": "金額中位數",
+  "expense.stats.amountRange": "金額範圍",
+  "expense.stats.typeCount": "類別數量",
   "expense": {
     "type":{
     "type": "消費類型"},

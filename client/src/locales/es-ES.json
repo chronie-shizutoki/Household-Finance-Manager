@@ -63,6 +63,12 @@
     "expense.sort.dateDesc": "Fecha (recientes)",
     "expense.sort.amountAsc": "Monto (bajo a alto)",
     "expense.sort.amountDesc": "Monto (alto a bajo)",
+    "expense.stats.rowCount": "Filas",
+    "expense.stats.totalAmount": "Total",
+    "expense.stats.averageAmount": "Promedio",
+    "expense.stats.medianAmount": "Mediana",
+    "expense.stats.amountRange": "Rango",
+    "expense.stats.typeCount": "Tipos",
     "expense": {
         "name": "Proveedor",
         "amount": "Importe (€)",

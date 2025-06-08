@@ -62,6 +62,12 @@
     "expense.sort.dateDesc": "Tarikh (Baru)",
     "expense.sort.amountAsc": "Jumlah (Rendah ke Tinggi)",
     "expense.sort.amountDesc": "Jumlah (Tinggi ke Rendah)",
+    "expense.stats.rowCount": "Jumlah Baris",
+    "expense.stats.totalAmount": "Jumlah Wang",
+    "expense.stats.averageAmount": "Purata",
+    "expense.stats.medianAmount": "Median",
+    "expense.stats.amountRange": "Julat Wang",
+    "expense.stats.typeCount": "Jenis",
     "expense": {
         "name": "Penerima",
         "amount": "Amaun (RM)",

@@ -63,6 +63,12 @@
     "expense.sort.dateDesc": "日期 (自今)",
     "expense.sort.amountAsc": "金額 (自寡)",
     "expense.sort.amountDesc": "金額 (自多)",
+    "expense.stats.rowCount": "行數",
+    "expense.stats.totalAmount": "總金",
+    "expense.stats.averageAmount": "均金",
+    "expense.stats.medianAmount": "中位金",
+    "expense.stats.amountRange": "金之範圍",
+    "expense.stats.typeCount": "類別之數",
   "expense": {
     "name": "事由",           
     "amount": "銀數",         

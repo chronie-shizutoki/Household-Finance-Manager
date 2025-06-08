@@ -57,6 +57,12 @@
 "expense.sort.dateDesc": "日期 (新嘅先)",
 "expense.sort.amountAsc": "金額 (少嘅先)",
 "expense.sort.amountDesc": "金額 (多嘅先)",
+"expense.stats.rowCount": "數據行數",
+"expense.stats.totalAmount": "總金額",
+"expense.stats.averageAmount": "平均金額",
+"expense.stats.medianAmount": "金額中位數",
+"expense.stats.amountRange": "金額範圍",
+"expense.stats.typeCount": "類型數量",
   "expense": {
     "date": "日子",
     "type":{

@@ -63,6 +63,12 @@
   "expense.sort.dateDesc": "日付 (降順)",
   "expense.sort.amountAsc": "金額 (低→高)",
   "expense.sort.amountDesc": "金額 (高→低)",
+  "expense.stats.rowCount": "行数",
+  "expense.stats.totalAmount": "合計金額",
+  "expense.stats.averageAmount": "平均金額",
+  "expense.stats.medianAmount": "金額中央値",
+  "expense.stats.amountRange": "金額範囲",
+  "expense.stats.typeCount": "種類数",
   "expense": {
     "name": "取引先",
     "amount": "金額円",

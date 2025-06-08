@@ -62,6 +62,12 @@
     "expense.sort.dateDesc": "日付 (新順)",
     "expense.sort.amountAsc": "金額 (低順)",
     "expense.sort.amountDesc": "金額 (高順)",
+    "expense.stats.rowCount": "行數",
+    "expense.stats.totalAmount": "總額",
+    "expense.stats.averageAmount": "平均金額",
+    "expense.stats.medianAmount": "金額中位數",
+    "expense.stats.amountRange": "金額範圍",
+    "expense.stats.typeCount": "類型數",
     "expense": {
         "name": "決濟處",
         "amount": "金額(圓)",

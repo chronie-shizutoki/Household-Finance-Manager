@@ -63,6 +63,12 @@
     "expense.sort.dateDesc": "Ngày (mới nhất)",
     "expense.sort.amountAsc": "Số tiền (thấp đến cao)",
     "expense.sort.amountDesc": "Số tiền (cao đến thấp)",
+    "expense.stats.rowCount": "Số dòng",
+    "expense.stats.totalAmount": "Tổng số tiền",
+    "expense.stats.averageAmount": "Số tiền trung bình",
+    "expense.stats.medianAmount": "Số tiền trung vị",
+    "expense.stats.amountRange": "Phạm vi số tiền",
+    "expense.stats.typeCount": "Số loại",
     "expense": {
         "name": "Đơn Vị/Nhà Cung Cấp",
         "amount": "Số Tiền (₫)",

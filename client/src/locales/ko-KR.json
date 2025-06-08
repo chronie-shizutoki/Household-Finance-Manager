@@ -62,6 +62,12 @@
     "expense.sort.dateDesc": "날짜 (최신순)",
     "expense.sort.amountAsc": "금액 (낮은순)",
     "expense.sort.amountDesc": "금액 (높은순)",
+    "expense.stats.rowCount": "행 수",
+    "expense.stats.totalAmount": "총액",
+    "expense.stats.averageAmount": "평균 금액",
+    "expense.stats.medianAmount": "금액 중간값",
+    "expense.stats.amountRange": "금액 범위",
+    "expense.stats.typeCount": "유형 수",
     "expense": {
         "name": "결제처",
         "amount": "금액(원)",

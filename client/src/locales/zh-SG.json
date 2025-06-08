@@ -58,6 +58,12 @@
   "expense.sort.dateDesc": "日期（晚→早）",
   "expense.sort.amountAsc": "金额（低→高）",
   "expense.sort.amountDesc": "金额（高→低）",
+  "expense.stats.rowCount": "数据行数",
+  "expense.stats.totalAmount": "总金额",
+  "expense.stats.averageAmount": "平均金额",
+  "expense.stats.medianAmount": "金额中位数",
+  "expense.stats.amountRange": "金额范围",
+  "expense.stats.typeCount": "类型数量",
   "expense": {
     "type":{
       "type": "消费类型"

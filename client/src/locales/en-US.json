@@ -63,6 +63,12 @@
     "expense.sort.dateDesc": "Date (Newest First)",
     "expense.sort.amountAsc": "Amount (Low to High)",
     "expense.sort.amountDesc": "Amount (High to Low)",
+    "expense.stats.rowCount": "Row Count",
+    "expense.stats.totalAmount": "Total Amount",
+    "expense.stats.averageAmount": "Average Amount",
+    "expense.stats.medianAmount": "Median Amount",
+    "expense.stats.amountRange": "Amount Range",
+    "expense.stats.typeCount": "Type Count",
   "expense": {
     "name": "Description",           
     "amount": "Amount (USD)",         

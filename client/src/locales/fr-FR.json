@@ -63,6 +63,12 @@
   "expense.sort.dateDesc": "Date (récentes)",
   "expense.sort.amountAsc": "Montant (croissant)",
   "expense.sort.amountDesc": "Montant (décroissant)",
+  "expense.stats.rowCount": "Nombre de lignes",
+  "expense.stats.totalAmount": "Montant total",
+  "expense.stats.averageAmount": "Moyenne",
+  "expense.stats.medianAmount": "Médiane",
+  "expense.stats.amountRange": "Plage de montant",
+  "expense.stats.typeCount": "Types différents",
   "expense": {
     "name": "Bénéficiaire",
     "amount": "Montant (€)",
