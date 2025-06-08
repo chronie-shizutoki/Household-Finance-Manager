@@ -44,8 +44,7 @@ const PORT = process.env.PORT || 3010; // 修改为3010，避免与可能被占�
 app.use(cors(corsOptions)); // 应用优化后的CORS配置
 
 // 定义路由
-app.use('/api/expenses', require('./routes/expenses'));
-app.use('/api/blocklist', require('./routes/blocklist'));
+app.use('/api/expenses', require('./routes/expenses'))
 
   // 添加请求日志中间件（记录请求路径和时间）
   app.use((req, res, next) => {

@@ -1,13 +1,10 @@
 import { ref, computed, watchEffect, onBeforeUnmount } from 'vue'
 import dayjs from 'dayjs'
-import CacheStore from '@/utils/CacheStore'
 import { formatMonthLabelByLocale } from '@/utils/dateFormatter'
 
 export function useChartData(csvExpenses, locale) {
   const currentMonth = ref(dayjs().format('YYYY-MM'))
   const chartType = ref(1)
-  const chart1Cache = ref(null)
-  const chart2Cache = ref(null)
   let chartUpdateTimer = ref(null)
   const isChartUpdating = ref(false)
 
@@ -70,37 +67,16 @@ export function useChartData(csvExpenses, locale) {
   const updateCharts = async () => {
     if (isChartUpdating.value) return
     isChartUpdating.value = true
-    const cacheKey = `chartData:${currentMonth.value}`
     try {
-      const cacheStore = new CacheStore()
-      const cachedChartData = await cacheStore.get(cacheKey)
-      if (cachedChartData && Date.now() - cachedChartData.timestamp < 1800 * 1000) {
-        if (JSON.stringify(chart1Cache.value) !== JSON.stringify(cachedChartData.chart1)) {
-          chart1Cache.value = cachedChartData.chart1
-        }
-        if (JSON.stringify(chart2Cache.value) !== JSON.stringify(cachedChartData.chart2)) {
-          chart2Cache.value = cachedChartData.chart2
-        }
-      } else {
-        const monthExpenses = csvExpenses.value.filter(expense =>
-          dayjs(expense.time).isSame(currentMonth.value, 'month')
-        )
-        const newChart1Data = calculateChart1Data(monthExpenses)
-        const newChart2Data = calculateChart2Data(monthExpenses)
-        if (JSON.stringify(chart1Cache.value) !== JSON.stringify(newChart1Data)) {
-          chart1Cache.value = newChart1Data
-        }
-        if (JSON.stringify(chart2Cache.value) !== JSON.stringify(newChart2Data)) {
-          chart2Cache.value = newChart2Data
-        }
-        await cacheStore.set(cacheKey, {
-          chart1: chart1Cache.value,
-          chart2: chart2Cache.value,
-          timestamp: Date.now()
-        }, 1800 * 1000)
-      }
+      const monthExpenses = csvExpenses.value.filter(expense =>
+        dayjs(expense.time).isSame(currentMonth.value, 'month')
+      )
+      const newChart1Data = calculateChart1Data(monthExpenses)
+    const newChart2Data = calculateChart2Data(monthExpenses)
+    chart1Data.value = newChart1Data
+    chart2Data.value = newChart2Data
     } catch (err) {
-      console.error('更新图表缓存失败:', err)
+      console.error('更新图表数据失败:', err)
     } finally {
       isChartUpdating.value = false
     }
@@ -128,8 +104,8 @@ export function useChartData(csvExpenses, locale) {
     chartType.value = type
   }
 
-  const chart1Data = computed(() => chart1Cache.value || { labels: [], datasets: [] })
-  const chart2Data = computed(() => chart2Cache.value || { labels: [], datasets: [] })
+  const chart1Data = ref({ labels: [], datasets: [] })
+  const chart2Data = ref({ labels: [], datasets: [] })
 
   return {
   chart1Data,
@@ -140,5 +116,4 @@ export function useChartData(csvExpenses, locale) {
   nextMonth,
   setChartType,
   chartType
-}
-}
+}}

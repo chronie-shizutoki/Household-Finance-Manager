@@ -74,9 +74,6 @@ import ExportButton from '@/components/ExportButton.vue'
 import { useExpenseData } from '@/composables/useExpenseData'
 import { ExpenseAPI } from '@/api/expenses'
 import { useExcelExport } from '@/composables/useExcelExport'
-import CacheStore from '@/utils/CacheStore'
-import GenAIWebpageEligibilityService from '@/utils/GenAIWebpageEligibilityService'
-import { safeShouldShowTouchpoints, initContentScript } from '@/utils/content-script-utils'
 import { useThemeStore } from '@/stores/theme';
 import ChartControls from '@/components/ChartControls.vue'
 import { useChartData } from '@/composables/useChartData'
@@ -93,30 +90,8 @@ const currentTheme = computed(() => themeStore.currentTheme);
 
 // Excel 导出功能
 const { exportToExcel } = useExcelExport()
-const eligibilityService = new GenAIWebpageEligibilityService()
 
-// 节流函数优化（使用时间戳+定时器）
-const throttle = (func, delay) => {
-  let lastTime = 0;
-  let timeoutId = null;
- 
-  return function(...args) {
-    const now = Date.now();
-    const remaining = delay - (now - lastTime);
-   
-    clearTimeout(timeoutId);
-   
-    if (remaining <= 0) {
-      lastTime = now;
-      func.apply(this, args);
-    } else {
-      timeoutId = setTimeout(() => {
-        lastTime = Date.now();
-        func.apply(this, args);
-      }, remaining);
-    }
-  }
-}
+
 
 // 使用 useExpenseData 组合式函数管理费用数据
 const {
@@ -173,19 +148,14 @@ const loadCsvExpenses = async () => {
   console.log('loadCsvExpenses: Starting data fetch.');
  
   try {
-    const cacheStore = new CacheStore();
-    const cacheKey = 'expensesData';
-    const cachedData = await cacheStore.get(cacheKey);
-
     let newData = [];
-    if (cachedData && Date.now() - cachedData.timestamp < 3600 * 1000) {
-      console.log('loadCsvExpenses: Loading from cache.');
-      newData = cachedData.data;
-    } else {
-      console.log('loadCsvExpenses: Cache expired or not found, fetching from API.');
+    try {
+      console.log('loadCsvExpenses: Fetching from API.');
       const data = await ExpenseAPI.getExpenses();
       newData = Array.isArray(data) ? data : [];
-      await cacheStore.set(cacheKey, { data: newData, timestamp: Date.now() }, 3600 * 1000);
+    } catch (err) {
+      console.error('获取消费数据失败:', err);
+      errorMessage.value = t('error.fetchExpensesFailed', { error: err.message });
     }
 
     // 关键优化：只有当数据实际发生变化时才更新 csvExpenses.value
@@ -322,12 +292,6 @@ const computedChartOptions = computed(() => {
 // 生命周期钩子
 onMounted(() => {
   loadCsvExpenses(); // 初始加载费用数据
- 
-  // 检查是否显示触摸点
-  eligibilityService.shouldShowTouchpoints().then(shouldShow => {
-    // 可添加响应式变量控制UI显示，例如：
-    // showTouchpoints.value = shouldShow;
-  });
 
   // 深色模式监听
   const darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
