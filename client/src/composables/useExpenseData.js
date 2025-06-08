@@ -1,152 +1,138 @@
-/*
-* @file useExpenseData.js
-* @package 家庭记账本
-* @module 组合式函数
-* @description 消费数据管理组合式函数，负责获取和处理消费记录数据
-* @author 开发者
-* @version 1.0
-*/
-
-import { ref, onMounted, watch, onUnmounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { ExpenseAPI } from '@/api/expenses'
+// src/composables/useExpenseData.js
+import { ref, computed } from 'vue';
+import { ExpenseAPI } from '@/api/expenses';
+import { useI18n } from 'vue-i18n';
+import dayjs from 'dayjs';
+import { useChartData } from './useChartData'; // Import the updated composition function
 
 /**
-* 获取并管理消费数据的组合式函数
-* @returns {Object} 包含消费数据和图表数据的响应式对象
-*/
+ * A simple deep equality comparison function
+ * Used to check if data fetched from the API has actually changed
+ * @param {any} a - The first value to compare
+ * @param {any} b - The second value to compare
+ * @returns {boolean} Returns true if the two values are deeply equal, otherwise false
+ */
+const deepEqual = (a, b) => {
+  if (a === b) return true; // If it's the same reference or primitive types are equal
+
+  if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) {
+    return false;
+  }
+
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length !== b.length) return false;
+    for (let i = 0; i < a.length; i++) {
+      if (!deepEqual(a[i], b[i])) return false;
+    }
+    return true;
+  }
+
+  const keysA = Object.keys(a);
+  const keysB = Object.keys(b);
+
+  if (keysA.length !== keysB.length) return false;
+
+  for (const key of keysA) {
+    if (!keysB.includes(key) || !deepEqual(a[key], b[key])) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+/**
+ * Composition function for handling expense data fetching, management, and statistics.
+ * @returns {Object} An object containing expense data, statistics, chart data, loading status, and error information.
+ */
 export function useExpenseData() {
-  const { t } = useI18n()
+  const { t, locale } = useI18n(); // Destructure locale from useI18n
 
-  /**
-   * 消费记录列表（响应式数据）
-   * @type {import('vue').Ref<Array>}
-   */
-  const expenses = ref([])
+  const expenses = ref([]); // All expense records
+  const isLoading = ref(false);
+  const error = ref(null);
+  const errorMessage = ref('');
+  const successMessage = ref('');
+  const lastUpdateTime = ref(null);
 
-  /**
-   * 分类消费统计数据（响应式数据）
-   * @type {import('vue').Ref<Object>}
-   */
-  const categoryStats = ref({})
+  // Initialize chartCurrentMonth ref. This will be passed to useChartData.
+  // It's crucial that this ref's value is updated only when necessary (e.g., via UI interaction).
+  const chartCurrentMonth = ref(dayjs().format('YYYY-MM'));
 
-  /**
-   * 数据获取错误信息（响应式数据）
-   * @type {import('vue').Ref<string>}
-   */
-  const error = ref('')
+  // Use the useChartData composition function to handle chart data and month filtering
+  // Pass expenses ref, chartCurrentMonth ref, and locale ref
+  const {
+    chart1Data,
+    chart2Data,
+    currentMonth, // This is the currentMonth managed by useChartData
+    monthLabel,
+    prevMonth,
+    nextMonth,
+    setChartType,
+    chartType
+  } = useChartData(expenses, chartCurrentMonth, locale); // Pass locale here
 
-  /**
-   * 操作成功提示信息（响应式数据）
-   * @type {import('vue').Ref<string>}
-   */
-  const successMessage = ref('')
+  // Computed property: Expense statistics by category
+  const categoryStats = computed(() => {
+    const stats = {};
+    expenses.value.forEach(expense => {
+      const type = t(`expense.type.${expense.type}`) || expense.type; // Use translation
+      if (!stats[type]) {
+        stats[type] = 0;
+      }
+      stats[type] += expense.amount;
+    });
+    return Object.entries(stats).map(([type, amount]) => ({ type, amount }));
+  });
 
-  /**
-   * 操作错误提示信息（响应式数据）
-   * @type {import('vue').Ref<string>}
-   */
-  const errorMessage = ref('')
-
-  /**
-   * 获取消费数据
-   * @param {boolean} forceRefresh - 是否强制刷新数据（目前未在外部使用，但保留）
-   */
+  // Fetch data from the backend
   const fetchData = async (forceRefresh = false) => {
     console.log('useExpenseData: fetchData called.');
+    if (isLoading.value && !forceRefresh) {
+      console.log('useExpenseData: Already loading and not forced refresh, skipping.');
+      return;
+    }
+    isLoading.value = true;
+    error.value = null;
+    errorMessage.value = '';
+
     try {
-      const res = await ExpenseAPI.getExpenses();
-      // 确保 res.data 是一个数组，即使 API 返回 null 或 undefined
-      const newData = Array.isArray(res?.data) ? res.data : [];
-     
-      // 只有当数据内容实际发生变化时才更新 expenses.value
-      // 避免不必要的响应式触发
-      if (JSON.stringify(expenses.value) !== JSON.stringify(newData)) {
+      const newData = await ExpenseAPI.getExpenses();
+      
+      // Only update the ref if the content of the new data is different from the current data
+      if (!deepEqual(expenses.value, newData)) {
+        console.log('useExpenseData: expenses ref changed, updating chart data.');
         expenses.value = newData;
-        console.log('useExpenseData: expenses.value updated (content changed).');
+        lastUpdateTime.value = new Date();
       } else {
         console.log('useExpenseData: expenses.value content is identical, no update needed.');
       }
-     
-      calculateCategoryStats();
-      error.value = ''; // 清除之前的错误信息
     } catch (err) {
-      console.error('useExpenseData: 获取消费数据失败:', err.message || err);
-      error.value = t('error.fetchExpensesFailed', { error: err.message || err });
-      // 在错误情况下，确保 expenses 仍然是一个空数组，避免后续操作报错
-      if (!Array.isArray(expenses.value)) {
-        expenses.value = [];
-      }
-      calculateCategoryStats(); // 即使出错也尝试计算一次，确保结构完整
+      console.error('Failed to fetch expense data:', err);
+      error.value = err;
+      errorMessage.value = t('error.fetchExpensesFailed', { error: err.message });
+    } finally {
+      isLoading.value = false;
     }
-  }
-
-  /**
-   * 计算分类消费统计
-   */
-  const calculateCategoryStats = () => {
-    const stats = {};
-    // 确保 expenses.value 是一个数组
-    if (Array.isArray(expenses.value)) {
-      expenses.value.forEach(expense => {
-        if (expense && typeof expense.type === 'string' && typeof expense.amount === 'number') {
-          if (!stats[expense.type]) stats[expense.type] = 0;
-          stats[expense.type] += expense.amount;
-        } else {
-          console.warn('useExpenseData: Skipping invalid expense item:', expense);
-        }
-      });
-    } else {
-      console.warn('useExpenseData: expenses.value is not an array, cannot calculate category stats.');
-    }
-    categoryStats.value = stats;
-  }
-
-  // 生成图表数据（包含labels和datasets）
-  const chartData = ref({ labels: [], datasets: [{ label: t('expense.chart.trendLabel'), data: [], borderColor: '#4BC0C0', tension: 0.1 }] })
-
-  /**
-   * 更新图表数据
-   */
-  const updateChartData = () => {
-    // 确保 expenses.value 是一个数组
-    if (Array.isArray(expenses.value)) {
-      chartData.value.labels = expenses.value.map(e => e.time?.slice(0,10) || '');
-      chartData.value.datasets = [{
-        label: t('expense.chart.trendLabel'),
-        data: expenses.value.map(e => e.amount) || [],
-        borderColor: '#4BC0C0',
-        tension: 0.1
-      }];
-    } else {
-      console.warn('useExpenseData: expenses.value is not an array, cannot update chart data.');
-      chartData.value = { labels: [], datasets: [{ label: t('expense.chart.trendLabel'), data: [], borderColor: '#4BC0C0', tension: 0.1 }] };
-    }
-  }
-
-  // 在数据更新时同步更新图表数据
-  watch(expenses, () => {
-    console.log('useExpenseData: expenses ref changed, updating chart data.');
-    updateChartData();
-  }, { immediate: true, deep: true }) // deep: true 确保能检测到 expenses 数组内容的深层变化
-
-  // 初始化数据获取 (移除 setInterval)
-  onMounted(() => {
-    fetchData();
-  });
-
-  // 组件卸载时不需要清除定时器，因为已经移除了 setInterval
-  onUnmounted(() => {
-    // 之前这里有 clearInterval(checkInterval); 现在可以移除
-  });
+  };
 
   return {
     expenses,
     categoryStats,
-    chartData,
-    error,
+    chart1Data,       // Expose chart1Data and chart2Data
+    chart2Data,
+    currentMonth,     // Expose currentMonth and its navigation methods
+    monthLabel,
+    prevMonth,
+    nextMonth,
+    setChartType,
+    chartType,
     fetchData,
+    isLoading,
+    error,
+    errorMessage,
     successMessage,
-    errorMessage
-  }
+    lastUpdateTime,
+  };
 }
+

@@ -1,21 +1,92 @@
-import { ref, computed, watchEffect, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, onBeforeUnmount, toRaw } from 'vue'
 import dayjs from 'dayjs'
 import { formatMonthLabelByLocale } from '@/utils/dateFormatter'
 
-export function useChartData(csvExpenses, locale) {
+/**
+ * 健壮的深层相等比较函数
+ * 适用于原始类型、数组和普通对象。
+ * 在比较前，可以使用Vue的`toRaw`来获取原始对象，以避免响应式代理的影响。
+ * @param {any} a - 第一个要比较的值
+ * @param {any} b - 第二个要比较的值
+ * @returns {boolean} 如果两个值深层相等则返回 true，否则返回 false
+ */
+const deepEqual = (a, b) => {
+  // 对比原始值或同一个引用
+  if (a === b) return true;
+
+  // 检查 null 或非对象类型
+  if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) {
+    return false;
+  }
+
+  // 确保比较的是原始对象，剥离Vue的响应式代理
+  const rawA = toRaw(a);
+  const rawB = toRaw(b);
+
+  if (rawA === rawB) return true; // 再次检查是否在剥离代理后变为同一引用
+
+  // 比较日期对象
+  if (rawA instanceof Date && rawB instanceof Date) {
+    return rawA.getTime() === rawB.getTime();
+  }
+
+  // 比较数组
+  if (Array.isArray(rawA)) {
+    if (!Array.isArray(rawB) || rawA.length !== rawB.length) return false;
+    for (let i = 0; i < rawA.length; i++) {
+      if (!deepEqual(rawA[i], rawB[i])) return false;
+    }
+    return true;
+  }
+
+  // 比较 Map/Set
+  if (rawA instanceof Map && rawB instanceof Map) {
+    if (rawA.size !== rawB.size) return false;
+    for (let [key, valA] of rawA) {
+      if (!rawB.has(key) || !deepEqual(valA, rawB.get(key))) return false;
+    }
+    return true;
+  }
+  if (rawA instanceof Set && rawB instanceof Set) {
+    if (rawA.size !== rawB.size) return false;
+    for (let valA of rawA) {
+      if (!rawB.has(valA)) return false;
+    }
+    return true;
+  }
+
+  // 比较普通对象
+  const keysA = Object.keys(rawA);
+  const keysB = Object.keys(rawB);
+
+  if (keysA.length !== keysB.length) return false;
+
+  for (const key of keysA) {
+    if (!Object.prototype.hasOwnProperty.call(rawB, key) || !deepEqual(rawA[key], rawB[key])) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+
+export function useChartData(expenses, locale) {
   const currentMonth = ref(dayjs().format('YYYY-MM'))
   const chartType = ref(1)
-  let chartUpdateTimer = ref(null)
-  const isChartUpdating = ref(false)
 
   const monthLabel = computed(() => {
     return formatMonthLabelByLocale(currentMonth.value, locale.value)
   })
 
-  const calculateChart1Data = (expenses) => {
-    if (!expenses || expenses.length === 0) return { labels: [], datasets: [] }
+  const filteredMonthExpenses = ref([]);
+  const chart1Data = ref({ labels: [], datasets: [] });
+  const chart2Data = ref({ labels: [], datasets: [] });
+
+  const calculateChart1Data = (data) => {
+    if (!data || data.length === 0) return { labels: [], datasets: [] }
     const dailyData = new Map()
-    expenses.forEach(expense => {
+    data.forEach(expense => {
       const day = dayjs(expense.time).format('YYYY-MM-DD')
       dailyData.set(day, (dailyData.get(day) || 0) + expense.amount)
     })
@@ -38,10 +109,10 @@ export function useChartData(csvExpenses, locale) {
     }
   }
 
-  const calculateChart2Data = (expenses) => {
-    if (!expenses || expenses.length === 0) return { labels: [], datasets: [] }
+  const calculateChart2Data = (data) => {
+    if (!data || data.length === 0) return { labels: [], datasets: [] }
     const dailySum = new Map()
-    expenses.forEach(expense => {
+    data.forEach(expense => {
       const day = dayjs(expense.time).format('YYYY-MM-DD')
       dailySum.set(day, (dailySum.get(day) || 0) + expense.amount)
     })
@@ -64,32 +135,62 @@ export function useChartData(csvExpenses, locale) {
     }
   }
 
-  const updateCharts = async () => {
-    if (isChartUpdating.value) return
-    isChartUpdating.value = true
-    try {
-      const monthExpenses = csvExpenses.value.filter(expense =>
-        dayjs(expense.time).isSame(currentMonth.value, 'month')
-      )
-      const newChart1Data = calculateChart1Data(monthExpenses)
-    const newChart2Data = calculateChart2Data(monthExpenses)
-    chart1Data.value = newChart1Data
-    chart2Data.value = newChart2Data
-    } catch (err) {
-      console.error('更新图表数据失败:', err)
-    } finally {
-      isChartUpdating.value = false
-    }
-  }
+  watch([expenses, currentMonth], ([newExpenses, newMonth]) => {
+    console.log('useChartData Debug: watch([expenses, currentMonth]) triggered.');
+    const newFiltered = (newExpenses || []).filter(expense =>
+      dayjs(expense.time).isSame(newMonth, 'month')
+    );
 
-  watchEffect(() => {
-    const dependencies = [csvExpenses.value, currentMonth.value, chartType.value]
-    if (chartUpdateTimer.value) clearTimeout(chartUpdateTimer.value)
-    chartUpdateTimer.value = setTimeout(updateCharts, 500)
-  })
+    // 获取原始数据进行比较，避免响应式代理影响
+    const currentFilteredRaw = toRaw(filteredMonthExpenses.value);
+    const newFilteredRaw = toRaw(newFiltered);
+
+    // 打印出完整的字符串化内容，以便我们对比差异
+    console.log("useChartData Debug: OLD FILTERED RAW:", JSON.stringify(currentFilteredRaw));
+    console.log("useChartData Debug: NEW FILTERED RAW:", JSON.stringify(newFilteredRaw));
+
+
+    if (!deepEqual(currentFilteredRaw, newFilteredRaw)) {
+      console.log('useChartData Debug: filteredMonthExpenses content changed, updating ref.');
+      filteredMonthExpenses.value = newFiltered; // 更新 ref，触发下游 watch
+    } else {
+      console.log('useChartData Debug: filteredMonthExpenses content identical, keeping same ref.');
+    }
+  }, { immediate: true, deep: true });
+
+  watch(filteredMonthExpenses, (newFilteredExpenses, oldFilteredExpenses) => {
+    const newRef = newFilteredExpenses === oldFilteredExpenses ? 'SAME_REF' : 'DIFFERENT_REF';
+    const contentChanged = !deepEqual(toRaw(newFilteredExpenses), toRaw(oldFilteredExpenses)); // 确保比较原始数据
+
+    console.log(`useChartData Debug: filteredMonthExpenses changed. Ref: ${newRef}, Content Changed: ${contentChanged}.`);
+
+    const newChart1CalculatedData = calculateChart1Data(newFilteredExpenses);
+    const newChart2CalculatedData = calculateChart2Data(newFilteredExpenses);
+
+    if (!deepEqual(toRaw(chart1Data.value), toRaw(newChart1CalculatedData))) { // 确保比较原始数据
+      console.log('useChartData Debug: chart1Data content changed, updating ref.');
+      chart1Data.value = newChart1CalculatedData;
+    } else {
+      console.log('useChartData Debug: chart1Data content identical, keeping same ref.');
+    }
+
+    if (!deepEqual(toRaw(chart2Data.value), toRaw(newChart2CalculatedData))) { // 确保比较原始数据
+      console.log('useChartData Debug: chart2Data content changed, updating ref.');
+      chart2Data.value = newChart2CalculatedData;
+    } else {
+      console.log('useChartData Debug: chart2Data content identical, keeping same ref.');
+    }
+  });
+
+  watch(chart1Data, (newVal, oldVal) => {
+    const newRef = newVal === oldVal ? 'SAME_REF' : 'DIFFERENT_REF';
+    const contentChanged = !deepEqual(toRaw(newVal), toRaw(oldVal)); // 确保比较原始数据
+    console.log(`useChartData Debug: chart1Data ref changed. Ref: ${newRef}, Content Changed: ${contentChanged}.`);
+  }, { deep: true });
+
 
   onBeforeUnmount(() => {
-    if (chartUpdateTimer.value) clearTimeout(chartUpdateTimer.value)
+    // 清理工作
   })
 
   const prevMonth = () => {
@@ -104,16 +205,15 @@ export function useChartData(csvExpenses, locale) {
     chartType.value = type
   }
 
-  const chart1Data = ref({ labels: [], datasets: [] })
-  const chart2Data = ref({ labels: [], datasets: [] })
-
   return {
-  chart1Data,
-  chart2Data,
-  currentMonth,
-  monthLabel,
-  prevMonth,
-  nextMonth,
-  setChartType,
-  chartType
-}}
+    chart1Data,
+    chart2Data,
+    currentMonth,
+    monthLabel,
+    prevMonth,
+    nextMonth,
+    setChartType,
+    chartType
+  }
+}
+

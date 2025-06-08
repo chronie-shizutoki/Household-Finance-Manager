@@ -23,36 +23,38 @@
       />
     </Transition>
 
-    <ExpenseList :expenses="csvExpenses" />
+    <!-- 直接使用 useExpenseData 提供的 expenses -->
+    <ExpenseList :expenses="expenses" />
 
     <div :class="['header', currentTheme]">
     </div>
     
     <ChartControls
-  @set-chart-type="setChartType"
-  :current-month="currentMonth"
-  :month-label="monthLabel"
-  :chart-type="chartType"
-  @prev-month="prevMonth"
-  @next-month="nextMonth"
-/>
+      @set-chart-type="setChartType"
+      :current-month="currentMonth"
+      :month-label="monthLabel"
+      :chart-type="chartType"
+      @prev-month="prevMonth"
+      @next-month="nextMonth"
+    />
 
     <Transition name="chart">
       <ConsumptionChart
         v-if="chartType===1 && chart1Data.labels.length > 0"
         :chart-data="chart1Data"
-        :chart-options="computedChartOptions"
+        :chart-options="chartOptionsRef"
       />
       <ConsumptionChart
         v-else-if="chartType===2 && chart2Data.labels.length > 0"
         :chart-data="chart2Data"
-        :chart-options="computedChartOptions"
+        :chart-options="chartOptionsRef"
       />
       <div v-else class="no-data">{{ t('home.noData') }}</div>
     </Transition>
 
     <Transition name="button">
-      <ExportButton v-if="csvExpenses.length > 0" @export-excel="() => exportToExcel(csvExpenses)" />
+      <!-- 直接使用 useExpenseData 提供的 expenses -->
+      <ExportButton v-if="expenses.length > 0" @export-excel="() => exportToExcel(expenses)" />
       <div v-else class="no-data">{{ t('home.noDataForExport') }}</div>
     </Transition>
   </div>
@@ -61,7 +63,7 @@
 <script setup>
 import { ref, computed, onMounted, watch, onBeforeUnmount, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
-import Papa from 'papaparse'
+import Papa from 'papaparse' // 可能不再需要，取决于 ExpenseList 是否直接处理CSV
 import dayjs from 'dayjs'
 import { formatMonthLabelByLocale } from '@/utils/dateFormatter'
 import MessageTip from '@/components/MessageTip.vue'
@@ -69,54 +71,41 @@ import Header from '@/components/Header.vue'
 import ActionButtons from '@/components/ActionButtons.vue'
 import ExpenseModal from '@/components/ExpenseModal.vue'
 import ExpenseList from '@/components/ExpenseList.vue'
-import ConsumptionChart from '@/components/ConsumptionChart.vue' // 确保路径正确
+import ConsumptionChart from '@/components/ConsumptionChart.vue'
 import ExportButton from '@/components/ExportButton.vue'
-import { useExpenseData } from '@/composables/useExpenseData'
-import { ExpenseAPI } from '@/api/expenses'
+import { useExpenseData } from '@/composables/useExpenseData' // 导入 useExpenseData
+import { ExpenseAPI } from '@/api/expenses' // ExpenseAPI 仍可能在 ExpenseModal 中使用
 import { useExcelExport } from '@/composables/useExcelExport'
 import { useThemeStore } from '@/stores/theme';
 import ChartControls from '@/components/ChartControls.vue'
-import { useChartData } from '@/composables/useChartData'
+import { useChartData } from '@/composables/useChartData' // 导入 useChartData
 
 // 国际化
 const { t, locale } = useI18n()
 
-// 响应式数据：所有费用记录
-let csvExpenses = ref([])
+// 使用 useExpenseData 组合式函数管理费用数据
+const {
+  expenses, // 直接使用 useExpenseData 提供的 expenses
+  fetchData, // useExpenseData 提供的 fetchData
+  errorMessage,
+  error,
+  successMessage
+} = useExpenseData()
 
-const { chart1Data, chart2Data, currentMonth, monthLabel, prevMonth, nextMonth, setChartType, chartType } = useChartData(csvExpenses, locale);
+// 将 useExpenseData 提供的 expenses 传递给 useChartData
+const { chart1Data, chart2Data, currentMonth, monthLabel, prevMonth, nextMonth, setChartType, chartType } = useChartData(expenses, locale);
 const themeStore = useThemeStore();
 const currentTheme = computed(() => themeStore.currentTheme);
 
 // Excel 导出功能
 const { exportToExcel } = useExcelExport()
 
-
-
-// 使用 useExpenseData 组合式函数管理费用数据
-const {
-  expenses,
-  chartData,
-  fetchData: originalFetchData, // 重命名原始 fetchData
-  errorMessage,
-  lastUpdateTime,
-  error,
-  successMessage
-} = useExpenseData()
-
-// 包装 fetchData，确保在数据刷新后也加载 CSV 费用
-const fetchData = async (forceRefresh = false) => {
-  console.log('fetchData called, forceRefresh:', forceRefresh);
-  await originalFetchData(forceRefresh);
-  await loadCsvExpenses();
-}
-
 // 新增消费记录的响应式数据
 const newExpense = ref({
   time: '',
   type: '',
   amount: 0,
-  remark: '' // 确保 remark 字段存在
+  remark: ''
 });
 
 // 初始化 newExpense 的 type 字段
@@ -137,50 +126,9 @@ const resetNewExpense = () => {
 // 模态弹窗显示状态
 const showModal = ref(false)
 
-// 从后端获取数据并赋值给csvExpenses
-const isLoadingCsv = ref(false);
-const loadCsvExpenses = async () => {
-  if (isLoadingCsv.value) {
-    console.log('loadCsvExpenses: Already loading, skipping.');
-    return;
-  }
-  isLoadingCsv.value = true;
-  console.log('loadCsvExpenses: Starting data fetch.');
- 
-  try {
-    let newData = [];
-    try {
-      console.log('loadCsvExpenses: Fetching from API.');
-      const data = await ExpenseAPI.getExpenses();
-      newData = Array.isArray(data) ? data : [];
-    } catch (err) {
-      console.error('获取消费数据失败:', err);
-      errorMessage.value = t('error.fetchExpensesFailed', { error: err.message });
-    }
-
-    // 关键优化：只有当数据实际发生变化时才更新 csvExpenses.value
-    // 使用 JSON.stringify 进行深层比较，确保数据内容一致时不会触发不必要的更新
-    if (JSON.stringify(csvExpenses.value) !== JSON.stringify(newData)) {
-      console.log('loadCsvExpenses: csvExpenses.value updated (content changed).');
-      csvExpenses.value = newData;
-    } else {
-      console.log('loadCsvExpenses: csvExpenses.value content is identical, no update needed.');
-    }
-
-  } catch (err) {
-    console.error('获取消费数据失败:', err);
-    errorMessage.value = t('error.fetchExpensesFailed', { error: err.message });
-  } finally {
-    isLoadingCsv.value = false;
-    console.log('loadCsvExpenses: Data fetch finished.');
-  }
-}
-
-// 当前月份（已通过useChartData导入）
-  // 图表类型 (1: 每日趋势, 2: 每日降序)
-
-// 计算属性：当前月份的显示标签
-
+// 移除 loadCsvExpenses 函数，数据获取和稳定性由 useExpenseData 统一管理
+// const isLoadingCsv = ref(false);
+// const loadCsvExpenses = async () => { /* ... 移除此函数 ... */ }
 
 // 方法
 const toggleModal = () => showModal.value = !showModal.value
@@ -189,7 +137,7 @@ const submitExpense = async () => {
   try {
     await ExpenseAPI.addExpense(newExpense.value)
     successMessage.value = t('expense.addSuccess')
-    await fetchData() // 提交后重新获取数据
+    await fetchData(true) // 提交后强制刷新数据，确保数据最新
     toggleModal() // 关闭模态框
     resetNewExpense() // 重置表单数据
   } catch (err) {
@@ -197,28 +145,14 @@ const submitExpense = async () => {
   }
 }
 
-
-
 // 深色模式状态
 const systemDarkMode = ref(false);
 
-// 应用主题
-const applyTheme = () => {
-  const currentTheme = document.documentElement.dataset.theme;
-  if (!currentTheme) { // 如果没有手动设置主题，则根据系统主题设置
-    document.documentElement.dataset.theme = systemDarkMode.value ? 'dark' : 'light';
-  }
-};
+// 图表配置 ref，将在主题变化时更新
+const chartOptionsRef = ref({});
 
-// 更新系统主题
-const updateSystemTheme = (event) => {
-  systemDarkMode.value = event.matches;
-  applyTheme();
-};
-
-// 计算属性：图表配置，根据深色模式动态调整颜色
-const computedChartOptions = computed(() => {
-  // 获取当前生效的 CSS 变量值
+// 更新图表配置的函数
+const updateChartOptions = () => {
   const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
   const textColor = getCssVar('--text-primary');
@@ -226,20 +160,20 @@ const computedChartOptions = computed(() => {
   const borderColor = getCssVar('--border-primary');
   const bgColor = getCssVar('--bg-primary');
 
-  return {
+  chartOptionsRef.value = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
         labels: {
-          color: textColor // 图例文字颜色
+          color: textColor
         }
       },
       tooltip: {
-        backgroundColor: bgColor, // 工具提示背景色
-        titleColor: textColor, // 工具提示标题颜色
-        bodyColor: textColor, // 工具提示内容颜色
-        borderColor: borderColor, // 工具提示边框颜色
+        backgroundColor: bgColor,
+        titleColor: textColor,
+        bodyColor: textColor,
+        borderColor: borderColor,
         borderWidth: 1,
         callbacks: {
           label: function(context) {
@@ -254,12 +188,12 @@ const computedChartOptions = computed(() => {
           }
         }
       },
-      datalabels: { // 配置 chartjs-plugin-datalabels
-        color: secondaryTextColor, // 数据标签颜色
+      datalabels: {
+        color: secondaryTextColor,
         anchor: 'end',
         align: 'top',
         formatter: (value) => {
-          return value.toFixed(2); // 显示两位小数
+          return value.toFixed(2);
         },
         font: {
           size: 10,
@@ -270,35 +204,65 @@ const computedChartOptions = computed(() => {
     scales: {
       x: {
         grid: {
-          color: borderColor // X轴网格线颜色
+          color: borderColor
         },
         ticks: {
-          color: secondaryTextColor // X轴刻度文字颜色
+          color: secondaryTextColor
         }
       },
       y: {
         grid: {
-          color: borderColor // Y轴网格线颜色
+          color: borderColor
         },
         ticks: {
-          color: secondaryTextColor, // Y轴刻度文字颜色
+          color: secondaryTextColor,
           callback: (value) => `¥${value}`
         }
       }
     }
   };
+};
+
+// 监听 currentTheme 变化，更新图表配置
+watch(currentTheme, (newTheme, oldTheme) => {
+  console.log(`HomeView: currentTheme changed from ${oldTheme} to ${newTheme}. Updating chart options.`);
+  updateChartOptions();
+}, { immediate: true });
+
+// 移除 csvExpenses 的调试 watch，因为 csvExpenses 已经不存在
+// watch(csvExpenses, (newVal, oldVal) => { /* ... */ }, { deep: true });
+
+// 监听 chartOptionsRef 的引用变化（用于调试）
+watch(chartOptionsRef, (newVal, oldVal) => {
+  const newRef = newVal === oldVal ? 'SAME_REF' : 'DIFFERENT_REF';
+  const contentChanged = JSON.stringify(newVal) !== JSON.stringify(oldVal);
+  console.log(`HomeView Debug: chartOptionsRef changed. Ref: ${newRef}, Content Changed: ${contentChanged}.`);
 });
+
+// 应用主题
+const applyTheme = () => {
+  const currentThemeDataset = document.documentElement.dataset.theme;
+  if (!currentThemeDataset) {
+    document.documentElement.dataset.theme = systemDarkMode.value ? 'dark' : 'light';
+  }
+};
+
+// 更新系统主题
+const updateSystemTheme = (event) => {
+  systemDarkMode.value = event.matches;
+  applyTheme();
+};
 
 // 生命周期钩子
 onMounted(() => {
-  loadCsvExpenses(); // 初始加载费用数据
-
+  // 初始加载费用数据现在直接调用 useExpenseData 提供的 fetchData
+  fetchData(false); // 初始获取数据
+  
   // 深色模式监听
   const darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
   systemDarkMode.value = darkModeMedia.matches;
   darkModeMedia.addEventListener('change', updateSystemTheme);
   applyTheme(); // 应用初始主题
-  fetchData(false); // 初始获取数据
 });
 
 onBeforeUnmount(() => {
@@ -307,7 +271,6 @@ onBeforeUnmount(() => {
   darkModeMedia.removeEventListener('change', updateSystemTheme);
 });
 
-// 监听金额变化，处理整数补两位小数逻辑 (注意：直接修改 props.newExpense.amount 不推荐，但为了保持原有功能，暂时保留)
 watch(() => newExpense.value.amount, (newVal) => {
   if (typeof newVal === 'number' && newVal % 1 === 0) {
     newExpense.value.amount = Number(newVal.toFixed(2));
@@ -319,3 +282,4 @@ watch(() => newExpense.value.amount, (newVal) => {
 <style scoped>
 @import '@/styles/home.css';
 </style>
+
