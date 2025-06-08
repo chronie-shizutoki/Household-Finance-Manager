@@ -28,29 +28,14 @@
     <div :class="['header', currentTheme]">
     </div>
     
-    <div class="chart-controls">
-      <div class="month-control">
-        <button class="btn btn-scale prev-btn" @click="prevMonth">&lt;</button>
-        <span class="month-label">{{ monthLabel }}</span>
-        <button class="btn btn-scale next-btn" @click="nextMonth">&gt;</button>
-      </div>
-      <div class="chart-toggle">
-        <button
-          class="btn btn-scale chart-btn"
-          :class="{active: chartType===1}"
-          @click="setChartType(1)"
-        >
-          {{ t('home.dailyTrend') }}
-        </button>
-        <button
-          class="btn btn-scale chart-btn"
-          :class="{active: chartType===2}"
-          @click="setChartType(2)"
-        >
-          {{ t('home.dailyDescending') }}
-        </button>
-      </div>
-    </div>
+    <ChartControls
+  @set-chart-type="setChartType"
+  :current-month="currentMonth"
+  :month-label="monthLabel"
+  :chart-type="chartType"
+  @prev-month="prevMonth"
+  @next-month="nextMonth"
+/>
 
     <Transition name="chart">
       <ConsumptionChart
@@ -93,12 +78,18 @@ import CacheStore from '@/utils/CacheStore'
 import GenAIWebpageEligibilityService from '@/utils/GenAIWebpageEligibilityService'
 import { safeShouldShowTouchpoints, initContentScript } from '@/utils/content-script-utils'
 import { useThemeStore } from '@/stores/theme';
+import ChartControls from '@/components/ChartControls.vue'
+import { useChartData } from '@/composables/useChartData'
 
-const themeStore = useThemeStore();
-const currentTheme = computed(() => themeStore.currentTheme);
+// 国际化
+const { t, locale } = useI18n()
 
 // 响应式数据：所有费用记录
 let csvExpenses = ref([])
+
+const { chart1Data, chart2Data, currentMonth, monthLabel, prevMonth, nextMonth, setChartType, chartType } = useChartData(csvExpenses, locale);
+const themeStore = useThemeStore();
+const currentTheme = computed(() => themeStore.currentTheme);
 
 // Excel 导出功能
 const { exportToExcel } = useExcelExport()
@@ -144,9 +135,6 @@ const fetchData = async (forceRefresh = false) => {
   await originalFetchData(forceRefresh);
   await loadCsvExpenses();
 }
-
-// 国际化
-const { t, locale } = useI18n()
 
 // 新增消费记录的响应式数据
 const newExpense = ref({
@@ -218,15 +206,11 @@ const loadCsvExpenses = async () => {
   }
 }
 
-// 当前月份
-const currentMonth = ref(dayjs().format('YYYY-MM'))
-// 图表类型 (1: 每日趋势, 2: 每日降序)
-const chartType = ref(1)
+// 当前月份（已通过useChartData导入）
+  // 图表类型 (1: 每日趋势, 2: 每日降序)
 
 // 计算属性：当前月份的显示标签
-const monthLabel = computed(() => {
-  return formatMonthLabelByLocale(currentMonth.value, locale.value);
-})
+
 
 // 方法
 const toggleModal = () => showModal.value = !showModal.value
@@ -243,186 +227,7 @@ const submitExpense = async () => {
   }
 }
 
-// 图表数据计算函数：每日趋势
-const calculateChart1Data = (expenses) => {
-  if (!expenses || expenses.length === 0) return { labels: [], datasets: [] };
- 
-  const dailyData = new Map();
-  expenses.forEach(expense => {
-    const day = dayjs(expense.time).format('YYYY-MM-DD');
-    dailyData.set(day, (dailyData.get(day) || 0) + expense.amount);
-  });
- 
-  const sortedDays = Array.from(dailyData.keys()).sort();
-  return {
-    labels: sortedDays.map(day => dayjs(day).format('MM-DD')),
-    datasets: [{
-      label: t('home.dailyTrend'),
-      data: sortedDays.map(day => dailyData.get(day)),
-      borderColor: '#4BC0C0',
-      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      tension: 0.4,
-      fill: true, // 需要 Filler 插件
-      pointRadius: 5, // 显示数据点
-      pointHoverRadius: 7,
-      pointBackgroundColor: '#4BC0C0',
-      pointBorderColor: '#fff',
-      pointHoverBorderColor: '#fff'
-    }]
-  };
-};
 
-// 图表数据计算函数：每日降序
-const calculateChart2Data = (expenses) => {
-  if (!expenses || expenses.length === 0) return { labels: [], datasets: [] };
- 
-  const dailySum = new Map();
-  expenses.forEach(expense => {
-    const day = dayjs(expense.time).format('YYYY-MM-DD');
-    dailySum.set(day, (dailySum.get(day) || 0) + expense.amount);
-  });
- 
-  const sortedEntries = Array.from(dailySum.entries()).sort((a, b) => b[1] - a[1]);
-  return {
-    labels: sortedEntries.map(([day]) => dayjs(day).format('MM-DD')),
-    datasets: [{
-      label: t('home.dailyDescending'),
-      data: sortedEntries.map(([_, value]) => value),
-      borderColor: '#FF6384',
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      tension: 0.4,
-      fill: true, // 需要 Filler 插件
-      pointRadius: 5, // 显示数据点
-      pointHoverRadius: 7,
-      pointBackgroundColor: '#FF6384',
-      pointBorderColor: '#fff',
-      pointHoverBorderColor: '#fff'
-    }]
-  };
-};
-
-// 图表数据缓存
-const chart1Cache = ref(null);
-const chart2Cache = ref(null);
-
-// 图表更新控制
-let chartUpdateTimer = ref(null);
-const isChartUpdating = ref(false);
-
-const updateCharts = async () => {
-  if (isChartUpdating.value) {
-    console.log('updateCharts: Chart update already in progress, skipping.');
-    return;
-  }
- 
-  isChartUpdating.value = true;
-  console.log('updateCharts: Starting chart data calculation and cache update.');
- 
-  // 计算缓存键（基于月份）
-  const cacheKey = `chartData:${currentMonth.value}`;
- 
-  try {
-    const cacheStore = new CacheStore();
-    const cachedChartData = await cacheStore.get(cacheKey);
-
-    if (cachedChartData && Date.now() - cachedChartData.timestamp < 1800 * 1000) { // 30分钟TTL
-      console.log('updateCharts: Loading chart data from cache.');
-      // 只有当缓存数据与当前 ref 内容不同时才更新
-      if (JSON.stringify(chart1Cache.value) !== JSON.stringify(cachedChartData.chart1)) {
-        chart1Cache.value = cachedChartData.chart1;
-        console.log('updateCharts: chart1Cache updated from cache (content changed).');
-      } else {
-        console.log('updateCharts: chart1Cache content from cache is identical, no update needed.');
-      }
-      if (JSON.stringify(chart2Cache.value) !== JSON.stringify(cachedChartData.chart2)) {
-        chart2Cache.value = cachedChartData.chart2;
-        console.log('updateCharts: chart2Cache updated from cache (content changed).');
-      } else {
-        console.log('updateCharts: chart2Cache content from cache is identical, no update needed.');
-      }
-    } else {
-      console.log('updateCharts: Cache expired or not found for chart data, recalculating.');
-      const monthExpenses = csvExpenses.value.filter(expense =>
-        dayjs(expense.time).isSame(currentMonth.value, 'month')
-      );
-     
-      const newChart1Data = calculateChart1Data(monthExpenses);
-      const newChart2Data = calculateChart2Data(monthExpenses);
-
-      // 只有当图表数据实际发生变化时才更新 ref，避免不必要的组件更新
-      if (JSON.stringify(chart1Cache.value) !== JSON.stringify(newChart1Data)) {
-        chart1Cache.value = newChart1Data;
-        console.log('updateCharts: chart1Data updated (content changed).');
-      } else {
-        console.log('updateCharts: chart1Data content is identical, no update needed.');
-      }
-
-      if (JSON.stringify(chart2Cache.value) !== JSON.stringify(newChart2Data)) {
-        chart2Cache.value = newChart2Data;
-        console.log('updateCharts: chart2Data updated (content changed).');
-      } else {
-        console.log('updateCharts: chart2Data content is identical, no update needed.');
-      }
-
-      await cacheStore.set(cacheKey, {
-        chart1: chart1Cache.value,
-        chart2: chart2Cache.value,
-        timestamp: Date.now()
-      }, 1800 * 1000);
-    }
-  } catch (err) {
-    console.error('更新图表缓存失败:', err);
-    errorMessage.value = t('error.chartUpdateFailed', { error: err.message });
-  } finally {
-    isChartUpdating.value = false;
-    console.log('updateCharts: Chart data calculation and cache update finished.');
-  }
-};
-
-// 使用watchEffect监听相关数据变化并防抖更新图表
-watchEffect(() => {
-  // 监听 csvExpenses, currentMonth, chartType 的变化
-  // 任何一个变化都会触发 watchEffect
-  // 注意：watchEffect 依赖的是 csvExpenses.value 的引用，而不是其深层内容。
-  // 但由于我们在 loadCsvExpenses 中已经做了深层比较，如果内容没变，引用也不会变。
-  // currentMonth 和 chartType 的变化是预期的。
-  const dependencies = [csvExpenses.value, currentMonth.value, chartType.value];
-  console.log('watchEffect triggered by changes in dependencies.');
- 
-  if (chartUpdateTimer.value) {
-    clearTimeout(chartUpdateTimer.value);
-  }
-  chartUpdateTimer.value = setTimeout(updateCharts, 500); // 500ms 防抖
-});
-
-// 清理定时器
-onBeforeUnmount(() => {
-  if (chartUpdateTimer.value) {
-    clearTimeout(chartUpdateTimer.value);
-  }
-});
-
-// 图表数据引用
-const chart1Data = computed(() => chart1Cache.value || { labels: [], datasets: [] });
-const chart2Data = computed(() => chart2Cache.value || { labels: [], datasets: [] });
-
-// 月份切换防抖（500ms）
-const prevMonth = throttle(() => {
-  currentMonth.value = dayjs(currentMonth.value)
-    .subtract(1, 'month')
-    .format('YYYY-MM')
-}, 500)
-
-const nextMonth = throttle(() => {
-  currentMonth.value = dayjs(currentMonth.value)
-    .add(1, 'month')
-    .format('YYYY-MM')
-}, 500)
-
-// 图表类型切换
-const setChartType = (type) => {
-  chartType.value = type
-}
 
 // 深色模式状态
 const systemDarkMode = ref(false);
@@ -548,5 +353,5 @@ watch(() => newExpense.value.amount, (newVal) => {
 </script>
 
 <style scoped>
-@import '../styles/home.css';
+@import '@/styles/home.css';
 </style>
