@@ -1,97 +1,98 @@
 {
-  "app.title":"家庭开支管理系统",
+  "app.title": "家庭开销管家",
   "app": {
-    "title": "家庭开支管理系统",
-    "addRecord": "添加记录",
-    "statistics": "开支分析",
-    "export": "导出数据",
+    "title": "家庭开销管家",
+    "addRecord": "记一笔",
+    "statistics": "开销分析",
+    "export": "Export数据",
     "recordList": "消费记录清单",
-    "consumptionTrend": "开支趋势图",
-    "notFound": "页面不存在",
-    "pageNotFound": "您访问的页面不存在或已被移除",
+    "consumptionTrend": "开销趋势图",
+    "notFound": "Page Not Found",
+    "pageNotFound": "找不到此页面或已被移除",
     "backToHome": "返回主页",
     "language": {
-      "zhCN": "简体中文（新加坡）",  
-      "enUS": "英语（美国）",
-      "jaJP": "日语（日本）",
-      "frFR": "法语（法国）",
-      "msMY": "马来语"            
+      "zhCN": "中文（新加坡）",  
+      "enUS": "English",
+      "jaJP": "日本語",
+      "frFR": "Français",
+      "msMY": "Bahasa Melayu"  
     }
   },
   "home": {
-    "prevMonth": "上个月",
-    "nextMonth": "下个月",
-    "dailyTrend": "每日开支走势",
-    "dailyDescending": "按金额从高到低排序",
-    "noData": "暂无消费记录",
-    "noDataForExport":"暂无数据可供导出",
+    "prevMonth": "← 上个月",
+    "nextMonth": "下个月 →",
+    "dailyTrend": "每日开销走势",
+    "dailyDescending": "金额（高→低）",
+    "noData": "Tak ada记录",
+    "noDataForExport": "No data to export",
     "type": {
-      "food": "食阁/餐饮",        
-      "shopping": "购物消费",
-      "entertainment": "娱乐休闲",
-      "transport": "交通/ERP费用",
-      "communication": "电信费用",  
-      "housing": "组屋贷款/租金",  
+      "food": "Kopitiam/Makan",        
+      "shopping": "Shopping",
+      "entertainment": "娱乐消闲",
+      "transport": "交通/ERP",
+      "communication": "Telco费用",  
+      "housing": "HDB贷款/租金",  
       "travel": "旅行度假",
-      "fitness": "健身运动",
+      "fitness": "Gym运动",
       "beauty": "美容护理",
       "pet": "宠物照护",
       "books": "书籍杂志",
-      "digital": "数码电子",
+      "digital": "电子用品",
       "home": "家居用品",
-      "gift": "礼品人情",
+      "gift": "人情红包",
       "office": "办公用品",
       "sports": "运动装备",
       "repair": "维修保养",
       "medical": "医疗保健",
-      "education": "教育补习",    
-      "utility": "水电杂费",      
-      "other": "其他支出"
+      "education": "补习学费",    
+      "utility": "Utilities账单",      
+      "other": "其他"
     }
   },
-  "expense.search.monthPlaceholder": "月份",
+  "expense.search.monthPlaceholder": "月份（MM/YYYY）",
   "expense.search.allType": "全部类型",
-  "expense.search.minAmountPlaceholder": "最低金额",
-  "expense.search.maxAmountPlaceholder": "最高金额",
-  "expense.search.keywordPlaceholder": "搜索关键词",
-  "expense.sort.dateAsc": "日期 (升序)",
-  "expense.sort.dateDesc": "日期 (降序)",
-  "expense.sort.amountAsc": "金额 (低至高)",
-  "expense.sort.amountDesc": "金额 (高至低)",
+  "expense.search.minAmountPlaceholder": "最低金额（SGD）",
+  "expense.search.maxAmountPlaceholder": "最高金额（SGD）",
+  "expense.search.keywordPlaceholder": "Search关键词",
+  "expense.sort.dateAsc": "日期（早→晚）",
+  "expense.sort.dateDesc": "日期（晚→早）",
+  "expense.sort.amountAsc": "金额（低→高）",
+  "expense.sort.amountDesc": "金额（高→低）",
   "expense": {
     "type":{
       "type": "消费类型"
     },
-    "amount": "金额（新元）",   
-    "date": "消费日期",
-    "remark": "备注（如PayNow转账编号）",
-    "addFailed": "添加失败：{error}，请检查后重试", 
-    "exportFilename": "开支记录_{date}",
+    "amount": "金额（SGD）",   
+    "date": "日期",
+    "remark": "备注（如PayNow编号）",
+    "addFailed": "添加失败：{error}，请检查再试", 
+    "exportFilename": "Expense_{date}",
     "columns": {
-      "type": "消费类型",
-      "amount": "金额（新元）",   
-      "date": "消费日期",
-      "remark": "备注（如PayNow转账编号）"
+      "type": "类型",
+      "amount": "金额（SGD）",   
+      "date": "日期",
+      "remark": "备注"
     },
-    "emptyText": "暂无记录，点击上方按钮开始记录",
+    "emptyText": "空空如也，点击按钮开始记录",
     "chart": {
-      "title": "消费类型占比分析",
-      "legend": "开支分布比例",
-      "trendLabel": "近期消费走势"  
+      "title": "消费类型占比",
+      "legend": "分布比例",
+      "trendLabel": "近期开销走势"  
     },
     "common": {
-      "requestCanceled": "操作已取消",
-      "networkError": "网络连接异常，请检查Wi-Fi或移动数据",
-      "requestTimeout": "请求超时，请稍后重试"
+      "requestCanceled": "Operation cancelled",
+      "networkError": "网络有问题，请检查Wi-Fi或Data",
+      "requestTimeout": "连接超时，稍后再试"
     },
     "labels": {
-      "date": "选择日期（DD/MM/YYYY）", 
-      "type": "选择消费类型",
-      "amount": "输入金额（SGD）",
-      "remark": "备注（可选）"
+      "date": "日期（DD/MM/YYYY）", 
+      "type": "消费类型",
+      "amount": "金额（SGD）",
+      "remark": "备注（optional）"
     },
     "buttons": {
-      "submit": "确认提交"
+      "submit": "OK"
     }
-  },"monthLabel.zh-SG":"{year}年{month}月"
+  },
+  "monthLabel.zh-SG": "{month}/{year}"
 }
