@@ -46,15 +46,31 @@
         <th>{{ $t('expense.remark') }}</th>
       </tr>
     </thead>
-    <tbody>
-      <tr v-for="expense in filteredExpenses" :key="expense.id"> <!-- 使用唯一id作为key优化渲染性能 -->
+    <transition-group name="list-fade" tag="tbody" mode="out-in" :key="currentPage" appear>
+      <tr v-for="(expense, index) in paginatedExpenses" :key="`expense-${currentPage}-${expense.id || index}`"> <!-- 使用唯一id作为key优化渲染性能 -->
         <td>{{ expense.time }}</td>
-        <td>{{ expense.type }}</td>
-        <td>¥{{ expense.amount }}</td>
-        <td>{{ expense.remark || '-' }}</td>
+          <td>{{ expense.type }}</td>
+          <td>¥{{ expense.amount }}</td>
+          <td>{{ expense.remark || '-' }}</td>
       </tr>
-    </tbody>
+    </transition-group>
   </table>
+  
+  <div class="pagination">
+      <button @click="currentPage = 1" :disabled="currentPage === 1" aria-label="首页">
+        <<
+      </button>
+      <button @click="currentPage = Math.max(currentPage - 1, 1)" :disabled="currentPage === 1" aria-label="上一页">
+        ←
+      </button>
+      <span v-for="page in displayedPages" :key="page" class="page-number" @click="handlePageClick(page)" :class="{ 'active': currentPage === page, 'ellipsis': page === '...' }">{{ page }}</span>
+      <button @click="currentPage = Math.min(currentPage + 1, totalPages)" :disabled="currentPage === totalPages" aria-label="下一页">
+        →
+      </button>
+      <button @click="currentPage = totalPages" :disabled="currentPage === totalPages || totalPages === 0" aria-label="末页">
+        >>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -99,6 +115,8 @@ const selectedType = ref('')
 const selectedMonth = ref('') // 格式：YYYY-MM
 const minAmount = ref('') // 最小金额
 const maxAmount = ref('') // 最大金额
+const currentPage = ref(1)
+const pageSize = ref(10) // 每页显示10条
 const uniqueTypes = computed(() => {
   return [...new Set(props.expenses.map(expense => expense.type))]
 })
@@ -127,6 +145,49 @@ const minAmountVal = computed(() => {
 
 const maxAmountVal = computed(() => {
   return sortedAmounts.value.length > 0 ? sortedAmounts.value[sortedAmounts.value.length - 1].toFixed(2) : '0.00';
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredExpenses.value.length / pageSize.value);
+});
+
+const handlePageClick = (page) => {
+  // 只处理数字类型的页码
+  if (typeof page === 'number') {
+    currentPage.value = page;
+  }
+};
+
+const displayedPages = computed(() => {
+  const pages = [];
+  const total = totalPages.value;
+  const current = currentPage.value;
+
+  // 总是显示第一页
+  if (total >= 1) pages.push(1);
+
+  // 当总页数大于5时显示省略号和中间页
+  if (total > 5) {
+    // 当前页附近的页码
+    if (current > 3) pages.push('...');
+    const start = Math.max(2, current - 1);
+    const end = Math.min(total - 1, current + 1);
+    for (let i = start; i <= end; i++) pages.push(i);
+    if (current < total - 2) pages.push('...');
+  } else {
+    // 总页数小于等于5时显示所有页码
+    for (let i = 2; i < total; i++) pages.push(i);
+  }
+
+  // 总是显示最后一页
+  if (total > 1) pages.push(total);
+
+  return pages;
+});
+
+const paginatedExpenses = computed(() => {
+  const startIndex = (currentPage.value - 1) * pageSize.value;
+  return filteredExpenses.value.slice(startIndex, startIndex + pageSize.value);
 });
 
 const filteredExpenses = computed(() => {

@@ -285,6 +285,134 @@
   }
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 0.5rem;
+}
+
+.pagination button {
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: var(--hover-bg);
+}
+
+.pagination .page-number {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination .page-number:hover:not(.active) {
+  background: var(--hover-bg);
+}
+
+.pagination .page-number.active {
+  background: var(--primary-color);
+  color: white;
+  font-weight: bold;
+}
+
+.pagination .page-number:not(.active):not(:nth-child(2)):not(:nth-last-child(2)) {
+  margin: 0 0.1rem;
+}
+
+/* 省略号样式 */
+.pagination .page-number:empty::before {
+  content: '...';
+  pointer-events: none;
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+/* 分页过渡动画 */
+ tbody tr {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.list-fade-enter-active, .list-fade-leave-active {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.list-fade-enter-from, .list-fade-leave-to {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  /* 行移动过渡动画 */
+  .list-fade-move {
+    transition: transform 0.5s ease;
+  }
+
+/* 移动端分页适配 */
+@media (max-width: 768px) {
+  .pagination {
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  justify-content: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: -1rem;
+  margin-right: -1rem;
+}
+
+  .pagination > * {
+    flex-shrink: 0;
+  }
+
+  .pagination button,
+  .pagination .page-number {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.95rem;
+  }
+
+  /* 增加触摸目标大小 */
+  .pagination button {
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  /* 隐藏部分页码减少宽度 */
+  .pagination .page-number:not(.active):not(:first-child):not(:last-child):not(:empty) {
+  display: none;
+}
+
+  .pagination .page-number:first-child,
+  .pagination .page-number:last-child {
+    display: inline-block;
+  }
+
+  /* 确保省略号显示 */
+  .pagination .page-number:empty::before {
+    display: inline-block;
+  }
+}
+
 .data-section h2::after {
   content: "";
   position: absolute;
@@ -297,4 +425,5 @@
 }
 .data-section {
   transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
 }
