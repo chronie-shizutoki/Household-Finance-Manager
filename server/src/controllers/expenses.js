@@ -7,6 +7,7 @@ const { ExpenseBuilder } = require('../db');
 const ExportService = require('../utils/export');
 const fs = require('fs'); // 引入完整fs模块以使用existsSync方法
 const path = require('path');
+const dayjs = require('dayjs');
 
 /**
  * 获取所有消费记录

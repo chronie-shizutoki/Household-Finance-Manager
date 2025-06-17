@@ -36,6 +36,18 @@
     overflow-y: auto;
     margin: auto; /* 增强flex居中效果 */
     box-sizing: border-box; /* 包含padding在宽度内 */
+
+    /* 移动端适配 */
+    @media (max-width: 768px) {
+      width: 75%; /* 移动端宽度75% */
+      padding: 1.5rem; /* 减少内边距 */
+    }
+
+    @media (max-width: 480px) {
+      width: 90%; /* 小屏手机宽度90% */
+      padding: 1rem; /* 进一步减少内边距 */
+      max-height: 85vh; /* 增加可视区域 */
+    }
   }
   .glass-effect {
     background: rgba(255, 255, 255, 0.95);
@@ -69,6 +81,13 @@
     border: 1px solid #ddd;
     border-radius: var(--border-radius);
     font-size: 1rem;
+
+    /* 移动端输入框优化 */
+    @media (max-width: 480px) {
+      padding: 0.7rem 0.6rem;
+      font-size: 0.95rem;
+      min-height: 44px; /* 确保足够的触控区域 */
+    }
   }
   
   .form-group textarea {
@@ -84,6 +103,14 @@
     border-radius: var(--border-radius);
     cursor: pointer;
     transition: background var(--transition-time) ease;
+    font-size: 1rem;
+
+    /* 移动端按钮优化 */
+    @media (max-width: 480px) {
+      padding: 0.85rem;
+      font-size: 0.95rem;
+      min-height: 48px; /* 增大触控区域 */
+    }
   }
   
   form button[type="submit"]:hover {
