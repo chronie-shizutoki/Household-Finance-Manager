@@ -29,7 +29,7 @@ cd Household-Finance-Manager
 npm install
 cd client && npm install
 cd ../server && npm install
-npm run dev  # Start both frontend (http://localhost:5173) and backend (http://localhost:3000)
+npm run dev  # Start both frontend (http://localhost:5173) and backend (http://localhost:3010)
 ```
 
 ## Usage Guide
@@ -43,7 +43,6 @@ npm run dev  # Start both frontend (http://localhost:5173) and backend (http://l
 - Storage: CSV files (DB-ready architecture)
 
 ---
-
 
 <a id="zh-CN"></a>
 # 家庭财务管理系统 [简体中文（中国大陆）]
@@ -73,7 +72,7 @@ cd Household-Finance-Manager
 npm install
 cd client && npm install
 cd ../server && npm install
-npm run dev  # 同时启动前端（http://localhost:5173）和后端（http://localhost:3000）
+npm run dev  # 同时启动前端（http://localhost:5173）和后端（http://localhost:3010）
 ```
 
 ## 使用指南
@@ -116,7 +115,7 @@ cd Household-Finance-Manager
 npm install
 cd client && npm install
 cd ../server && npm install
-npm run dev  # 启动前端(http://localhost:5173)与后端(http://localhost:3000)
+npm run dev  # 启动前端(http://localhost:5173)与后端(http://localhost:3010)
 ```
 
 ## 使用指南
@@ -167,7 +166,7 @@ cd Household-Finance-Manager
 npm install
 cd client && npm install
 cd ../server && npm install
-npm run dev  # 同時開前端(http://localhost:5173)同後端(http://localhost:3000)
+npm run dev  # 同時開前端(http://localhost:5173)同後端(http://localhost:3010)
 ```
 
 ## 點樣用
@@ -220,7 +219,7 @@ cd Household-Finance-Manager
 npm install
 cd client && npm install
 cd ../server && npm install
-npm run dev  # 同時啟動前端(http://localhost:5173)與後端(http://localhost:3000)
+npm run dev  # 同時啟動前端(http://localhost:5173)與後端(http://localhost:3010)
 ```
 
 ## 使用教學
@@ -280,7 +279,7 @@ cd Household-Finance-Manager
 npm install  
 cd client && npm install  
 cd ../server && npm install  
-npm run dev  # 門面啟於 http://localhost:5173，機樞啟於 http://localhost:3000  
+npm run dev  # 門面啟於 http://localhost:5173，機樞啟於 http://localhost:3010  
 ```  
 
 ## 操持指南  
@@ -326,7 +325,7 @@ cd Household-Finance-Manager
 npm install
 cd client && npm install
 cd ../server && npm install
-npm run dev  # フロントエンド(http://localhost:5173)とバックエンド(http://localhost:3000)を同時起動
+npm run dev  # フロントエンド(http://localhost:5173)とバックエンド(http://localhost:3010)を同時起動
 ```
 
 ## 操作ガイド
@@ -397,7 +396,7 @@ cd Household-Finance-Manager
 npm install
 cd client && npm install
 cd ../server && npm install
-npm run dev  # 前面部分(http://localhost:5173)並後面部分(http://localhost:3000)同時起動
+npm run dev  # 前面部分(http://localhost:5173)並後面部分(http://localhost:3010)同時起動
 ```
 
 ## 操作指南
@@ -463,7 +462,7 @@ cd Household-Finance-Manager
 npm install
 cd client && npm install
 cd ../server && npm install
-npm run dev  # 프론트엔드(http://localhost:5173)와 백엔드(http://localhost:3000) 동시 실행
+npm run dev  # 프론트엔드(http://localhost:5173)와 백엔드(http://localhost:3010) 동시 실행
 ```
 
 ## 사용 방법
@@ -530,7 +529,7 @@ cd Household-Finance-Manager
 npm install  
 cd client && npm install  
 cd ../server && npm install  
-npm run dev  # frontend(http://localhost:5173)와 backend(http://localhost:3000) 同時 run  
+npm run dev  # frontend(http://localhost:5173)와 backend(http://localhost:3010) 同時 run  
 ```  
 
 ## usage  
@@ -597,7 +596,7 @@ cd Household-Finance-Manager
 npm install
 cd client && npm install
 cd ../server && npm install
-npm run dev  # Mulakan frontend(http://localhost:5173) dan backend(http://localhost:3000)
+npm run dev  # Mulakan frontend(http://localhost:5173) dan backend(http://localhost:3010)
 ```
 
 ## Cara Penggunaan
@@ -664,7 +663,7 @@ cd Household-Finance-Manager
 npm install
 cd client && npm install
 cd ../server && npm install
-npm run dev  # Khởi động frontend(http://localhost:5173) và backend(http://localhost:3000)
+npm run dev  # Khởi động frontend(http://localhost:5173) và backend(http://localhost:3010)
 ```
 
 ## Hướng Dẫn Sử Dụng
@@ -731,7 +730,7 @@ cd Household-Finance-Manager
 npm install
 cd client && npm install
 cd ../server && npm install
-npm run dev  # Inicia frontend(http://localhost:5173) y backend(http://localhost:3000)
+npm run dev  # Inicia frontend(http://localhost:5173) y backend(http://localhost:3010)
 ```
 
 ## Guía de Uso
@@ -798,7 +797,7 @@ cd Household-Finance-Manager
 npm install
 cd client && npm install
 cd ../server && npm install
-npm run dev  # Lance le frontend(http://localhost:5173) et backend(http://localhost:3000)
+npm run dev  # Lance le frontend(http://localhost:5173) et backend(http://localhost:3010)
 ```
 
 ## Guide d'Utilisation
@@ -836,3 +835,5 @@ Exemple d'enregistrement :
 16/03/2024, Transport, €75.50, Plein d'essence
 17/03/2024, Loisirs, €120.00, Cinéma en famille
 ```
+
+

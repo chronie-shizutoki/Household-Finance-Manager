@@ -1,4 +1,30 @@
 import { createApp } from 'vue'
+
+// 检查favicon请求
+console.log('Checking favicon...');
+const faviconLink = document.querySelector('link[rel="icon"]');
+if (faviconLink) {
+  console.log('Favicon URL:', faviconLink.href);
+} else {
+    console.log('No favicon link found in document head');
+  }
+
+  // 手动请求favicon测试代理
+  console.log('Initiating manual favicon fetch...');
+  const faviconUrl = '/favicon.ico';
+  console.log('Fetching favicon from:', faviconUrl);
+  fetch(faviconUrl)
+    .then(response => {
+      console.log('Favicon fetch response status:', response.status);
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      return response.blob();
+    })
+    .then(blob => {
+      console.log('Favicon fetched successfully. Size:', blob.size);
+    })
+    .catch(error => {
+      console.error('Error fetching favicon:', error);
+    });
 import './styles/common.css' // 导入公共样式文件
 import './styles/fonts.css' // 导入自定义字体
 import 'element-plus/dist/index.css' // 导入Element Plus基础样式

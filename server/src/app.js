@@ -54,6 +54,12 @@ app.use('/api/expenses', require('./routes/expenses'))
     next();
   });
   app.use(express.json());
+
+// 记录favicon请求
+app.use('/favicon.ico', (req, res, next) => {
+  console.log(`[${new Date().toISOString()}] Favicon requested: ${req.originalUrl}`);
+  next();
+});
 // 挂载消费数据相关路由
 const expensesRouter = require('./routes/expenses');
 app.use('/api/expenses', expensesRouter);
@@ -69,12 +75,17 @@ app.use('/api/expenses', expensesRouter);
     if (process.env.NODE_ENV === 'development') {
       const { createProxyMiddleware } = require('http-proxy-middleware');
 
+    // 优先挂载静态资源（public目录）以处理favicon.ico
+  const publicPath = path.join(__dirname, '../public');
+  app.use(express.static(publicPath));
+  console.log(`[Static Resource] Public directory mounted at: ${publicPath}`);
+
     // 配置前端代理（仅处理非API请求）
       app.use(createProxyMiddleware('/', {
         target: "http://localhost:5173",
         changeOrigin: true,
         logLevel: 'debug',
-        pathFilter: (path) => !path.startsWith('/api') // 过滤掉/api路径
+        pathFilter: (path) => !path.startsWith('/api') && !path.startsWith('/favicon.ico') && !path.startsWith('/favicon.png') && !path.startsWith('/font/') // 过滤掉API和静态资源路径
 }));
   }
 
@@ -181,9 +192,7 @@ app.use((err, req, res, next) => {
 });
 
 // 启动服务器
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+
 
   const clipboardy = require('clipboardy');
 
