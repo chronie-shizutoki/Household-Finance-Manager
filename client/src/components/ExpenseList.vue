@@ -37,24 +37,26 @@
     <input type="number" v-model="maxAmount" :placeholder="$t('expense.search.maxAmountPlaceholder')">
     <input type="text" v-model="searchKeyword" :placeholder="$t('expense.search.keywordPlaceholder')">
   </div>
-  <table>
-    <thead>
-      <tr>
-        <th>{{ $t('expense.date') }}</th>
-        <th>{{ $t('expense.type.type') }}</th>
-        <th>{{ $t('expense.amount') }}</th>
-        <th>{{ $t('expense.remark') }}</th>
-      </tr>
-    </thead>
-    <transition-group name="list-fade" tag="tbody" mode="out-in" :key="currentPage" appear>
-      <tr v-for="(expense, index) in paginatedExpenses" :key="`expense-${currentPage}-${expense.id || index}`"> <!-- 使用唯一id作为key优化渲染性能 -->
-        <td>{{ expense.time }}</td>
-          <td>{{ expense.type }}</td>
-          <td>¥{{ expense.amount }}</td>
-          <td>{{ expense.remark || '-' }}</td>
-      </tr>
-    </transition-group>
-  </table>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>{{ $t('expense.date') }}</th>
+          <th>{{ $t('expense.type.type') }}</th>
+          <th>{{ $t('expense.amount') }}</th>
+          <th>{{ $t('expense.remark') }}</th>
+        </tr>
+      </thead>
+      <transition-group name="list-fade" tag="tbody" mode="out-in" :key="currentPage" appear>
+        <tr v-for="(expense, index) in paginatedExpenses" :key="`expense-${currentPage}-${expense.id || index}`"> <!-- 使用唯一id作为key优化渲染性能 -->
+          <td>{{ expense.time }}</td>
+            <td>{{ expense.type }}</td>
+            <td>¥{{ expense.amount }}</td>
+            <td>{{ expense.remark || '-' }}</td>
+        </tr>
+      </transition-group>
+    </table>
+  </div>
   
   <div class="pagination">
       <button @click="currentPage = 1" :disabled="currentPage === 1" aria-label="首页">
@@ -240,5 +242,10 @@ const props = defineProps({  expenses: Array,  title: String })
 
 <style scoped>
 @import '../styles/expense-list.css';
+
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+}
 </style>
 
