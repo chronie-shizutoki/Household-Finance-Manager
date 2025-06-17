@@ -127,16 +127,14 @@ const handleSubmit = () => {
 const validateAmount = () => {
   if (isNaN(newExpense.value.amount)) {
     amountError.value = t('error.invalidNumber');
-  } else if (newExpense.value.amount <= 0) {
-    amountError.value = t('error.positiveRequired');
-  }
+  // 允许金额为0，移除正数限制
 }
 watch(() => props.newExpense.amount, (newVal) => {
   if (typeof newVal === 'number' && newVal % 1 === 0) {
     // 整数转换为两位小数格式（如33 → 33.00）
     props.newExpense.amount = Number(newVal.toFixed(2))
   }
-}, { immediate: true })
+}, { immediate: true })}
 </script>
 
 <style scoped>

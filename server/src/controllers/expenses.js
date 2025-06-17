@@ -23,7 +23,7 @@ exports.getExpenses = async () => {
       throw new Error('CSV文件尚未生成');
     }
     const csvData = await fs.promises.readFile(csvFilePath, 'utf8'); // 使用promises版本的readFile
-    const parsed = Papa.parse(csvData, { header: true });
+    const parsed = Papa.parse(csvData, { header: true, quoteChar: '"', escapeChar: '"', skipEmptyLines: true });
     console.log('解析到的消费记录行数:', parsed.data.length); // 添加日志记录解析行数
     return parsed.data.map(item => ({
       type: item['类型'],
@@ -61,20 +61,26 @@ exports.getCsvPath = async (req, res) => {
 
 exports.addExpense = async (req, res) => {
   try {
-    // 新增数据预处理
-    const processedData = {
-      type: String(req.body.type || '').trim(),
-      remark: String(req.body.remark || '').trim(), // 使用remark替代itemName
-      amount: parseFloat(req.body.amount) || 0,
-      time: dayjs(req.body.time).isValid() 
-        ? dayjs(req.body.time).format('YYYY-MM-DD')
-        : dayjs().format('YYYY-MM-DD')
-    };
+      console.log('开始处理新消费记录:', req.body);
+      // 新增数据预处理
+      const processedData = {
+        type: String(req.body.type || '').trim(),
+        remark: String(req.body.remark || '').trim(), // 使用remark替代itemName
+        amount: parseFloat(req.body.amount) || 0,
+        time: dayjs(req.body.time).isValid() 
+          ? dayjs(req.body.time).format('YYYY-MM-DD')
+          : dayjs().format('YYYY-MM-DD')
+      };
+      console.log('预处理后的数据:', processedData);
 
-    // 新增必填字段验证
-    if (!processedData.type) {
-      throw new Error('消费类型不能为空');
-    }
+      // 新增必填字段验证
+      if (!processedData.type) {
+        throw new Error('消费类型不能为空');
+      }
+      if (isNaN(processedData.amount)) {}
+      if (!dayjs(processedData.time).isValid()) {
+        throw new Error('时间格式无效');
+      }
 
     const expense = new ExpenseBuilder()
       .setType(processedData.type)
@@ -82,28 +88,15 @@ exports.addExpense = async (req, res) => {
       .setAmount(processedData.amount)
       .setTime(processedData.time)
       .build();
-    await req.app.locals.db.addExpense(expense);
-
-    // 新增：同步写入CSV并打印日志
-    const exportService = new ExportService(req.app.locals.db);
-    const data = await exportService.getFullData();
-    const csvContent = Papa.unparse(data.map(item => ({
-      type: item.type || '未分类',
-      remark: item.remark || item.remark || '',
-      amount: Number(item.amount || 0).toFixed(2),
-      time: item.time ? dayjs(item.time).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD')
-    })), {
-      quotes: true,
-      header: true,
-      skipEmptyLines: true
-    });
-    const csvFilePath = path.join(__dirname, '../../exports/expenses_initial.csv');
-    console.log('写入CSV路径:', csvFilePath);
-    console.log('写入CSV内容:', csvContent);
-    fs.writeFileSync(csvFilePath, csvContent);
-    console.log('CSV写入完成');
-
-    res.status(201).json({ message: '记录添加成功' });
+    console.log('准备添加记录到数据库:', expense);
+    try {
+      await req.app.locals.db.addExpense(expense);
+      console.log('记录添加到数据库成功');
+      res.status(201).json({ message: '记录添加成功' });
+    } catch (dbError) {
+      console.error('数据库添加记录失败:', dbError);
+      throw new Error(`数据库操作失败: ${dbError.message}`);
+    }
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: error.message });

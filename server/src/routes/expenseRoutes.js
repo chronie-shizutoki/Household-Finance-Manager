@@ -13,7 +13,15 @@ const csvFilePath = path.join(__dirname, '../../exports/expenses_initial.csv');
  * @apiGroup Expenses
  * @apiSuccess {Object[]} expenses 消费记录数组
  */
-router.get('/api/expenses', getExpenses);
+router.get('/api/expenses', async (req, res) => {
+  try {
+    const expenses = await getExpenses();
+    res.json(expenses);
+  } catch (error) {
+    console.error('获取消费记录失败:', error);
+    res.status(500).json({ error: '获取消费记录失败', message: error.message });
+  }
+});
 
 /**
  * @api {post} /api/expenses 添加新消费记录
@@ -27,8 +35,24 @@ router.get('/api/expenses', getExpenses);
  */
 router.post('/api/expenses', (req, res, next) => {
   try {
-    req.body.amount = parseFloat(req.body.amount);
-    req.body.time = dayjs(req.body.time).format('YYYY-MM-DD');
+    // 验证金额
+    if (req.body.amount === undefined) {
+      throw new Error('金额不能为空');
+    }
+    const amount = parseFloat(req.body.amount);
+    if (isNaN(amount)) {
+      throw new Error('金额必须是有效的数字');
+    }
+    req.body.amount = amount;
+    
+    // 验证时间
+    if (req.body.time && !dayjs(req.body.time).isValid()) {
+      throw new Error('时间格式无效，请使用有效的日期格式');
+    }
+    req.body.time = dayjs(req.body.time).isValid() 
+      ? dayjs(req.body.time).format('YYYY-MM-DD')
+      : dayjs().format('YYYY-MM-DD');
+    
     next();
   } catch (e) {
     res.status(400).json({ error: '数据格式错误: ' + e.message });
