@@ -1,0 +1,42 @@
+name: Auto Create PR
+
+on:
+  push:
+    branches:
+      - main    # 监听 main 分支推送
+  schedule:
+    - cron: '0 * * * *'  # 每小时自动运行一次
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # 这里可以插入自动修改代码、生成文件等步骤
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Check for changes
+        run: |
+          git diff --quiet || echo "Has changes"
+
+      - name: Commit & push changes
+        if: success() && steps.check.outputs.HAS_CHANGES == 'true'
+        run: |
+          git checkout -b auto-pr-branch
+          git add .
+          git commit -m "Auto update"
+          git push origin auto-pr-branch
+
+      - name: Create Pull Request
+        if: success() && steps.check.outputs.HAS_CHANGES == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: auto-pr-branch
+          title: "自动检测到更改并提交 PR"
+          body: "这是一个自动生成的 PR。"
