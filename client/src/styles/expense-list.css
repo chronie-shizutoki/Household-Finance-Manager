@@ -1,9 +1,7 @@
 /* 基础输入组件样式 */
 .search-container > input,
 .search-container > select {
-  background: var(--input-bg);
   border-color: var(--border-color);
-  color: var(--text-primary);
   padding: 0.5rem 0rem;
   border: 1px solid var(--border-color);
   border-radius: 6px;
@@ -210,7 +208,6 @@
 /* 移动端适配 (768px以下) */
 @media (max-width: 768px) {
   .data-section {
-    padding: 1rem 0;
     border-radius: 0;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
