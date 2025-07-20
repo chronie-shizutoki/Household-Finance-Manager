@@ -2,21 +2,18 @@
   <div :class="['header', currentTheme]">
     <h1>{{ title }}</h1>
 
-    <ElDropdown trigger="click">
-      <span class="earth-icon" role="button" aria-haspopup="true" aria-expanded="false" aria-label="切换语言">🌍</span>
-      
-      <template #dropdown>
-        <ElDropdownMenu>
-          <ElDropdownItem 
-            v-for="lang in languages" 
-            :key="lang.code" 
-            @click="switchLanguage(lang.code)"
-          >
-            {{ lang.label }}
-          </ElDropdownItem>
-        </ElDropdownMenu>
-      </template>
-    </ElDropdown>
+    <div class="language-selector">
+      <select
+        class="language-select"
+        aria-label="切换语言"
+        @change="(e) => switchLanguage(e.target.value)"
+        v-model="currentLanguage"
+      >
+        <option v-for="lang in languages" :key="lang.code" :value="lang.code">
+          {{ lang.label }}
+        </option>
+      </select>
+    </div>
   </div>
 </template>
 
@@ -25,8 +22,6 @@
 import { useLanguageSwitch } from '@/composables/useLanguageSwitch';
 import { computed } from 'vue';
 import { useThemeStore } from '@/stores/theme'; // 导入主题存储
-// 导入 Element Plus 的下拉菜单相关组件
-import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
 
 // 定义组件接收的 props
 const props = defineProps({ 
@@ -34,7 +29,7 @@ const props = defineProps({
 });
 
 // 调用 useLanguageSwitch 获取语言切换函数
-const { switchLanguage } = useLanguageSwitch();
+const { currentLanguage, switchLanguage } = useLanguageSwitch();
 const themeStore = useThemeStore();
 const currentTheme = computed(() => themeStore.currentTheme); // 响应式获取当前主题
 

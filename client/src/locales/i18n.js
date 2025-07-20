@@ -41,9 +41,42 @@ import { solarToLunar } from 'chinese-lunar';
  * 初始化i18n实例
  * @type {import('vue-i18n').I18n}
  */
+// 定义支持的语言列表
+const supportedLocales = [
+  'zh-CN', 'en-US', 'ja-JP', 'fr-FR', 'zh-HK', 'zh-TW', 
+  'zh-SG', 'es-ES', 'ko-KR', 'ms-MY', 'vi-VN', 
+  'zh-Classical', 'kanji-JP', 'kanji-KR'
+];
+
+// 获取浏览器语言并映射到支持的语言
+function getBrowserLocale() {
+  // 检查是否在浏览器环境中
+  if (typeof navigator === 'undefined') {
+    return 'en-US'; // 默认返回英文
+  }
+  
+  const browserLocale = navigator.language || navigator.userLanguage;
+  
+  // 精确匹配
+  if (supportedLocales.includes(browserLocale)) {
+    return browserLocale;
+  }
+  
+  // 模糊匹配（如 'zh' 匹配 'zh-CN'）
+  const lang = browserLocale.split('-')[0];
+  for (const locale of supportedLocales) {
+    if (locale.startsWith(lang)) {
+      return locale;
+    }
+  }
+  
+  // 默认返回回退语言
+  return 'en-US';
+}
+
 const i18n = createI18n({
   legacy: false, // 使用组合式API模式
-  locale: 'zh-CN', // 默认语言
+  locale: getBrowserLocale(), // 根据浏览器语言自动设置
   fallbackLocale: 'en-US', // 回退语言
   messages: {
     'zh-CN': zhCN,
@@ -75,7 +108,5 @@ const monthLabel = computed(() => {
     month: locale.value === 'en-US' ? d.format('MMMM') : d.format('MM')
   })
 })
-
-
 
 export default i18n

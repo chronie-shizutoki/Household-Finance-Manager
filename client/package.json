@@ -6,16 +6,10 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^2.3.1",
     "axios": "^1.6.2",
     "chart.js": "^4.4.1",
-    "cors": "^2.8.5",
     "dayjs": "^1.11.13",
-    "dotenv": "^16.5.0",
-    "element-plus": "^2.9.11",
-    "express": "^5.1.0",
     "file-saver": "^2.0.5",
-    "homemoney": "file:..",
     "lunar-javascript": "^1.7.3",
     "papaparse": "^5.5.3",
     "pinia": "^3.0.2",
@@ -26,10 +20,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.4",
-    "@vue/eslint-config-prettier": "^10.2.0",
-    "eslint": "^9.27.0",
-    "eslint-plugin-vue": "^10.1.0",
-    "prettier": "^3.5.3",
     "vite": "^6.3.5"
   }
 }
