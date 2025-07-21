@@ -23,26 +23,26 @@ export default defineConfig({
     proxy: {
       // 显式favicon代理
       '/favicon.ico': {
-        target: 'http://192.168.0.197:3010',
+        target: 'http://192.168.0.197:3000',
         secure: false,
         changeOrigin: true,
         logLevel: 'debug'
       },
       // API请求代理
       '/api': {
-        target: 'http://192.168.0.197:3010',
+        target: 'http://192.168.0.197:3000',
         secure: false,
         changeOrigin: true
       },
       // 合并静态资源代理规则
       '/font/': {
-        target: 'http://192.168.0.197:3010',
+        target: 'http://192.168.0.197:3000',
         secure: false,
         changeOrigin: true
       },
       // 正则表达式匹配所有静态资源
       [/\.(ico|png|ttf)$/]: {
-        target: 'http://192.168.0.197:3010',
+        target: 'http://192.168.0.197:3000',
         secure: false,
         changeOrigin: true
       }

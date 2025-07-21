@@ -3,7 +3,7 @@ import axios from 'axios';
 const api = axios.create({
   baseURL: process.env.NODE_ENV === 'production' 
     ? 'https://yourdomain.com/api' 
-    : 'http://localhost:3010/api',
+    : 'http://localhost:3000/api',
   timeout: 10000,
   withCredentials: true
 });

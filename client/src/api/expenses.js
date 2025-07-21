@@ -2,8 +2,8 @@ import axios from 'axios';
 
 // 动态获取API基础URL，支持开发和生产环境
 export const API_BASE = (() => {
-  // 默认使用后端服务端口3010（已从3001/3002修改）
-  const defaultBase = 'http://localhost:3010/api';
+  // 默认使用后端服务端口3000（已从3001/3002修改）
+  const defaultBase = 'http://localhost:3000/api';
   
   // 如果在浏览器环境中，尝试使用当前域名
   if (typeof window !== 'undefined') {
@@ -13,7 +13,7 @@ export const API_BASE = (() => {
       
       // 如果是开发环境（localhost或IP地址）
       if (currentHost === 'localhost' || /^\d+\.\d+\.\d+\.\d+$/.test(currentHost)) {
-        return `http://${currentHost}:3010/api`;
+        return `http://${currentHost}:3000/api`;
       }
       
       // 生产环境使用相对路径
