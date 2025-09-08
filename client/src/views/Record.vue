@@ -8,9 +8,12 @@
       <div v-else class="form-content">
         <div class="form-group">
           <label for="expense-type">{{ TextConfig.form.typeLabel }}</label>
-          <select v-model="newExpense.type" id="expense-type" class="form-control">
-            <option v-for="type in expenseTypes" :key="type" :value="type">{{ type }}</option>
-          </select>
+          <CustomDropdown
+            v-model="newExpense.type"
+            :options="dropdownExpenseTypes"
+            :placeholder="TextConfig.form.typePlaceholder"
+            class="form-control"
+          />
         </div>
         
         <div class="form-group">
@@ -89,11 +92,13 @@ import { ExpenseAPI } from '@/api/expenses';
 import { useI18n } from 'vue-i18n';
 import PieChart from '@/components/charts/PieChart.vue';
 import LineChart from '@/components/charts/LineChart.vue';
+import CustomDropdown from '@/components/CustomDropdown.vue';
 
 export default {
   components: {
-    PieChart,
-    LineChart
+    PieChart, 
+    LineChart,
+    CustomDropdown
   },
   setup() {
     const { t } = useI18n();
@@ -123,6 +128,14 @@ export default {
       t('expense.type.entertainment'), 
       t('expense.type.other')
     ]);
+    
+    // 转换为CustomDropdown需要的格式
+    const dropdownExpenseTypes = computed(() => {
+      return expenseTypes.value.map(type => ({
+        value: type,
+        label: type
+      }))
+    });
     
     // 饼图数据
     const pieChartData = computed(() => ({
@@ -251,6 +264,7 @@ export default {
       loading,
       newExpense,
       expenseTypes,
+      dropdownExpenseTypes,
       expenses,
       statistics,
       pieChartData,

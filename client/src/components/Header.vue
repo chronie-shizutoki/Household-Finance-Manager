@@ -3,16 +3,13 @@
     <h1>{{ title }}</h1>
 
     <div class="language-selector">
-      <select
-        class="language-select"
-        aria-label="切换语言"
-        @change="(e) => switchLanguage(e.target.value)"
+      <CustomDropdown
         v-model="currentLanguage"
-      >
-        <option v-for="lang in languages" :key="lang.code" :value="lang.code">
-          {{ lang.label }}
-        </option>
-      </select>
+        :options="languageOptions"
+        :placeholder="t('language.select')"
+        aria-label="切换语言"
+        @change="handleLanguageChange"
+      />
     </div>
   </div>
 </template>
@@ -22,11 +19,16 @@
 import { useLanguageSwitch } from '@/composables/useLanguageSwitch';
 import { computed } from 'vue';
 import { useThemeStore } from '@/stores/theme'; // 导入主题存储
+import CustomDropdown from './CustomDropdown.vue';
 
 // 定义组件接收的 props
 const props = defineProps({ 
   title: String // 接收一个字符串类型的标题
 });
+
+// 导入国际化
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 // 调用 useLanguageSwitch 获取语言切换函数
 const { currentLanguage, switchLanguage } = useLanguageSwitch();
@@ -50,9 +52,27 @@ const languages = [
   { code: 'zh-SG', label: '华语 (新加坡)' },
   { code: 'zh-TW', label: '繁體中文 (台灣)' },
 ];
+
+// 计算语言选项
+const languageOptions = computed(() => {
+  return languages.map(lang => ({
+    value: lang.code,
+    label: lang.label
+  }))
+})
+
+// 处理语言变化
+const handleLanguageChange = (newLanguage) => {
+  switchLanguage(newLanguage)
+}
 </script>
 
 <style scoped>
-@import '../styles/header.css';
+/* 已迁移至common.css，仅保留作用域标识 */
+
+/* 语言选择器样式 */
+.language-selector {
+  position: relative;
+}
 </style>
 

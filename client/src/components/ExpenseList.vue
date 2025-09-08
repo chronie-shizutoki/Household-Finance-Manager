@@ -46,19 +46,18 @@
         </div>
         <div class="search-group">
           <label>{{ $t('expense.search.type') }}</label>
-          <select v-model="selectedType">
-            <option value="">{{ $t('expense.search.allType') }}</option>
-            <option v-for="type in uniqueTypes" :key="type" :value="type">{{ type }}</option>
-          </select>
+          <CustomDropdown
+            v-model="selectedType"
+            :options="computedTypeOptions"
+            :placeholder="$t('expense.search.allType')"
+          />
         </div>
         <div class="search-group">
           <label>{{ $t('expense.search.sort') }}</label>
-          <select v-model="sortOption">
-            <option value="dateAsc">{{ $t('expense.sort.dateAsc') }}</option>
-            <option value="dateDesc">{{ $t('expense.sort.dateDesc') }}</option>
-            <option value="amountAsc">{{ $t('expense.sort.amountAsc') }}</option>
-            <option value="amountDesc">{{ $t('expense.sort.amountDesc') }}</option>
-          </select>
+          <CustomDropdown
+            v-model="sortOption"
+            :options="sortOptions"
+          />
         </div>
       </div>
       <div class="search-row">
@@ -149,6 +148,11 @@
 <script setup>
 
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import CustomDropdown from './CustomDropdown.vue'
+import { useI18n } from 'vue-i18n'
+
+// 获取国际化函数
+const { t } = useI18n()
 
 // 移动端检测
 const isMobile = ref(window.innerWidth <= 768)
@@ -223,6 +227,35 @@ const pageSize = ref(10) // 每页显示10条
 const uniqueTypes = computed(() => {
   return [...new Set(props.expenses.map(expense => expense.type))]
 })
+
+// 计算类型选项，添加空选项
+const computedTypeOptions = computed(() => {
+  const options = []
+  
+  // 添加空选项
+  options.push({
+    value: '',
+    label: t('expense.search.allType')
+  })
+  
+  // 添加所有类型选项
+  uniqueTypes.value.forEach(type => {
+    options.push({
+      value: type,
+      label: type
+    })
+  })
+  
+  return options
+})
+
+// 排序选项
+const sortOptions = computed(() => [
+  { value: 'dateAsc', label: t('expense.sort.dateAsc') },
+  { value: 'dateDesc', label: t('expense.sort.dateDesc') },
+  { value: 'amountAsc', label: t('expense.sort.amountAsc') },
+  { value: 'amountDesc', label: t('expense.sort.amountDesc') }
+])
 const sortOption = ref('dateAsc') // 默认日期升序
 const totalAmount = computed(() => {
   return filteredExpenses.value.reduce((sum, expense) => sum + expense.amount, 0).toFixed(2);
@@ -347,6 +380,19 @@ const props = defineProps({  expenses: Array,  title: String })
 .table-container {
   overflow-x: auto;
   width: 100%;
+}
+
+/* 搜索组样式优化 */
+.search-group {
+  margin-bottom: 1rem;
+}
+
+.search-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 </style>
 

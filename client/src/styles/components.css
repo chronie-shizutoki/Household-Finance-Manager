@@ -1,3 +1,21 @@
+/* 基础表单元素变量 */
+:root {
+  --border-primary: #e0e0e0;
+  --menu-max-height: 300px;
+}
+
+/* 系统级深色模式表单元素变量 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --border-primary: #404040;
+  }
+}
+
+/* 手动切换暗黑模式表单元素变量 */
+[data-theme="dark"] {
+  --border-primary: #404040;
+}
+
 /* 卡片模块样式优化 */
 .form-section,
 .data-section,

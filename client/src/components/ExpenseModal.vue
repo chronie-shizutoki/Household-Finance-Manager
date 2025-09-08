@@ -19,9 +19,12 @@
           </div>
           <div class="form-group">
             <label>{{ $t('expense.labels.type') }}：</label>
-            <select v-model="newExpense.type" required>
-              <option v-for="type in expenseTypesArray" :key="type.typeKey" :value="type.typeKey">{{ type.typeName }}</option>
-            </select>
+            <CustomDropdown
+              v-model="newExpense.type"
+              :options="expenseTypesArray"
+              :placeholder="$t('expense.labels.selectType')"
+              required
+            />
           </div>
           <div class="form-group">
             <label>{{ $t('expense.labels.amount') }}：</label>
@@ -46,6 +49,7 @@
 <script setup>
 import { ref, defineProps, defineEmits, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import CustomDropdown from './CustomDropdown.vue'
 const { t } = useI18n()
 // 定义支出类型（使用 home.type 命名空间）
 const expenseTypes = {
@@ -74,8 +78,8 @@ const expenseTypes = {
 
 const expenseTypesArray = computed(() => {
   return Object.entries(expenseTypes).map(([typeKey, typeName]) => ({
-    typeKey,
-    typeName: t(typeName)
+    value: typeKey,
+    label: t(typeName)
   }))
 })
 
