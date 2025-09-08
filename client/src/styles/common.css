@@ -16,35 +16,27 @@
   
   /* 系统级深色模式 */
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme]) { /* 排除手动切换 */
+    :root { 
       --container-bg: #2d2d2d;
       --shadow: 0 4px 24px rgba(255,255,255,0.05);
     }
-  }
-  
-  /* 手动深色模式 */
-  [data-theme="dark"] {
-    --container-bg: #2d2d2d;
-    --shadow: 0 4px 24px rgba(255,255,255,0.05);
+/* Notify browser's date picker, month picker, etc. about dark mode */
+    input[type="date"],
+    input[type="month"],
+    input[type="datetime-local"],
+    input[type="week"],
+    select,
+    option,
+    .dropdown-menu {
+        color-scheme: dark;
+        background-color: #2d2d2d;
+        color: #ffffff;
+        border-color: #555555;
+    }
   }
   
   /* 应用样式 */
   .data-section {
     background: var(--container-bg);
     box-shadow: var(--shadow);
-  }
-  /* element-plus深色模式兼容 */
-:root.dark {
-    --el-bg-color-overlay: #1f1f1f;
-    --el-border-color-light: rgba(255,255,255,0.1);
-    --el-text-color-regular: rgba(255,255,255,0.8);
-    --el-fill-color-light: rgba(255,255,255,0.1);
-    --el-box-shadow-dark: 0 12px 32px 4px rgba(0, 0, 0, 0.36);
-  }
-  
-  /* 明亮模式默认值 */
-  :root {
-    --el-color-primary: #4CAF50;
-    --primary-hover-color: #2E7D32;
-    --el-border-radius-base: 8px;
   }

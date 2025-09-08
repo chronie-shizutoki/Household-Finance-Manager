@@ -103,10 +103,6 @@
   }
 }
 
-[data-theme="dark"] {
-  --highlight-gradient-color: 100,100,100;
-}
-
 .form-section:hover,
 .data-section:hover,
 .chart-section:hover {

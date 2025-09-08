@@ -154,26 +154,6 @@
   padding: auto auto rem;
 }
 
-/* 深色模式适配 */
-[data-theme="dark"] {
-  --input-bg: #363636;
-  --border-color: #4a4a4a;
-  --primary-color: #79bbff;
-  --primary-rgb: 121, 187, 255;
-  --text-primary: #e0e0e0;
-  --text-secondary: #a2a2a2;
-  --select-bg: #363636; /* 下拉框背景 */
-  --select-border: #4a4a4a; /* 下拉框边框 */
-}
-
-[data-theme="light"] {
-  --input-bg: #ffffff;
-  --border-color: #e4e7ed;
-  --primary-color: #409eff;
-  --primary-rgb: 64, 158, 255;
-  --text-primary: #303133;
-  --text-secondary: #606266;
-}
 /* 深色模式变量体系 */
 :root {
   /* 浅色默认值 */
@@ -201,7 +181,7 @@
 
 /* 系统级深色模式 */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
+  :root {
     --container-bg: #6b6b6b; /* 保留原容器变量 */
     --data-section-bg: #424141; /* 新增容器专用背景变量（深色模式调浅） */
     --table-bg: #555555; /* 再次调浅深色模式表格背景 */
@@ -224,28 +204,6 @@
     --select-bg: #363636;
     --select-border: #4a4a4a;
   }
-}
-
-/* 手动深色模式 */
-[data-theme="dark"] {
-  --container-bg: #6b6b6b; /* 保留原容器变量 */
-    --data-section-bg: #7c7c7c; /* 新增容器专用背景变量（手动深色模式调浅） */
-    --table-bg: #555555; /* 再次调浅手动深色模式表格背景 */
-    --th-bg: #4f4f4f;
-    --text-primary: #e0e0e0;
-    --text-secondary: #a2a2a2;
-    --border-color: #454545;
-    --hover-bg: #545556;
-    --shadow-base: 0 4px 24px rgba(0,0,0,0.4);  /* 加深阴影透明度 */
-    --shadow-hover: 0 8px 32px rgba(0,0,0,0.5);
-    --shadow-table: 0 2px 8px rgba(255,255,255,0.03);
-    --scroll-mask: linear-gradient(
-      to right,
-      transparent,
-      #393939 20px,
-      #424242 calc(100% - 20px),
-      transparent
-  );
 }
 
 /* 基础容器样式 */
