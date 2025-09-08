@@ -1,13 +1,23 @@
 
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
+const fs = require("fs");
+
+// Resolve database path and ensure directory exists so SQLite can create the file.
 const dbPath = path.resolve(__dirname, "../data/expenses.db");
+const dbDir = path.dirname(dbPath);
+if (!fs.existsSync(dbDir)) {
+  // create directory recursively (safe no-op if it already exists)
+  fs.mkdirSync(dbDir, { recursive: true });
+  console.log(`Created missing database directory: ${dbDir}`);
+}
 
 let db;
 
 function initializeDatabase() {
   return new Promise((resolve, reject) => {
-    db = new sqlite3.Database(dbPath, (err) => {
+  // Open database with read/write and create flags so the file is created if it doesn't exist
+  db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
       if (err) {
         console.error("Could not connect to database", err);
         reject(err);
