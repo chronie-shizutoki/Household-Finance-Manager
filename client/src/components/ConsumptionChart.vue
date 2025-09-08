@@ -9,22 +9,16 @@
 <template>
   <div :class="['chart-container', { 'scene-style': showSceneStyle }]">
     <h2 v-if="showTitle">{{ $t('app.consumptionTrend') }}</h2>
-    <LineChart :data="chartData" :options="chartOptions" />
+    <LineChart :chart-data="chartData" :chart-options="chartOptions" />
   </div>
 </template>
 
 <script setup>
-import { Line as LineChart } from 'vue-chartjs'
-// 导入所有 Chart.js 核心模块和 datalabels, Filler 插件
-import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement, Filler } from 'chart.js' // 导入 Filler 插件
-import ChartDataLabels from 'chartjs-plugin-datalabels' // 导入 datalabels 插件
 import { defineProps } from 'vue'
-import { useI18n } from 'vue-i18n' // 引入 useI18n 用于模板中的 $t
+import { useI18n } from 'vue-i18n'
+import LineChart from './charts/LineChart.vue'
 
 const { t } = useI18n()
-
-// 注册图表核心模块和 datalabels, Filler 插件
-ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement, Filler, ChartDataLabels) // 确保 Filler 和 ChartDataLabels 都被注册
 
 /**
 * 组件属性定义
