@@ -253,7 +253,7 @@ watch(() => props.disabled, (newDisabled) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: 90%;
   padding: 0.75rem 1rem;
   background: var(--bg-card);
   border: 1px solid var(--border-primary);
