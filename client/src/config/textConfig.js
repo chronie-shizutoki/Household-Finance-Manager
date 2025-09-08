@@ -4,7 +4,7 @@ export const TextConfig = {
     title: i18n.t('app.title'),
     typeLabel: i18n.t('expense.columns.type'),
     nameLabel: i18n.t('expense.columns.name'),
-    amountLabel: '金额（元）',
+    amountLabel: i18n.t('expense.columns.amount'),
     timeLabel: i18n.t('expense.columns.time'),
     submitBtn: i18n.t('app.addRecord')
   },
