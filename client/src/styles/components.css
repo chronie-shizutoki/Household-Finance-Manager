@@ -16,7 +16,6 @@
 .form-section::before,
 .data-section::before,
 .chart-section::before {
-  content: '';
   position: absolute;
   top: -50%;
   left: -50%;

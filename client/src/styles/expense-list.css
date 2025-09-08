@@ -183,7 +183,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --container-bg: #6b6b6b; /* 保留原容器变量 */
-    --data-section-bg: #424141; /* 新增容器专用背景变量（深色模式调浅） */
+    --data-section-bg: var(--container-bg); /* 新增容器专用背景变量（深色模式调浅） */
     --table-bg: #555555; /* 再次调浅深色模式表格背景 */
     --th-bg: #4f4f4f;
     --text-primary: #e0e0e0;
@@ -211,7 +211,7 @@
   margin: 0;
   padding: 1.5rem;
   box-sizing: border-box;
-  width: max-content; /* 适配表格长度 */
+  width: 100%; 
   max-width: 100%; /* 防止溢出屏幕 */
   overflow-x: auto; /* 中间容器铺满屏幕 */
   border-radius: 16px;
@@ -234,7 +234,7 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: var(--shadow-table);
-  min-width: max-content; /* 保留表格内容自适应 */
+  min-width: 100%; 
 }
 
 /* 表头样式 */

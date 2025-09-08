@@ -34,9 +34,3 @@
         border-color: #555555;
     }
   }
-  
-  /* 应用样式 */
-  .data-section {
-    background: var(--container-bg);
-    box-shadow: var(--shadow);
-  }
