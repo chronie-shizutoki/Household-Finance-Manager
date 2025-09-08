@@ -9,7 +9,7 @@ class ExportService {
 
   // 获取完整消费数据（异步方法）
   async getFullData() {
-    return await this.db.getExpenses(); // 使用数据库提供的getExpenses方法获取数据
+    return await this.db.getAllExpenses(); // 使用数据库提供的getExpenses方法获取数据
   }
 
   // 生成CSV文件（异步方法）

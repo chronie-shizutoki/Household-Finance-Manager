@@ -39,6 +39,7 @@ const fs = require('fs');
 const app = express();
 const db = require('./db');
 app.locals.db = db;
+db.initializeDatabase();
 // 动态端口分配，避免端口冲突
 const PORT = process.env.PORT || 3000; // 修改为3000，避免与可能被占用的3001和3002冲突
 

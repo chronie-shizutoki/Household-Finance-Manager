@@ -11,3 +11,4 @@ Thumbs.db
 .vscode/
 .DS_Store
 Thumbs.db
+server/data/expenses.db
