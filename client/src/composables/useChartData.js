@@ -82,7 +82,7 @@ export function useChartData(expenses, locale) {
   const chart1Data = ref({ labels: [], datasets: [] });
   const chart2Data = ref({ labels: [], datasets: [] });
 
-  // 移除了中间状态filteredMonthExpenses，直接计算图表数据
+  // 优化的图表数据计算函数
   const calculateChartData = () => {
     if (!expenses.value || expenses.value.length === 0) {
       chart1Data.value = { labels: [], datasets: [] };
@@ -104,56 +104,60 @@ export function useChartData(expenses, locale) {
 
     // 趋势图数据（按日期排序）
     const sortedDays = Array.from(dailyData.keys()).sort();
-    const newChart1Data = {
-      labels: sortedDays.map(day => dayjs(day).format('MM-DD')),
-      datasets: [{
-        label: '每日趋势',
-        data: sortedDays.map(day => dailyData.get(day)),
-        borderColor: '#4BC0C0',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        tension: 0.4,
-        fill: true,
-        pointRadius: 5,
-        pointHoverRadius: 7,
-        pointBackgroundColor: '#4BC0C0',
-        pointBorderColor: '#fff',
-        pointHoverBorderColor: '#fff'
-      }]
-    };
+    const chart1Labels = sortedDays.map(day => dayjs(day).format('MM-DD'));
+    const chart1Values = sortedDays.map(day => dailyData.get(day));
 
     // 降序图数据
     const sortedEntries = Array.from(dailyData.entries()).sort((a, b) => b[1] - a[1]);
-    const newChart2Data = {
-      labels: sortedEntries.map(([day]) => dayjs(day).format('MM-DD')),
-      datasets: [{
-        label: '每日降序',
-        data: sortedEntries.map(([_, value]) => value),
-        borderColor: '#FF6384',
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        tension: 0.4,
-        fill: true,
-        pointRadius: 5,
-        pointHoverRadius: 7,
-        pointBackgroundColor: '#FF6384',
-        pointBorderColor: '#fff',
-        pointHoverBorderColor: '#fff'
-      }]
-    };
+    const chart2Labels = sortedEntries.map(([day]) => dayjs(day).format('MM-DD'));
+    const chart2Values = sortedEntries.map(([_, value]) => value);
 
-    // 避免不必要的更新
-    if (!deepEqual(toRaw(chart1Data.value), toRaw(newChart1Data))) {
-      chart1Data.value = newChart1Data;
+    // 避免不必要的更新，只更新变化的部分
+    if (!deepEqual(chart1Data.value.labels, chart1Labels) || 
+        !deepEqual(chart1Data.value.datasets[0]?.data, chart1Values)) {
+      chart1Data.value = {
+        labels: chart1Labels,
+        datasets: [{
+          label: '每日趋势',
+          data: chart1Values,
+          borderColor: '#4BC0C0',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          tension: 0.4,
+          fill: true,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          pointBackgroundColor: '#4BC0C0',
+          pointBorderColor: '#fff',
+          pointHoverBorderColor: '#fff'
+        }]
+      };
     }
 
-    if (!deepEqual(toRaw(chart2Data.value), toRaw(newChart2Data))) {
-      chart2Data.value = newChart2Data;
+    if (!deepEqual(chart2Data.value.labels, chart2Labels) || 
+        !deepEqual(chart2Data.value.datasets[0]?.data, chart2Values)) {
+      chart2Data.value = {
+        labels: chart2Labels,
+        datasets: [{
+          label: '每日降序',
+          data: chart2Values,
+          borderColor: '#FF6384',
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          tension: 0.4,
+          fill: true,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          pointBackgroundColor: '#FF6384',
+          pointBorderColor: '#fff',
+          pointHoverBorderColor: '#fff'
+        }]
+      };
     }
   };
 
-  // 只保留一个watch监听器，避免链式触发
-  watch([expenses, currentMonth], () => {
+  // 优化watch监听器，避免deep监听
+  watch([() => expenses.value, currentMonth], () => {
     calculateChartData();
-  }, { immediate: true, deep: true });
+  }, { immediate: true });
 
   const prevMonth = () => {
     currentMonth.value = dayjs(currentMonth.value).subtract(1, 'month').format('YYYY-MM')
