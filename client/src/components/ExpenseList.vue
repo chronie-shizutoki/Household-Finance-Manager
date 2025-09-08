@@ -9,34 +9,74 @@
 <template>
   <div class="data-section">
 
-    <div class="stats-container" style="margin-bottom: 1rem; padding: 0 1rem; color: var(--text-primary);">
-      <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
-        <span>{{ $t('expense.stats.rowCount') }}：{{ filteredExpenses.length }}</span>
-        <span>{{ $t('expense.stats.totalAmount') }}：¥{{ totalAmount }}</span>
-        <span>{{ $t('expense.stats.averageAmount') }}：¥{{ averageAmount }}</span>
-        <span>{{ $t('expense.stats.medianAmount') }}：¥{{ medianAmount }}</span>
-        <span>{{ $t('expense.stats.amountRange') }}：¥{{ minAmountVal }}-¥{{ maxAmountVal }}</span>
-        <span>{{ $t('expense.stats.typeCount') }}：{{ uniqueTypes.length }}</span>
+    <div class="stats-container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">{{ $t('expense.stats.rowCount') }}</div>
+          <div class="stat-value">{{ filteredExpenses.length }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">{{ $t('expense.stats.totalAmount') }}</div>
+          <div class="stat-value amount">¥{{ totalAmount }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">{{ $t('expense.stats.averageAmount') }}</div>
+          <div class="stat-value">¥{{ averageAmount }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">{{ $t('expense.stats.medianAmount') }}</div>
+          <div class="stat-value">¥{{ medianAmount }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">{{ $t('expense.stats.amountRange') }}</div>
+          <div class="stat-value">¥{{ minAmountVal }}-¥{{ maxAmountVal }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">{{ $t('expense.stats.typeCount') }}</div>
+          <div class="stat-value">{{ uniqueTypes.length }}</div>
+        </div>
       </div>
     </div>
 
-    <div class="search-container" style="display: flex; gap: 1rem; flex-wrap: wrap;">
-    <input type="month" v-model="selectedMonth" :placeholder="$t('expense.search.monthPlaceholder')">
-    <select v-model="selectedType">
-      <option value="">{{ $t('expense.search.allType') }}</option>
-      <option v-for="type in uniqueTypes" :key="type" :value="type">{{ type }}</option>
-    </select>
-    <select v-model="sortOption">
-      <option value="dateAsc">{{ $t('expense.sort.dateAsc') }}</option>
-      <option value="dateDesc">{{ $t('expense.sort.dateDesc') }}</option>
-      <option value="amountAsc">{{ $t('expense.sort.amountAsc') }}</option>
-      <option value="amountDesc">{{ $t('expense.sort.amountDesc') }}</option>
-    </select>
-    <input type="number" v-model="minAmount" :placeholder="$t('expense.search.minAmountPlaceholder')">
-    <span style="align-self: center;">~</span>
-    <input type="number" v-model="maxAmount" :placeholder="$t('expense.search.maxAmountPlaceholder')">
-    <input type="text" v-model="searchKeyword" :placeholder="$t('expense.search.keywordPlaceholder')">
-  </div>
+    <div class="search-container">
+      <div class="search-row">
+        <div class="search-group">
+          <label>{{ $t('expense.search.month') }}</label>
+          <input type="month" v-model="selectedMonth" :placeholder="$t('expense.search.monthPlaceholder')">
+        </div>
+        <div class="search-group">
+          <label>{{ $t('expense.search.type') }}</label>
+          <select v-model="selectedType">
+            <option value="">{{ $t('expense.search.allType') }}</option>
+            <option v-for="type in uniqueTypes" :key="type" :value="type">{{ type }}</option>
+          </select>
+        </div>
+        <div class="search-group">
+          <label>{{ $t('expense.search.sort') }}</label>
+          <select v-model="sortOption">
+            <option value="dateAsc">{{ $t('expense.sort.dateAsc') }}</option>
+            <option value="dateDesc">{{ $t('expense.sort.dateDesc') }}</option>
+            <option value="amountAsc">{{ $t('expense.sort.amountAsc') }}</option>
+            <option value="amountDesc">{{ $t('expense.sort.amountDesc') }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="search-row">
+        <div class="search-group amount-range">
+          <label>{{ $t('expense.search.amountRange') }}</label>
+          <div class="amount-inputs">
+            <input type="number" v-model="minAmount" :placeholder="$t('expense.search.minAmountPlaceholder')" min="0" step="0.01">
+            <span class="range-separator">~</span>
+            <input type="number" v-model="maxAmount" :placeholder="$t('expense.search.maxAmountPlaceholder')" min="0" step="0.01">
+          </div>
+        </div>
+        <div class="search-group">
+          <label>{{ $t('expense.search.keyword') }}</label>
+          <input type="text" v-model="searchKeyword" :placeholder="$t('expense.search.keywordPlaceholder')">
+        </div>
+        <button class="reset-btn" @click="resetFilters" :disabled="!hasActiveFilters">{{ $t('expense.search.reset') }}</button>
+      </div>
+    </div>
   
   <!-- 桌面端表格视图 -->
   <div class="table-container" v-if="!isMobile">
@@ -158,6 +198,26 @@ const selectedType = ref('')
 const selectedMonth = ref('') // 格式：YYYY-MM
 const minAmount = ref('') // 最小金额
 const maxAmount = ref('') // 最大金额
+
+// 检测是否有激活的筛选条件
+const hasActiveFilters = computed(() => {
+  return !!selectedMonth.value || 
+         !!selectedType.value || 
+         !!minAmount.value || 
+         !!maxAmount.value || 
+         !!searchKeyword.value
+})
+
+// 重置所有筛选条件
+const resetFilters = () => {
+  selectedMonth.value = ''
+  selectedType.value = ''
+  minAmount.value = ''
+  maxAmount.value = ''
+  searchKeyword.value = ''
+  sortOption.value = 'dateAsc'
+  currentPage.value = 1
+}
 const currentPage = ref(1)
 const pageSize = ref(10) // 每页显示10条
 const uniqueTypes = computed(() => {
