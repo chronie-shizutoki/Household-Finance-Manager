@@ -29,28 +29,17 @@
     <div :class="['header', currentTheme]">
     </div>
     
-    <ChartControls
-      @set-chart-type="setChartType"
+    <!-- 使用新的图表容器组件 -->
+    <ChartContainer
+      :chart1-data="chart1Data"
+      :chart2-data="chart2Data"
       :current-month="currentMonth"
       :month-label="monthLabel"
       :chart-type="chartType"
+      @set-chart-type="setChartType"
       @prev-month="prevMonth"
       @next-month="nextMonth"
     />
-
-    <Transition name="chart">
-      <ConsumptionChart
-        v-if="chartType===1 && chart1Data.labels.length > 0"
-        :chart-data="chart1Data"
-        :chart-options="chartOptions"
-      />
-      <ConsumptionChart
-        v-else-if="chartType===2 && chart2Data.labels.length > 0"
-        :chart-data="chart2Data"
-        :chart-options="chartOptions"
-      />
-      <div v-else class="no-data">{{ t('home.noData') }}</div>
-    </Transition>
 
     <Transition name="button">
       <!-- 直接使用 useExpenseData 提供的 expenses -->
@@ -77,6 +66,7 @@ import { ExpenseAPI } from '@/api/expenses' // ExpenseAPI 仍可能在 ExpenseMo
 import { useExcelExport } from '@/composables/useExcelExport'
 import { useThemeStore } from '@/stores/theme';
 import ChartControls from '@/components/ChartControls.vue'
+import ChartContainer from '@/components/ChartContainer.vue'
 
 // 国际化
 const { t, locale } = useI18n()
@@ -151,80 +141,7 @@ const submitExpense = async () => {
 // 深色模式状态
 const systemDarkMode = ref(false);
 
-// 使用计算属性而不是响应式引用，避免不必要的重新渲染
-const chartOptions = computed(() => {
-  const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
-  const textColor = getCssVar('--text-primary');
-  const secondaryTextColor = getCssVar('--text-secondary');
-  const borderColor = getCssVar('--border-primary');
-  const bgColor = getCssVar('--bg-primary');
-
-  return {
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: {
-      duration: 0 // 禁用动画以提高性能
-    },
-    plugins: {
-      legend: {
-        labels: {
-          color: textColor
-        }
-      },
-      tooltip: {
-        backgroundColor: bgColor,
-        titleColor: textColor,
-        bodyColor: textColor,
-        borderColor: borderColor,
-        borderWidth: 1,
-        callbacks: {
-          label: function(context) {
-            let label = context.dataset.label || '';
-            if (label) {
-              label += ': ';
-            }
-            if (context.parsed.y !== null) {
-              label += new Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'CNY' }).format(context.parsed.y);
-            }
-            return label;
-          }
-        }
-      },
-      datalabels: {
-        color: secondaryTextColor,
-        anchor: 'end',
-        align: 'top',
-        formatter: (value) => {
-          return value.toFixed(2);
-        },
-        font: {
-          size: 10,
-          weight: 'bold'
-        }
-      }
-    },
-    scales: {
-      x: {
-        grid: {
-          color: borderColor
-        },
-        ticks: {
-          color: secondaryTextColor
-        }
-      },
-      y: {
-        grid: {
-          color: borderColor
-        },
-        ticks: {
-          color: secondaryTextColor,
-          callback: (value) => `¥${value}`
-        }
-      }
-    }
-  };
-});
 
 // 应用主题
 const applyTheme = () => {
