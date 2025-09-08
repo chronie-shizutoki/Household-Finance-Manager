@@ -55,12 +55,11 @@ export function useExpenseData() {
   const successMessage = ref('');
   const lastUpdateTime = ref(null);
 
-  // Initialize chartCurrentMonth ref. This will be passed to useChartData.
-  // It's crucial that this ref's value is updated only when necessary (e.g., via UI interaction).
-  const chartCurrentMonth = ref(dayjs().format('YYYY-MM'));
+  // chartCurrentMonth is no longer needed since it's managed internally by useChartData
+  // const chartCurrentMonth = ref(dayjs().format('YYYY-MM'));
 
   // Use the useChartData composition function to handle chart data and month filtering
-  // Pass expenses ref, chartCurrentMonth ref, and locale ref
+  // Pass expenses ref and locale ref
   const {
     chart1Data,
     chart2Data,
@@ -70,7 +69,7 @@ export function useExpenseData() {
     nextMonth,
     setChartType,
     chartType
-  } = useChartData(expenses, chartCurrentMonth, locale); // Pass locale here
+  } = useChartData(expenses, locale); // Pass locale here
 
   // Computed property: Expense statistics by category
   const categoryStats = computed(() => {

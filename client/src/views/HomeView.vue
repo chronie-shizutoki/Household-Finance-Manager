@@ -42,12 +42,12 @@
       <ConsumptionChart
         v-if="chartType===1 && chart1Data.labels.length > 0"
         :chart-data="chart1Data"
-        :chart-options="chartOptionsRef"
+        :chart-options="chartOptions"
       />
       <ConsumptionChart
         v-else-if="chartType===2 && chart2Data.labels.length > 0"
         :chart-data="chart2Data"
-        :chart-options="chartOptionsRef"
+        :chart-options="chartOptions"
       />
       <div v-else class="no-data">{{ t('home.noData') }}</div>
     </Transition>
@@ -63,7 +63,6 @@
 <script setup>
 import { ref, computed, onMounted, watch, onBeforeUnmount, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
-import Papa from 'papaparse' // 可能不再需要，取决于 ExpenseList 是否直接处理CSV
 import dayjs from 'dayjs'
 import { formatMonthLabelByLocale } from '@/utils/dateFormatter'
 import MessageTip from '@/components/MessageTip.vue'
@@ -78,7 +77,6 @@ import { ExpenseAPI } from '@/api/expenses' // ExpenseAPI 仍可能在 ExpenseMo
 import { useExcelExport } from '@/composables/useExcelExport'
 import { useThemeStore } from '@/stores/theme';
 import ChartControls from '@/components/ChartControls.vue'
-import { useChartData } from '@/composables/useChartData' // 导入 useChartData
 
 // 国际化
 const { t, locale } = useI18n()
@@ -89,11 +87,16 @@ const {
   fetchData, // useExpenseData 提供的 fetchData
   errorMessage,
   error,
-  successMessage
+  successMessage,
+  chart1Data, // 使用 useExpenseData 内部调用 useChartData 返回的图表数据
+  chart2Data,
+  currentMonth,
+  monthLabel,
+  prevMonth,
+  nextMonth,
+  setChartType,
+  chartType
 } = useExpenseData()
-
-// 将 useExpenseData 提供的 expenses 传递给 useChartData
-const { chart1Data, chart2Data, currentMonth, monthLabel, prevMonth, nextMonth, setChartType, chartType } = useChartData(expenses, locale);
 const themeStore = useThemeStore();
 const currentTheme = computed(() => themeStore.currentTheme);
 
@@ -148,11 +151,8 @@ const submitExpense = async () => {
 // 深色模式状态
 const systemDarkMode = ref(false);
 
-// 图表配置 ref，将在主题变化时更新
-const chartOptionsRef = ref({});
-
-// 更新图表配置的函数
-const updateChartOptions = () => {
+// 使用计算属性而不是响应式引用，避免不必要的重新渲染
+const chartOptions = computed(() => {
   const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
   const textColor = getCssVar('--text-primary');
@@ -160,9 +160,12 @@ const updateChartOptions = () => {
   const borderColor = getCssVar('--border-primary');
   const bgColor = getCssVar('--bg-primary');
 
-  chartOptionsRef.value = {
+  return {
     responsive: true,
     maintainAspectRatio: false,
+    animation: {
+      duration: 0 // 禁用动画以提高性能
+    },
     plugins: {
       legend: {
         labels: {
@@ -221,22 +224,6 @@ const updateChartOptions = () => {
       }
     }
   };
-};
-
-// 监听 currentTheme 变化，更新图表配置
-watch(currentTheme, (newTheme, oldTheme) => {
-  console.log(`HomeView: currentTheme changed from ${oldTheme} to ${newTheme}. Updating chart options.`);
-  updateChartOptions();
-}, { immediate: true });
-
-// 移除 csvExpenses 的调试 watch，因为 csvExpenses 已经不存在
-// watch(csvExpenses, (newVal, oldVal) => { /* ... */ }, { deep: true });
-
-// 监听 chartOptionsRef 的引用变化（用于调试）
-watch(chartOptionsRef, (newVal, oldVal) => {
-  const newRef = newVal === oldVal ? 'SAME_REF' : 'DIFFERENT_REF';
-  const contentChanged = JSON.stringify(newVal) !== JSON.stringify(oldVal);
-  console.log(`HomeView Debug: chartOptionsRef changed. Ref: ${newRef}, Content Changed: ${contentChanged}.`);
 });
 
 // 应用主题
