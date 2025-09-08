@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ChartControls from './ChartControls.vue'
 import ConsumptionChart from './ConsumptionChart.vue'
@@ -74,16 +74,39 @@ const handleNextMonth = () => {
   emit('next-month')
 }
 
-// 图表配置计算属性
+// 缓存变量，用于避免不必要的chartOptions对象创建
+const cachedThemeValues = ref({
+  textColor: '',
+  secondaryTextColor: '',
+  borderColor: '',
+  bgColor: '',
+  options: null
+});
+
+// 图表配置计算属性 - 添加缓存机制以避免无限渲染
 const chartOptions = computed(() => {
   const getCssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
+  // 获取当前CSS变量值
   const textColor = getCssVar('--text-primary');
   const secondaryTextColor = getCssVar('--text-secondary');
   const borderColor = getCssVar('--border-primary');
   const bgColor = getCssVar('--bg-primary');
 
-  return {
+  // 检查CSS变量值是否有变化
+  const themeValuesChanged = 
+    textColor !== cachedThemeValues.value.textColor ||
+    secondaryTextColor !== cachedThemeValues.value.secondaryTextColor ||
+    borderColor !== cachedThemeValues.value.borderColor ||
+    bgColor !== cachedThemeValues.value.bgColor;
+
+  // 如果没有变化且已有缓存的配置，则返回缓存的配置对象
+  if (!themeValuesChanged && cachedThemeValues.value.options) {
+    return cachedThemeValues.value.options;
+  }
+
+  // 只有当主题值变化时才创建新的配置对象
+  const options = {
     responsive: true,
     maintainAspectRatio: false,
     animation: {
@@ -147,6 +170,17 @@ const chartOptions = computed(() => {
       }
     }
   };
+
+  // 更新缓存
+  cachedThemeValues.value = {
+    textColor,
+    secondaryTextColor,
+    borderColor,
+    bgColor,
+    options
+  };
+
+  return options;
 });
 </script>
 

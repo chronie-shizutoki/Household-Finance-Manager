@@ -3,8 +3,6 @@
     <div v-if="error" class="error-alert">{{ error }}</div>
     <MessageTip v-model:message="successMessage" type="success" />
     <MessageTip v-model:message="errorMessage" type="error" />
-    <MessageTip v-model:message="successMessage" type="success" />
-    <MessageTip v-model:message="errorMessage" type="error" />
 
     <Header :title="$t('app.title')" />
    
@@ -102,9 +100,7 @@ const newExpense = ref({
 });
 
 // 初始化 newExpense 的 type 字段
-watchEffect(() => {
-  newExpense.value.type = t('expense.type.food');
-});
+newExpense.value.type = t('expense.type.food');
 
 // 重置 newExpense 数据
 const resetNewExpense = () => {
