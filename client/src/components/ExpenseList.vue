@@ -37,7 +37,9 @@
     <input type="number" v-model="maxAmount" :placeholder="$t('expense.search.maxAmountPlaceholder')">
     <input type="text" v-model="searchKeyword" :placeholder="$t('expense.search.keywordPlaceholder')">
   </div>
-  <div class="table-container">
+  
+  <!-- 桌面端表格视图 -->
+  <div class="table-container" v-if="!isMobile">
     <table>
       <thead>
         <tr>
@@ -48,7 +50,7 @@
         </tr>
       </thead>
       <transition-group name="list-fade" tag="tbody" mode="out-in" :key="currentPage" appear>
-        <tr v-for="(expense, index) in paginatedExpenses" :key="`expense-${currentPage}-${expense.id || index}`"> <!-- 使用唯一id作为key优化渲染性能 -->
+        <tr v-for="(expense, index) in paginatedExpenses" :key="`expense-${currentPage}-${expense.id || index}`">
           <td>{{ expense.time }}</td>
             <td>{{ expense.type }}</td>
             <td>¥{{ expense.amount }}</td>
@@ -56,6 +58,34 @@
         </tr>
       </transition-group>
     </table>
+  </div>
+  
+  <!-- 移动端卡片视图 -->
+  <div class="card-container" v-else>
+    <transition-group name="list-fade" tag="div" mode="out-in" :key="currentPage" appear>
+      <div 
+        v-for="(expense, index) in paginatedExpenses" 
+        :key="`expense-${currentPage}-${expense.id || index}`"
+        class="expense-card"
+      >
+        <div class="card-row">
+          <span class="card-label">{{ $t('expense.date') }}:</span>
+          <span class="card-value">{{ expense.time }}</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">{{ $t('expense.type.type') }}:</span>
+          <span class="card-value">{{ expense.type }}</span>
+        </div>
+        <div class="card-row">
+          <span class="card-label">{{ $t('expense.amount') }}:</span>
+          <span class="card-value amount">¥{{ expense.amount }}</span>
+        </div>
+        <div v-if="expense.remark" class="card-row">
+          <span class="card-label">{{ $t('expense.remark') }}:</span>
+          <span class="card-value">{{ expense.remark }}</span>
+        </div>
+      </div>
+    </transition-group>
   </div>
   
   <div class="pagination">
@@ -80,6 +110,9 @@
 
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
+// 移动端检测
+const isMobile = ref(window.innerWidth <= 768)
+
 // 系统主题状态跟踪
 let systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -100,12 +133,20 @@ const forceStyleUpdate = () => {
 
 onMounted(() => {
   mediaQuery.addEventListener('change', updateSystemTheme)
+  window.addEventListener('resize', handleResize)
   forceStyleUpdate() // 初始化执行
 })
 
+const handleResize = () => {
+  isMobile.value = window.innerWidth <= 768
+}
+
 onBeforeUnmount(() => {
   mediaQuery.removeEventListener('change', updateSystemTheme)
+  window.removeEventListener('resize', handleResize)
 })
+
+
 /**
  * 组件属性定义
  * @typedef {Object} ExpenseListProps
