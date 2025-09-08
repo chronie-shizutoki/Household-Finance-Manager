@@ -54,6 +54,12 @@
       "other": "Miscellaneous"
     }
   },
+  "expense.search.month": "Month",
+  "expense.search.type": "Type",
+  "expense.search.sort": "Sort",
+  "expense.search.amountRange": "Amount Range",
+  "expense.search.keyword": "Keyword",
+  "expense.search.reset": "Reset",
    "expense.search.monthPlaceholder": "Month",
     "expense.search.allType": "All Types",
     "expense.search.minAmountPlaceholder": "Min Amount",
