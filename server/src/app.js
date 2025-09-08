@@ -39,8 +39,9 @@ const fs = require('fs');
 const app = express();
 const db = require('./db');
 app.locals.db = db;
+db.initializeDatabase();
 // 动态端口分配，避免端口冲突
-const PORT = process.env.PORT || 3000; // 修改为3000，避免与可能被占用的3001和3002冲突
+const PORT = process.env.PORT || 3001; // 修改为3000，避免与可能被占用的3001和3002冲突
 
 // 统一CORS配置（移除重复的中间件调用）
 app.use(cors(corsOptions)); // 应用优化后的CORS配置

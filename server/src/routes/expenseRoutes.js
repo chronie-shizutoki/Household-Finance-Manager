@@ -1,7 +1,7 @@
 const dayjs = require('dayjs');
 const express = require('express');
 const router = express.Router();
-const { getExpenses, addExpense, getCsvPath } = require('../controllers/expenses');
+const { getExpenses, addExpense } = require("../controllers/expenses");
 
 const fs = require('fs');
 const path = require('path');
@@ -59,27 +59,10 @@ router.post('/api/expenses', (req, res, next) => {
   }
 }, addExpense);
 
-/**
- * @api {get} /api/expenses/csv 获取最新CSV文件路径
- * @apiName GetCsv
- * @apiGroup Expenses
- * @apiSuccess {string} path CSV文件路径
- */
-router.get('/api/expenses/csv', getCsvPath);
 
 
 
-router.get('/api/expenses/csv/raw', (req, res) => {
-  if (!fs.existsSync(csvFilePath)) {
-    return res.status(404).json({ error: 'CSV文件尚未生成' });
-  }
-  fs.readFile(csvFilePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('读取CSV文件失败:', err);
-      return res.status(500).json({ error: '无法读取CSV文件' });
-    }
-    res.type('text/csv').send(data);
-  });
-});
+
+
 
 module.exports = router;
